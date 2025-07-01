@@ -16,9 +16,18 @@ public struct Dot
         this.y = y;
     }
 }
+public enum MouseState
+{
+    Default,
+    PlacedObject,
+    Creature,
+    CreatureRange,
+}
 public class MouseManager : MonoBehaviour
 {
     public static MouseManager instance;
+
+    public MouseState mouseState = MouseState.Default;
 
     public Vector3 mousePos
     {
@@ -80,6 +89,7 @@ public class MouseManager : MonoBehaviour
                 mouseTip.transform.position = planet.transform.position + direction;
                 mouseTip.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
+
                 if (placedObject != null)
                 {
                     placedObject.transform.position = planet.transform.position + direction;
@@ -114,25 +124,27 @@ public class MouseManager : MonoBehaviour
                     }
 
                 }
-            }
-            else mouseTip.SetActive(false);
 
-            if (creature != null)
-            {
-                if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
+                else mouseTip.SetActive(false);
+
+                if (creature != null)
                 {
-                    Cell cell = planet.PosToCell(mousePos);
-                    if (cell != null)
+                    if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
                     {
-                        List<Cell> temp = planet.FindPath(planet.PosToCell(creature.transform.position), cell);
-                        if (temp != null)
+                        Cell cell = planet.PosToCell(mousePos);
+                        if (cell != null)
                         {
-                            creature.path = temp;
-                            creature.ChangeCreatureState(CreatureState.Walk);
+                            List<Cell> temp = planet.FindPath(planet.PosToCell(creature.transform.position), cell);
+                            if (temp != null)
+                            {
+                                creature.path = temp;
+                                creature.ChangeCreatureState(CreatureState.Walk);
+                            }
                         }
                     }
+                    if (Input.GetMouseButtonDown(1)) DeselectCreature();
                 }
-                if (Input.GetMouseButtonDown(1)) DeselectCreature();
+
             }
         }
     }

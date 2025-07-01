@@ -43,6 +43,7 @@ public class Planet : MonoBehaviour
 
     public Cell cellPrefab;
     public int innerRadius, outerRadius, surfaceRadius;
+    public float cellSizeCorrection;
     public float cellHeight, cellIntervalAngle;
 
     public Building woodBuildingPrefab;
@@ -75,6 +76,7 @@ public class Planet : MonoBehaviour
                 Vector3 dir = Vector2.right;
                 dir = Quaternion.Euler(0, 0, cellIntervalAngle * j) * dir;
                 Cell cell = Instantiate(cellPrefab, transform.position + dir.normalized * i * cellHeight, Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
+                cell.transform.localScale = new Vector3(1 + (i - surfaceRadius) * cellSizeCorrection, 1, 1);
                 grid[i, j] = cell;// new Cell(i, j);
                 cell.SetCell(this, i, j);
                 //if (i == surfaceRadius + 1) cell.AddCircleNeighbours();

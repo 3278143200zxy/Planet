@@ -75,6 +75,7 @@ public class Creature : MonoBehaviour
     // Update is called once per 
     void Update()
     {
+        //Debug.Log(currentCell.radiusIdx + " " + currentCell.angleIdx + " " + lastCurrentCell.radiusIdx + " " + lastCurrentCell.angleIdx);
 
         Vector3 dir = transform.position - planet.transform.position;
         float angle = Vector2.SignedAngle(Vector2.right, dir);
@@ -130,69 +131,38 @@ public class Creature : MonoBehaviour
             case CreatureState.Walk:
                 if (path.Count > 0)
                 {
-                    if (path[0] != lastCurrentCell)
+                    //Debug.Log(currentCell.radiusIdx * planet.cellHeight + " " + Vector2.Distance(transform.position, planet.transform.position));
+                    if (path[0].radiusIdx == lastCurrentCell.radiusIdx && Math.Abs(currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position)) <= 0.01f)
                     {
-                        if (path[0].radiusIdx == lastCurrentCell.radiusIdx)
+                        Debug.Log(currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) + " " + 1 + " " + Time.time);
+                        float step = walkSpeed / (polarCoord.r * planet.cellHeight) * Time.deltaTime * Mathf.Rad2Deg;
+                        //float targetAngle = polarCoord.a * planet.cellIntervalAngle + idleWalkAngleOffset;
+                        float targetAngle = path[0].angleIdx * planet.cellIntervalAngle;
+                        float angleDiff = Mathf.DeltaAngle(targetAngle, currentAngle);
+                        if (Mathf.Abs(angleDiff) <= step)
                         {
-                            float step = walkSpeed / (polarCoord.r * planet.cellHeight) * Time.deltaTime * Mathf.Rad2Deg;
-                            //float targetAngle = polarCoord.a * planet.cellIntervalAngle + idleWalkAngleOffset;
-                            float targetAngle = path[0].angleIdx * planet.cellIntervalAngle;
-                            float angleDiff = Mathf.DeltaAngle(targetAngle, currentAngle);
-                            if (Mathf.Abs(angleDiff) <= step)
-                            {
-                                transform.RotateAround(planet.transform.position, Vector3.forward, angleDiff);
-                                lastCurrentCell = path[0];
-                                path.RemoveAt(0);
-                            }
-                            else transform.RotateAround(planet.transform.position, Vector3.forward, step * -Mathf.Sign(angleDiff));
+                            transform.RotateAround(planet.transform.position, Vector3.forward, angleDiff);
+                            lastCurrentCell = path[0];
+                            path.RemoveAt(0);
                         }
-                        else
-                        {
-                            float step = climbSpeed * Time.deltaTime;
-                            float distanceDiff = Vector2.Distance(path[0].transform.position, planet.transform.position) - Vector2.Distance(transform.position, planet.transform.position);
-                            //Debug.Log(distanceDiff + " " + step);
-                            if (Mathf.Abs(distanceDiff) <= step)
-                            {
-                                transform.position += transform.up * distanceDiff;
-                                lastCurrentCell = path[0];
-                                path.RemoveAt(0);
-                            }
-                            else transform.position += transform.up * step * Mathf.Sign(distanceDiff);
-                        }
+                        else transform.RotateAround(planet.transform.position, Vector3.forward, step * -Mathf.Sign(angleDiff));
                     }
                     else
                     {
-                        if (currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) <= 0.05f)
+                        Debug.Log(2 + " " + Time.time);
+                        float step = climbSpeed * Time.deltaTime;
+                        float distanceDiff = Vector2.Distance(path[0].transform.position, planet.transform.position) - Vector2.Distance(transform.position, planet.transform.position);
+                        //Debug.Log(distanceDiff + " " + step);
+                        if (Mathf.Abs(distanceDiff) <= step)
                         {
-                            float step = walkSpeed / (polarCoord.r * planet.cellHeight) * Time.deltaTime * Mathf.Rad2Deg;
-                            //float targetAngle = polarCoord.a * planet.cellIntervalAngle + idleWalkAngleOffset;
-                            float targetAngle = path[0].angleIdx * planet.cellIntervalAngle;
-                            float angleDiff = Mathf.DeltaAngle(targetAngle, currentAngle);
-                            if (Mathf.Abs(angleDiff) <= step)
-                            {
-                                transform.RotateAround(planet.transform.position, Vector3.forward, angleDiff);
-                                lastCurrentCell = path[0];
-                                path.RemoveAt(0);
-                            }
-                            else transform.RotateAround(planet.transform.position, Vector3.forward, step * -Mathf.Sign(angleDiff));
+                            transform.position += transform.up * distanceDiff;
+                            lastCurrentCell = path[0];
+                            path.RemoveAt(0);
                         }
-                        else
-                        {
-
-                            float step = climbSpeed * Time.deltaTime;
-                            float distanceDiff = Vector2.Distance(path[0].transform.position, planet.transform.position) - Vector2.Distance(transform.position, planet.transform.position);
-                            //Debug.Log(distanceDiff + " " + step);
-                            if (Mathf.Abs(distanceDiff) <= step)
-                            {
-                                transform.position += transform.up * distanceDiff;
-                                lastCurrentCell = path[0];
-                                path.RemoveAt(0);
-                            }
-                            else transform.position += transform.up * step * Mathf.Sign(distanceDiff);
-                        }
+                        else transform.position += transform.up * step * Mathf.Sign(distanceDiff);
                     }
-
                 }
+
                 if (path.Count == 0) ChangeCreatureState(CreatureState.Idle);
                 break;
 

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class CameraController : MonoBehaviour
 {
@@ -34,8 +35,11 @@ public class CameraController : MonoBehaviour
         if (Input.GetKey(KeyCode.W)) transform.position += transform.up * moveVelocity * Time.deltaTime;//transform.position.normalized * moveVelocity * Time.deltaTime;
         if (Input.GetKey(KeyCode.S)) transform.position -= transform.up * moveVelocity * Time.deltaTime;//transform.position.normalized * moveVelocity * Time.deltaTime;
         if (Vector3.Dot(transform.up, transform.position) <= 0) transform.position = new Vector3(0, 0, -10);
-        float scroll = Input.GetAxis("Mouse ScrollWheel");
-        Camera.main.orthographicSize += scroll * zoomVelocity;
+        if (!(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()))
+        {
+            float scroll = Input.GetAxis("Mouse ScrollWheel");
+            Camera.main.orthographicSize += scroll * zoomVelocity;
+        }
         /*
     }
     else

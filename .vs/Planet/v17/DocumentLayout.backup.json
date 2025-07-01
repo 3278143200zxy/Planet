@@ -3,7 +3,11 @@
   "WorkspaceRootPath": "C:\\Users\\32781\\Planet\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\placedobjectbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|c:\\users\\32781\\planet\\assets\\script\\placedobjectbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\placedobjectbutton.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -15,12 +19,8 @@
       "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\placedobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|c:\\users\\32781\\planet\\assets\\script\\planet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\planet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\planet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\cameracontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -54,7 +54,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
@@ -74,13 +74,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "Creature.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Creature.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Creature.cs",
               "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Creature.cs",
               "RelativeToolTip": "Assets\\Script\\Creature.cs",
-              "ViewState": "AgIAADEAAAAAAAAAAAAiwFkAAAA3AAAAAAAAAA==",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAkwK4AAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-26T15:33:17.683Z",
               "EditorCaption": ""
@@ -107,8 +107,7 @@
               "RelativeToolTip": "Assets\\Script\\Building.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAYAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-26T08:22:04.477Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-26T08:22:04.477Z"
             },
             {
               "$type": "Document",
@@ -120,12 +119,11 @@
               "RelativeToolTip": "Assets\\Script\\Cell.cs",
               "ViewState": "AgIAADkAAAAAAAAAAAAYwBkAAAAdAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-25T04:55:03.739Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-25T04:55:03.739Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Planet.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Planet.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Planet.cs",
@@ -133,12 +131,11 @@
               "RelativeToolTip": "Assets\\Script\\Planet.cs",
               "ViewState": "AgIAAFAAAAAAAAAAAAAqwF8AAABJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T13:26:02.562Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-23T13:26:02.562Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "PlacedObjectButton.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\PlacedObjectButton.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\PlacedObjectButton.cs",
@@ -159,12 +156,11 @@
               "RelativeToolTip": "Assets\\Script\\ResourceManager.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T12:55:14.204Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-24T12:55:14.204Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "PlacedObject.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\PlacedObject.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\PlacedObject.cs",
@@ -172,8 +168,7 @@
               "RelativeToolTip": "Assets\\Script\\PlacedObject.cs",
               "ViewState": "AgIAAA4AAAAAAAAAAAAkwCcAAAAfAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-24T12:52:53.352Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-24T12:52:53.352Z"
             },
             {
               "$type": "Document",
@@ -185,12 +180,11 @@
               "RelativeToolTip": "Assets\\Script\\CameraController.cs",
               "ViewState": "AgIAABAAAAAAAAAAAAAAwB4AAAAKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T14:05:12.365Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-23T14:05:12.365Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MouseManager.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\MouseManager.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\MouseManager.cs",
@@ -198,8 +192,7 @@
               "RelativeToolTip": "Assets\\Script\\MouseManager.cs",
               "ViewState": "AgIAAIQAAAAAAAAAAAAcwJUAAAAlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-06-23T12:46:51.979Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-06-23T12:46:51.979Z"
             }
           ]
         }
