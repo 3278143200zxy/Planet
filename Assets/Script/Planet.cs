@@ -15,26 +15,70 @@ public struct PolarCoord
         this.a = a;
     }
 }
+
 class PriorityQueue<T>
 {
-    private List<(T item, int priority)> elements = new List<(T item, int priority)>();
+    private SortedList<float, Queue<T>> elements = new SortedList<float, Queue<T>>();
 
-
-    public void Enqueue(T item, int priority)
+    // Enqueue an item with a priority
+    public void Enqueue(T item, float priority)
     {
-        elements.Add((item, priority));
-        elements.Sort((a, b) => a.priority.CompareTo(b.priority));
+        if (!elements.ContainsKey(priority))
+        {
+            elements[priority] = new Queue<T>();
+        }
+        elements[priority].Enqueue(item);
     }
 
+    // Dequeue the item with the highest priority (smallest key)
     public T Dequeue()
     {
-        var item = elements[0].item;
-        elements.RemoveAt(0);
+        // Get the queue with the smallest priority key (highest priority)
+        var firstPriority = elements.Keys[0];
+        var queue = elements[firstPriority];
+        var item = queue.Dequeue();
+
+        // Remove the queue if it's empty
+        if (queue.Count == 0)
+        {
+            elements.Remove(firstPriority);
+        }
         return item;
     }
 
-    public bool Contains(T item) => elements.Any(e => EqualityComparer<T>.Default.Equals(e.item, item));
-    public int Count => elements.Count;
+    // Check if the queue contains an item
+    public bool Contains(T item)
+    {
+        foreach (var queue in elements.Values)
+        {
+            if (queue.Contains(item))
+                return true;
+        }
+        return false;
+    }
+
+    // Update the priority of an item
+    public bool UpdatePriority(T item, float newPriority)
+    {
+        // Remove the item from its current position
+        foreach (var priority in elements.Keys)
+        {
+            var queue = elements[priority];
+            if (queue.Contains(item))
+            {
+                queue = new Queue<T>(queue.Where(x => !EqualityComparer<T>.Default.Equals(x, item))); // Remove item
+                elements[priority] = queue;
+
+                // Enqueue the item with the new priority
+                Enqueue(item, newPriority);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Count of elements in the queue
+    public int Count => elements.Values.Sum(queue => queue.Count);
 }
 
 public class Planet : MonoBehaviour
@@ -45,6 +89,10 @@ public class Planet : MonoBehaviour
     public int innerRadius, outerRadius, surfaceRadius;
     public float cellSizeCorrection;
     public float cellHeight, cellIntervalAngle;
+
+    public List<Item> items = new List<Item>();
+
+    public float gravity;
 
     public Building woodBuildingPrefab;
     public float woodPossibility;
@@ -93,9 +141,7 @@ public class Planet : MonoBehaviour
             {
                 Building woodBuilding = Instantiate(woodBuildingPrefab, transform.position + dir.normalized * tempIdx * cellHeight, Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
 
-                Cell cell1 = grid[tempIdx, i], cell2 = grid[tempIdx + 1, i];
-                cell1.building = woodBuilding; cell2.building = woodBuilding;
-                woodBuilding.AddCell(cell1); woodBuilding.AddCell(cell2);
+                woodBuilding.SetBuilding(grid[tempIdx, i]);
 
 
             }
@@ -108,12 +154,13 @@ public class Planet : MonoBehaviour
     {
         var openSet = new PriorityQueue<Cell>();
         var cameFrom = new Dictionary<Cell, Cell>();
-        var gScore = new Dictionary<Cell, int>();
-        var fScore = new Dictionary<Cell, int>();
+        var gScore = new Dictionary<Cell, float>();
+        var fScore = new Dictionary<Cell, float>();
         var closedSet = new HashSet<Cell>();
 
-        int Heuristic(Cell a, Cell b) => (int)(Mathf.Abs(a.transform.position.x - b.transform.position.x) + Mathf.Abs(a.transform.position.y - b.transform.position.y));
-
+        int Heuristic(Cell a, Cell b) =>
+            (int)(Mathf.Abs(a.transform.position.x - b.transform.position.x) +
+                  Mathf.Abs(a.transform.position.y - b.transform.position.y));
 
         openSet.Enqueue(start, 0);
         gScore[start] = 0;
@@ -125,13 +172,14 @@ public class Planet : MonoBehaviour
 
             if (current == end)
             {
-                var path = new List<Cell>();
-                while (cameFrom.ContainsKey(current))
+                // 计算路径总代价
+                float pathLength = gScore[end]; // 总路径代价
+                var path = new List<Cell> { current };
+                while (cameFrom.TryGetValue(current, out var prev))
                 {
+                    current = prev;
                     path.Add(current);
-                    current = cameFrom[current];
                 }
-                path.Add(start);
                 path.Reverse();
                 return path;
             }
@@ -143,12 +191,13 @@ public class Planet : MonoBehaviour
                 if (/*!neighbor.canStand || */closedSet.Contains(neighbor))
                     continue;
 
-                int currentG = gScore.ContainsKey(current) ? gScore[current] : int.MaxValue;
-                int neighborG = gScore.ContainsKey(neighbor) ? gScore[neighbor] : int.MaxValue;
-                int tentativeG = currentG + 1;
+                float currentG = gScore.TryGetValue(current, out var g) ? g : float.MaxValue;
+                float neighborG = gScore.TryGetValue(neighbor, out var ng) ? ng : float.MaxValue;
+
+                float moveCost = current.GetMoveCostTo(neighbor);
+                float tentativeG = currentG + moveCost;
 
                 if (tentativeG < neighborG)
-
                 {
                     cameFrom[neighbor] = current;
                     gScore[neighbor] = tentativeG;
@@ -156,13 +205,89 @@ public class Planet : MonoBehaviour
 
                     if (!openSet.Contains(neighbor))
                         openSet.Enqueue(neighbor, fScore[neighbor]);
+                    else
+                        openSet.UpdatePriority(neighbor, fScore[neighbor]); // 如果支持
                 }
             }
         }
 
         return null; // 无路径
     }
+    public List<Cell> FindPathWithMaxDistance(Cell start, Cell end, float maxDistance)
+    {
+        var openSet = new PriorityQueue<Cell>();
+        var cameFrom = new Dictionary<Cell, Cell>();
+        var gScore = new Dictionary<Cell, float>();
+        var fScore = new Dictionary<Cell, float>();
 
+        float Heuristic(Cell a, Cell b) =>
+            Mathf.Abs(a.transform.position.x - b.transform.position.x) +
+            Mathf.Abs(a.transform.position.y - b.transform.position.y);
+
+        openSet.Enqueue(start, 0);
+        gScore[start] = 0;
+        fScore[start] = Heuristic(start, end);
+
+        while (openSet.Count > 0)
+        {
+            var current = openSet.Dequeue();
+
+            // ✅ 超过最大距离，提前终止
+            if (gScore[current] > maxDistance)
+                return null;
+
+            if (current == end)
+            {
+                float totalPathLength = gScore[end];
+                if (totalPathLength > maxDistance)
+                    return null;
+
+                var path = new List<Cell> { current };
+                while (cameFrom.ContainsKey(current))
+                {
+                    current = cameFrom[current];
+                    path.Add(current);
+                }
+                path.Reverse();
+                return path;
+            }
+
+            foreach (var neighbor in current.GetNeighbours())
+            {
+                if (!neighbor.canStand) continue;
+
+                float tentativeG = gScore.TryGetValue(current, out var g) ? g : float.MaxValue;
+                tentativeG += current.GetMoveCostTo(neighbor);
+
+                if (tentativeG < (gScore.TryGetValue(neighbor, out var ng) ? ng : float.MaxValue))
+                {
+                    cameFrom[neighbor] = current;
+                    gScore[neighbor] = tentativeG;
+                    fScore[neighbor] = tentativeG + Heuristic(neighbor, end);
+
+                    if (!openSet.Contains(neighbor))
+                        openSet.Enqueue(neighbor, fScore[neighbor]);
+                    else
+                        openSet.UpdatePriority(neighbor, fScore[neighbor]);
+                }
+            }
+        }
+
+        return null; // 无法找到路径或超出最大距离
+    }
+
+    public float GetPathLength(List<Cell> path)
+    {
+        float totalLength = 0f;
+
+        for (int i = 0; i < path.Count - 1; i++)
+        {
+            // 获取当前格子和下一个格子之间的距离
+            totalLength += path[i].GetMoveCostTo(path[i + 1]);
+        }
+
+        return totalLength;
+    }
     public Cell PosToCell(Vector3 pos)
     {
         Vector3 dir = pos - transform.position;

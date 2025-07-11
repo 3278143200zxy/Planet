@@ -21,7 +21,7 @@ public class PlacedObjectButton : MonoBehaviour
         PlacedObject p = MouseManager.instance.placedObject;
         if (p != null) Destroy(p.gameObject);
         MouseManager.instance.placedObject = Instantiate(placedObjectPrefab);
-        MouseManager.instance.DeselectCreature();
+        MouseManager.instance.DeselectBaseUnit();
         //Debug.Log(1);
 
     }

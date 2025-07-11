@@ -8,14 +8,20 @@ public struct NeighbourCellNode
 {
     public Cell cell;
     public int number;
+    public float distance;
     public NeighbourCellNode(Cell c)
     {
         cell = c;
         number = 0;
+        distance = 0;
     }
     public void AddCellNumber()
     {
         number++;
+    }
+    public void SetDistance(float d)
+    {
+        distance = d;
     }
 }
 public class Cell : MonoBehaviour
@@ -24,7 +30,16 @@ public class Cell : MonoBehaviour
     public int radiusIdx, angleIdx;
 
     public Building building;
-    public bool canStand = false;
+    public PlacedObject placedObject;
+    public bool canPlace
+    {
+        get { return building == null && placedObject == null; }
+    }
+    public bool canStand
+    {
+        get { return standNumber > 0; }
+    }
+    public int standNumber;
     private int[] rd = new int[4] { 1, -1, 0, 0 };
     private int[] ad = new int[4] { 0, 0, 1, -1 };
     public NeighbourCellNode[] neighbourCellNodes = new NeighbourCellNode[4];
@@ -45,10 +60,10 @@ public class Cell : MonoBehaviour
             if (ai < 0) ai += planet.circleCellNumber;
             neighbourCellNodes[i] = new NeighbourCellNode(planet.grid[ri, ai]);
         }
+        if (radiusIdx == planet.surfaceRadius) standNumber++;
         if (radiusIdx == planet.surfaceRadius + 1)
         {
-            AddCircleNeighbours();
-            SetCanStand(true);
+            AddCircleNeighbours(1);
         }
 
     }
@@ -57,10 +72,6 @@ public class Cell : MonoBehaviour
         planet = p;
         radiusIdx = ri;
         angleIdx = ai;
-    }
-    public void SetCanStand(bool cs)
-    {
-        canStand = cs;
     }
     public List<Cell> GetNeighbours()
     {
@@ -72,24 +83,40 @@ public class Cell : MonoBehaviour
         }
         return temp;
     }
-    public void AddCircleNeighbours()
+    public float GetMoveCostTo(Cell neighbor)
     {
-        neighbourCellNodes[2].AddCellNumber();
-        neighbourCellNodes[3].AddCellNumber();
+        for (int i = 0; i < 4; i++)
+        {
+            if (neighbourCellNodes[i].cell == neighbor)
+            {
+                return neighbourCellNodes[i].distance; // 返回邻居的移动代价
+            }
+        }
+        return float.MaxValue; // 如果没有找到邻居，返回一个非常大的值，表示无法到达
     }
-    public void AddAboveNeighbour()
+    public void AddCircleNeighbours(float d)
+    {
+        AddRightNeighbour(d);
+        AddLeftNeighbour(d);
+    }
+    public void AddAboveNeighbour(float d)
     {
         neighbourCellNodes[0].AddCellNumber();
+        neighbourCellNodes[0].SetDistance(d);
     }
-    public void AddBelowNeighbour()
+    public void AddBelowNeighbour(float d)
     {
         neighbourCellNodes[1].AddCellNumber();
-    }public void AddLeftNeighbour()
+        neighbourCellNodes[1].SetDistance(d);
+    }
+    public void AddLeftNeighbour(float d)
     {
         neighbourCellNodes[2].AddCellNumber();
+        neighbourCellNodes[2].SetDistance(d);
     }
-    public void AddRightNeighbour()
+    public void AddRightNeighbour(float d)
     {
         neighbourCellNodes[3].AddCellNumber();
+        neighbourCellNodes[3].SetDistance(d);
     }
 }

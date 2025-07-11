@@ -1,47 +1,36 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Transactions;
 using UnityEngine;
 
-[Serializable]
-public struct Circle
-{
-    public float x, y;
-    public float radius;
-    public Circle(float x, float y, float radius)
-    {
-        this.x = x;
-        this.y = y;
-        this.radius = radius;
-    }
-}
+
 public enum CreatureState
 {
+    Air,
     Idle,
     Walk,
+    CutTree,
 }
-public class Creature : MonoBehaviour
+public class Creature : BaseUnit
 {
+    [Header("Creature")]
     public CreatureState creatureState;
     private Animator animator;
-
-    public Planet planet;
+    public float lastNormalizedTime;
     public PolarCoord polarCoord
     {
         get { return planet.PosToPolarCoord(transform.position); }
-    }
-    public Cell currentCell
-    {
-        get { return planet.PosToCell(transform.position); }
     }
     public Cell lastCurrentCell;
     public float currentAngle
     {
         get { return Vector2.SignedAngle(Vector2.right, transform.position - planet.transform.position); }
     }
+    public Vector3 velocity;
 
-    public List<Circle> clickCircles = new List<Circle>();
+    public Task task;
 
     public float idleWalkSpeed;
     public float minIdleWalkInterval, maxIdleWalkInterval;
@@ -53,17 +42,25 @@ public class Creature : MonoBehaviour
     public float walkSpeed;
     public float climbSpeed;
 
-    public GameObject outline;
-    public int rangeStartAngleIdx, rangeEndAngleIdx;
-    private void Awake()
+    public List<TaskType> priorityTaskTypes = new List<TaskType>();
+
+    public float processPerCutTree;
+    public Wood wood;
+
+    public PlacedObject buildingPlacedObject;
+    public Item reseverdItem;
+    public Transform itemPos;
+    public override void Awake()
     {
+        base.Awake();
 
         animator = GetComponent<Animator>();
-
+        task = null;
     }
-    // Start is called before the first  update
-    void Start()
+    public override void Start()
     {
+        base.Start();
+
         planet = MouseManager.instance.planets[0];
         lastCurrentCell = currentCell;
         //ChangeCreatureState(CreatureState.Idle);
@@ -71,10 +68,10 @@ public class Creature : MonoBehaviour
         idleWalkInterval = UnityEngine.Random.Range(minIdleWalkInterval, maxIdleWalkInterval);
         idleWalkAngleOffset = UnityEngine.Random.Range(-planet.cellIntervalAngle / 2, planet.cellIntervalAngle / 2);
     }
-
-    // Update is called once per 
-    void Update()
+    public override void Update()
     {
+        base.Update();
+
         //Debug.Log(currentCell.radiusIdx + " " + currentCell.angleIdx + " " + lastCurrentCell.radiusIdx + " " + lastCurrentCell.angleIdx);
 
         Vector3 dir = transform.position - planet.transform.position;
@@ -83,16 +80,23 @@ public class Creature : MonoBehaviour
         Vector3 direction = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
         transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
-        if (Input.GetMouseButtonDown(0) && !MouseManager.instance.isChoosingCreature)
-        {
-            foreach (Circle c in clickCircles)
-            {
-                float sqrDistance = Vector2.SqrMagnitude(transform.position + new Vector3(c.x, c.y) - MouseManager.instance.mousePos);
-                if (sqrDistance < c.radius * c.radius) MouseManager.instance.SelectCreature(this);
-            }
-        }
+        /*
+        Cell belowCell = currentCell.neighbourCellNodes[1].cell;
+        if ((belowCell != null && !belowCell.canStand) || currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) < 0) ChangeCreatureState(CreatureState.Air);
+        */
+
         switch (creatureState)
         {
+            /*
+            case CreatureState.Air:
+                transform.position += velocity * Time.deltaTime;
+                if (belowCell != null && belowCell.canStand && currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= 0)
+                {
+                    FindTask();
+                }
+
+                break;
+                */
             case CreatureState.Idle:
                 /*
                 if (isIdleWalking)
@@ -134,7 +138,7 @@ public class Creature : MonoBehaviour
                     //Debug.Log(currentCell.radiusIdx * planet.cellHeight + " " + Vector2.Distance(transform.position, planet.transform.position));
                     if (path[0].radiusIdx == lastCurrentCell.radiusIdx && Math.Abs(currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position)) <= 0.01f)
                     {
-                        Debug.Log(currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) + " " + 1 + " " + Time.time);
+                        //Debug.Log(currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) + " " + 1 + " " + Time.time);
                         float step = walkSpeed / (polarCoord.r * planet.cellHeight) * Time.deltaTime * Mathf.Rad2Deg;
                         //float targetAngle = polarCoord.a * planet.cellIntervalAngle + idleWalkAngleOffset;
                         float targetAngle = path[0].angleIdx * planet.cellIntervalAngle;
@@ -149,7 +153,6 @@ public class Creature : MonoBehaviour
                     }
                     else
                     {
-                        Debug.Log(2 + " " + Time.time);
                         float step = climbSpeed * Time.deltaTime;
                         float distanceDiff = Vector2.Distance(path[0].transform.position, planet.transform.position) - Vector2.Distance(transform.position, planet.transform.position);
                         //Debug.Log(distanceDiff + " " + step);
@@ -163,7 +166,66 @@ public class Creature : MonoBehaviour
                     }
                 }
 
-                if (path.Count == 0) ChangeCreatureState(CreatureState.Idle);
+                if (path.Count == 0)
+                {
+                    if (task == null)
+                        ChangeCreatureState(CreatureState.Idle);
+                    else
+                        switch (task.taskType)
+                        {
+                            case TaskType.CutTree:
+                                ChangeCreatureState(CreatureState.CutTree);
+                                break;
+                            case TaskType.MoveItem:
+                                if (reseverdItem == null)
+                                {
+                                    Item it = task.baseUnits[0].GetComponent<Item>();
+                                    PickUpItem(it);
+                                    it.PickUp();
+                                    SetTargetCell(planet.PosToCell(task.baseUnits[1].transform.position));
+                                }
+                                else
+                                {
+
+                                }
+                                break;
+                            case TaskType.Build:
+                                if (reseverdItem.isPickedUp)
+                                {
+                                    buildingPlacedObject.AddItem(reseverdItem);
+                                    reseverdItem = null;
+                                    if (buildingPlacedObject != null)
+                                    {
+                                        List<Cell> tempPath = pathToClosetItem(buildingPlacedObject.requiredItemTypes, out reseverdItem);
+                                        if (reseverdItem == null) buildingPlacedObject.CancelBuildingTask();
+                                        else
+                                        {
+                                            path = tempPath;
+                                            ChangeCreatureState(CreatureState.Walk);
+                                            reseverdItem.reserver = this;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    PickUpItem(reseverdItem);
+                                    SetTargetCell(buildingPlacedObject.currentCell);
+                                }
+                                break;
+                        }
+
+                }
+                break;
+            case CreatureState.CutTree:
+                AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                float current = stateInfo.normalizedTime % 1f;
+
+                if (lastNormalizedTime > current)
+                {
+                    wood.CutTree(processPerCutTree);
+                }
+
+                lastNormalizedTime = current;
                 break;
 
         }
@@ -181,17 +243,122 @@ public class Creature : MonoBehaviour
                 animator.Play("Walk", 0, 0f);
                 animator.Update(0f);
                 break;
+            case CreatureState.CutTree:
+                animator.Play("PunchTree", 0, 0f);
+                animator.Update(0f);
+                break;
+            case CreatureState.Air:
+                velocity = planet.transform.position - transform.position;
+                velocity = velocity.normalized;
+                break;
         }
     }
-    public void OnDrawGizmos()
+    public void PickUpItem(Item it)
     {
-        foreach (Circle c in clickCircles)
-        {
-            Gizmos.DrawWireSphere(transform.position + new Vector3(c.x, c.y), c.radius);
-        }
+        it.transform.SetParent(transform);
+        it.transform.position = itemPos.position;
+        it.PickUp();
+
+    }
+    public void ReserveItem(Item it)
+    {
+        it.reserver = this;
+        reseverdItem = it;
     }
     public void SetTargetCell(Cell tc)
     {
-
+        List<Cell> temp = planet.FindPath(planet.PosToCell(transform.position), tc);
+        if (temp != null)
+        {
+            path = temp;
+            ChangeCreatureState(CreatureState.Walk);
+        }
+    }
+    public void SetTask(Task t)
+    {
+        if (t == null)
+        {
+            //ChangeCreatureState(CreatureState.Idle);
+            return;
+        }
+        task = t;
+        TaskManager.instance.taskToCreatures[t].Add(this);
+        switch (task.taskType)
+        {
+            case TaskType.CutTree:
+                SetTargetCell(planet.PosToCell(task.baseUnits[0].transform.position));
+                wood = task.baseUnits[0].GetComponent<Wood>();
+                break;
+            case TaskType.MoveItem:
+                SetTargetCell(planet.PosToCell(task.baseUnits[0].transform.position));
+                break;
+            case TaskType.Build:
+                buildingPlacedObject = task.baseUnits[0].GetComponent<PlacedObject>();
+                List<Cell> tempPath = pathToClosetItem(buildingPlacedObject.requiredItemTypes, out reseverdItem);
+                if (reseverdItem == null) buildingPlacedObject.CancelBuildingTask();
+                else
+                {
+                    path = tempPath;
+                    ChangeCreatureState(CreatureState.Walk);
+                    reseverdItem.reserver = this;
+                }
+                break;
+        }
+    }
+    public void FindTask()
+    {
+        if (task != null) return;
+        //float tempDis = float.MaxValue;
+        Task tempTask = null;
+        foreach (var t in TaskManager.instance.tasks)
+        {
+            if ((TaskManager.instance.taskToCreatures.ContainsKey(t) && (TaskManager.instance.taskToCreatures[t].Count > 0))) continue;
+            if (tempTask == null) tempTask = t;
+            else if (priorityTaskTypes.Contains(t.taskType) && !priorityTaskTypes.Contains(tempTask.taskType)) tempTask = t;
+            else
+            {
+                tempTask = t;
+            }
+        }
+        SetTask(tempTask);
+    }
+    public void CancelTask()
+    {
+        task = null;
+        SetTargetCell(currentCell);
+        FindTask();
+    }
+    public override void DestoryBaseUnit()
+    {
+        base.DestoryBaseUnit();
+    }
+    public List<Cell> pathToClosetItem(List<ItemType> itemTypes, out Item itm)
+    {
+        List<Cell> result = null;
+        float minCost = float.MaxValue;
+        itm = null;
+        foreach (Item it in planet.items)
+        {
+            if (itemTypes.Contains(it.itemType))
+            {
+                List<Cell> tempPath = planet.FindPath(currentCell, it.currentCell);
+                //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);
+                if (tempPath != null)
+                {
+                    float cost = planet.GetPathLength(tempPath);
+                    if (cost < minCost)
+                    {
+                        result = tempPath;
+                        itm = it;
+                        minCost = cost;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public override void OnDrawGizmos()
+    {
+        base.OnDrawGizmos();
     }
 }

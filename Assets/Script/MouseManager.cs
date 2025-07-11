@@ -41,8 +41,9 @@ public class MouseManager : MonoBehaviour
     public PlacedObject placedObject;
     public List<GameObject> lastFrameNoPlacingSigns = new List<GameObject>();
 
-    public Creature creature;
-    public bool isChoosingCreature = false;
+    public BaseUnit baseUnit;
+    private bool isChoosingBaseUnitFrame = false;
+    public BaseUnitInfoPanel baseUnitInfoPanel;
 
     public Color placedObjectColor;
 
@@ -51,6 +52,8 @@ public class MouseManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+
     }
     // Start is called before the first frame update
     void Start()
@@ -89,6 +92,14 @@ public class MouseManager : MonoBehaviour
                 mouseTip.transform.position = planet.transform.position + direction;
                 mouseTip.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
+                if (Input.GetMouseButtonDown(0) && placedObject != null)
+                {
+                    if (mouseCell != null && mouseCell.building != null && mouseCell.building.buildingType == BuildingType.Tree)
+                    {
+                        //creature.SetTargetCell(mouseCell.building.cells[0]);
+                    }
+                }
+
 
                 if (placedObject != null)
                 {
@@ -105,7 +116,7 @@ public class MouseManager : MonoBehaviour
                             if (angleIdx < 0) angle += temp;
                             if (angleIdx >= temp) angleIdx -= temp;
                             Cell processingCell = planet.grid[radiusIdx, angleIdx];
-                            if (processingCell.building != null)
+                            if (!processingCell.canPlace)
                             {
                                 lastFrameNoPlacingSigns.Add(processingCell.noPlacingSign);
                                 processingCell.noPlacingSign.SetActive(true);
@@ -125,46 +136,56 @@ public class MouseManager : MonoBehaviour
 
                 }
 
-                else mouseTip.SetActive(false);
+                if (Input.GetMouseButtonDown(1)) DeselectBaseUnit();
 
-                if (creature != null)
+                // else mouseTip.SetActive(false);
+
+                /*
+                if (baseUnit != null && baseUnit is Creature)
                 {
                     if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
                     {
                         Cell cell = planet.PosToCell(mousePos);
                         if (cell != null)
                         {
-                            List<Cell> temp = planet.FindPath(planet.PosToCell(creature.transform.position), cell);
-                            if (temp != null)
-                            {
-                                creature.path = temp;
-                                creature.ChangeCreatureState(CreatureState.Walk);
-                            }
+                            baseUnit.GetComponent<Creature>().SetTargetCell(cell);
                         }
                     }
-                    if (Input.GetMouseButtonDown(1)) DeselectCreature();
+                    if (Input.GetMouseButtonDown(1)) DeselectBaseUnit();
                 }
-
+                */
             }
         }
     }
-    public void SelectCreature(Creature c)
+    public void LateUpdate()
     {
-        if (placedObject == null)
+        isChoosingBaseUnitFrame = false;
+    }
+    public void SelectBaseUnit(BaseUnit bu)
+    {
+        if (placedObject != null) return;
+
+        if (baseUnit != null && isChoosingBaseUnitFrame)
         {
-            creature = c;
-            isChoosingCreature = true;
-            creature.outline.SetActive(true);
+            SpriteRenderer sr1 = baseUnit.GetComponentInChildren<SpriteRenderer>();
+            SpriteRenderer sr2 = bu.GetComponentInChildren<SpriteRenderer>();
+
+            if (sr1.sortingOrder > sr2.sortingOrder) return;
         }
+        isChoosingBaseUnitFrame = true;
+        DeselectBaseUnit();
+        baseUnit = bu;
+        baseUnit.selectionRectangle.SetActive(true);
+
+        baseUnitInfoPanel.SetBaseUnitInfoPanel(baseUnit.baseUnitInfo);
+        baseUnitInfoPanel.gameObject.SetActive(true);
+
     }
-    public void DeselectCreature()
+    public void DeselectBaseUnit()
     {
-        if (creature == null) return;
-        creature.outline.SetActive(false);
-        creature = null;
-    }
-    private void LateUpdate()
-    {
-        isChoosingCreature = false;
+        if (baseUnit == null) return;
+        baseUnit.selectionRectangle.SetActive(false);
+        baseUnit = null;
+        baseUnitInfoPanel.gameObject.SetActive(false);
     }
 }
