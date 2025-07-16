@@ -134,16 +134,21 @@ MonoBehaviour:
   radiusIdx: 0
   angleIdx: 0
   building: {fileID: 0}
-  canStand: 0
+  placedObject: {fileID: 0}
+  standNumber: 0
   neighbourCellNodes:
   - cell: {fileID: 0}
     number: 0
+    distance: 0
   - cell: {fileID: 0}
     number: 0
+    distance: 0
   - cell: {fileID: 0}
     number: 0
+    distance: 0
   - cell: {fileID: 0}
     number: 0
+    distance: 0
   noPlacingSign: {fileID: 8083197864577237626}
 --- !u!1 &2854690775292174841
 GameObject:

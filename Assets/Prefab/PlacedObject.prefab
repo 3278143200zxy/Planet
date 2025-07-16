@@ -71,7 +71,7 @@ SpriteRenderer:
   m_SortingLayerID: -2119420465
   m_SortingLayer: 1
   m_SortingOrder: 32767
-  m_Sprite: {fileID: 21300000, guid: 08080656eee49e041a41c6f300eb296a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f23f18014c119148a179ff118d7dbeb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -212,16 +212,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canClick: 1
   clickCircles: []
+  clickRectangles: []
   selectionRectangle: {fileID: 3406959329679705299}
   baseUnitInfo:
     baseUnitName: 
     baseUnitDescription: 
     actionTypes: 
+  planet: {fileID: 0}
   dots:
   - x: 0
     y: 0
-  standDots: []
   itemNodes: []
+  requiredItemTypes: 
+  isFinished: 0
   buildingPrefab: {fileID: 8089100300959023357, guid: 66749ff24cd5b7e46891185419ac5309, type: 3}
 --- !u!1 &8535227638125865931
 GameObject:
@@ -248,7 +251,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8535227638125865931}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 2638450469621158704}
@@ -294,7 +297,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1151
-  m_Sprite: {fileID: 21300000, guid: fba1f06ac6c45c345a2ae892bc2f8bfd, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fbb8366c2faa604488d769bd0bfabae0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 0.6}
   m_FlipX: 0
   m_FlipY: 0

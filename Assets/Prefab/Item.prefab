@@ -50,6 +50,7 @@ MonoBehaviour:
   - x: 0
     y: 0
     radius: 0.2
+  clickRectangles: []
   selectionRectangle: {fileID: 8360251962304247362}
   baseUnitInfo:
     baseUnitName: Item
@@ -57,7 +58,7 @@ MonoBehaviour:
     actionTypes: 
   planet: {fileID: 0}
   itemType: 0
-  itemHeight: 0.37
+  itemHeight: 0.35
   isInAir: 0
   isInAirLastFrame: 0
   velocity: {x: 0, y: 0, z: 0}
@@ -135,7 +136,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 32767
-  m_Sprite: {fileID: 21300000, guid: 954bd3d967dd02d49a603fd25681a052, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2799051fa675cae4494ab79541a95931, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -217,7 +218,7 @@ SpriteRenderer:
   m_SortingLayerID: -2119420465
   m_SortingLayer: 1
   m_SortingOrder: 32767
-  m_Sprite: {fileID: 21300000, guid: 08080656eee49e041a41c6f300eb296a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f23f18014c119148a179ff118d7dbeb, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

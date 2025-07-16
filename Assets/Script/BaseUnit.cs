@@ -17,10 +17,26 @@ public struct Circle
         this.radius = radius;
     }
 }
+[Serializable]
+public struct Rectangle
+{
+    public float x, y;
+    public float width, height;
+
+    public Rectangle(float x, float y, float width, float height)
+    {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+}
 public class BaseUnit : MonoBehaviour
 {
     public bool canClick = true;
     public List<Circle> clickCircles = new List<Circle>();
+    public List<Rectangle> clickRectangles = new List<Rectangle>();
+
     public GameObject selectionRectangle;
 
     public BaseUnitInfo baseUnitInfo;
@@ -47,11 +63,31 @@ public class BaseUnit : MonoBehaviour
     {
         if (canClick && Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
         {
+            bool isFinished = false;
+            Vector3 mousePos = MouseManager.instance.mousePos;
             foreach (Circle c in clickCircles)
             {
-                float sqrDistance = Vector2.SqrMagnitude(transform.position + new Vector3(c.x, c.y) - MouseManager.instance.mousePos);
-                if (sqrDistance < c.radius * c.radius) MouseManager.instance.SelectBaseUnit(this);
+                if (isFinished) break;
+                float sqrDistance = Vector2.SqrMagnitude(transform.position + new Vector3(c.x, c.y) - mousePos);
+                if (sqrDistance < c.radius * c.radius)
+                {
+                    MouseManager.instance.SelectBaseUnit(this);
+                    isFinished = true;
+                }
             }
+            foreach (Rectangle r in clickRectangles)
+            {
+                if (isFinished) break;
+                Vector3 center = transform.position + new Vector3(r.x, r.y);
+                float halfWidth = r.width / 2f;
+                float halfHeight = r.height / 2f;
+                if (mousePos.x >= center.x - halfWidth && mousePos.x <= center.x + halfWidth && mousePos.y >= center.y - halfHeight && mousePos.y <= center.y + halfHeight)
+                {
+                    isFinished = true;
+                    MouseManager.instance.SelectBaseUnit(this);
+                }
+            }
+
         }
     }
     public virtual void LateUpdate()
@@ -63,6 +99,22 @@ public class BaseUnit : MonoBehaviour
         foreach (Circle c in clickCircles)
         {
             Gizmos.DrawWireSphere(transform.position + new Vector3(c.x, c.y), c.radius);
+        }
+        foreach (Rectangle r in clickRectangles)
+        {
+            Vector3 c = new Vector3(r.x, r.y, 0f);
+            float halfW = r.width / 2f;
+            float halfH = r.height / 2f;
+
+            Vector3 topLeft = c + new Vector3(-halfW, halfH, 0);
+            Vector3 topRight = c + new Vector3(halfW, halfH, 0);
+            Vector3 bottomRight = c + new Vector3(halfW, -halfH, 0);
+            Vector3 bottomLeft = c + new Vector3(-halfW, -halfH, 0);
+
+            Gizmos.DrawLine(topLeft, topRight);
+            Gizmos.DrawLine(topRight, bottomRight);
+            Gizmos.DrawLine(bottomRight, bottomLeft);
+            Gizmos.DrawLine(bottomLeft, topLeft);
         }
     }
     public void AddActionType(ActionType type)

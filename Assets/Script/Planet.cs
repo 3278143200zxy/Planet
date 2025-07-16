@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public struct PolarCoord
@@ -33,17 +34,28 @@ class PriorityQueue<T>
     // Dequeue the item with the highest priority (smallest key)
     public T Dequeue()
     {
-        // Get the queue with the smallest priority key (highest priority)
-        var firstPriority = elements.Keys[0];
-        var queue = elements[firstPriority];
-        var item = queue.Dequeue();
-
-        // Remove the queue if it's empty
-        if (queue.Count == 0)
+        while (elements.Count > 0)
         {
-            elements.Remove(firstPriority);
+            var firstPriority = elements.Keys[0];
+            var queue = elements[firstPriority];
+
+            if (queue.Count == 0)
+            {
+                elements.Remove(firstPriority); // 直接移除空队列
+                continue;
+            }
+
+            var item = queue.Dequeue();
+
+            if (queue.Count == 0)
+            {
+                elements.Remove(firstPriority); // 再次移除空队列
+            }
+
+            return item;
         }
-        return item;
+
+        throw new InvalidOperationException("Queue is empty");
     }
 
     // Check if the queue contains an item
@@ -60,16 +72,19 @@ class PriorityQueue<T>
     // Update the priority of an item
     public bool UpdatePriority(T item, float newPriority)
     {
-        // Remove the item from its current position
-        foreach (var priority in elements.Keys)
+        foreach (var priority in elements.Keys.ToList()) // 修改点：避免遍历时修改
         {
             var queue = elements[priority];
             if (queue.Contains(item))
             {
-                queue = new Queue<T>(queue.Where(x => !EqualityComparer<T>.Default.Equals(x, item))); // Remove item
-                elements[priority] = queue;
+                // 过滤掉 item
+                var newQueue = new Queue<T>(queue.Where(x => !EqualityComparer<T>.Default.Equals(x, item)));
 
-                // Enqueue the item with the new priority
+                if (newQueue.Count > 0)
+                    elements[priority] = newQueue;
+                else
+                    elements.Remove(priority); // 修改点：移除空队列
+
                 Enqueue(item, newPriority);
                 return true;
             }
@@ -96,6 +111,10 @@ public class Planet : MonoBehaviour
 
     public Building woodBuildingPrefab;
     public float woodPossibility;
+    public Building stoneBuildingPrefab;
+
+    public UnityEvent<ItemType> ItemHitGroundEvent = new UnityEvent<ItemType>();
+
     public int circleCellNumber
     {
         get { return Mathf.RoundToInt(360f / cellIntervalAngle); }
@@ -148,7 +167,21 @@ public class Planet : MonoBehaviour
             //if (i == surfaceRadius + 1) cell.AddCircleNeighbours();
             //cell.SetCanReach(true);
         }
-        //Debug.Log((int)(360f / cellIntervalAngle) + " " + (360f / cellIntervalAngle));
+
+        
+        for (int i = innerRadius; i < surfaceRadius + 1; i++)
+        {
+
+            for (int j = 0; j < Mathf.RoundToInt(360f / cellIntervalAngle); j++)
+            {
+                Vector3 dir = Vector2.right;
+                dir = Quaternion.Euler(0, 0, cellIntervalAngle * j) * dir;
+                Building stoneBuilding = Instantiate(stoneBuildingPrefab, transform.position + dir.normalized * i * cellHeight, Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
+                stoneBuilding.SetBuilding(grid[i, j]);
+            }
+        }
+        
+
     }
     public List<Cell> FindPath(Cell start, Cell end)
     {
@@ -232,7 +265,6 @@ public class Planet : MonoBehaviour
         {
             var current = openSet.Dequeue();
 
-            // ✅ 超过最大距离，提前终止
             if (gScore[current] > maxDistance)
                 return null;
 
@@ -280,13 +312,14 @@ public class Planet : MonoBehaviour
     {
         float totalLength = 0f;
 
-        for (int i = 0; i < path.Count - 1; i++)
-        {
-            // 获取当前格子和下一个格子之间的距离
-            totalLength += path[i].GetMoveCostTo(path[i + 1]);
-        }
+        for (int i = 0; i < path.Count - 1; i++) totalLength += path[i].GetMoveCostTo(path[i + 1]);
 
         return totalLength;
+    }
+    public void ItemHitGround(Item item)
+    {
+        items.Add(item);
+        ItemHitGroundEvent.Invoke(item.itemType);
     }
     public Cell PosToCell(Vector3 pos)
     {

@@ -92,15 +92,6 @@ public class MouseManager : MonoBehaviour
                 mouseTip.transform.position = planet.transform.position + direction;
                 mouseTip.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
-                if (Input.GetMouseButtonDown(0) && placedObject != null)
-                {
-                    if (mouseCell != null && mouseCell.building != null && mouseCell.building.buildingType == BuildingType.Tree)
-                    {
-                        //creature.SetTargetCell(mouseCell.building.cells[0]);
-                    }
-                }
-
-
                 if (placedObject != null)
                 {
                     placedObject.transform.position = planet.transform.position + direction;
@@ -128,6 +119,7 @@ public class MouseManager : MonoBehaviour
                     {
                         placedObject.SetPlacedObject(mouseCell);
                         placedObject = null;
+                        Debug.Log(3);
                     }
                     if (Input.GetMouseButtonDown(1))
                     {

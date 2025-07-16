@@ -9,7 +9,9 @@ public class PlacedObject : BaseUnit
 
     public List<ItemNode> itemNodes = new List<ItemNode>();
     public Dictionary<ItemType, int> itemTypeToNumber = new Dictionary<ItemType, int>();
+    public Dictionary<ItemType, int> requiredItemTypeToNumber = new Dictionary<ItemType, int>();
     public List<ItemType> requiredItemTypes = new List<ItemType>();
+    public bool isFinished = false;
 
     public Dictionary<Item, Task> itemToTask = new Dictionary<Item, Task>();
 
@@ -28,8 +30,10 @@ public class PlacedObject : BaseUnit
 
         foreach (var itemNode in itemNodes)
         {
+            requiredItemTypeToNumber[itemNode.itemType] = itemNode.number;
             itemTypeToNumber[itemNode.itemType] = 0;
             requiredItemTypes.Add(itemNode.itemType);
+
         }
 
         canClick = false;
@@ -66,29 +70,72 @@ public class PlacedObject : BaseUnit
 
         //building.SetBuilding(cell, dots, standDots);
         //Destroy(gameObject);
-        StartBuildingTask();
+        if (IsItemAvailable()) StartBuildingTask();
+        else CancelBuildingTask();
     }
     public void StartBuildingTask()
     {
         buildTask = new Task(TaskType.Build, new BaseUnit[] { this });
         TaskManager.instance.AddTask(buildTask);
+        planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
     }
     public void CancelBuildingTask()
     {
         TaskManager.instance.RemoveTask(buildTask);
+        planet.ItemHitGroundEvent.AddListener(ItemHitGround);
+    }
+    public bool IsItemAvailable()
+    {
+        foreach (var it in planet.items)
+        {
+            if (requiredItemTypes.Contains(it.itemType) && !it.isInAir) return true;
+        }
+        return false;
     }
     public override void DestoryBaseUnit()
     {
+        planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
 
+        foreach (Dot d in dots)
+        {
+            int radiusIdx = d.y + currentCell.radiusIdx, angleIdx = d.x + currentCell.angleIdx;
+            if (radiusIdx >= currentCell.planet.innerRadius && radiusIdx < currentCell.planet.outerRadius)
+            {
+                int temp = Mathf.RoundToInt(360f / currentCell.planet.cellIntervalAngle);
+                if (angleIdx < 0) angleIdx += temp;
+                if (angleIdx >= temp) angleIdx -= temp;
+                Cell processingCell = currentCell.planet.grid[radiusIdx, angleIdx];
+                processingCell.placedObject = this;
+            }
+        }
         base.DestoryBaseUnit();
     }
     public override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
     }
+    public void ItemHitGround(ItemType itemType)
+    {
+        if (!requiredItemTypes.Contains(itemType)) return;
+        StartBuildingTask();
+    }
     public void AddItem(Item item)
     {
         itemTypeToNumber[item.itemType]++;
         item.DestoryBaseUnit();
+
+        if (itemTypeToNumber[item.itemType] >= requiredItemTypeToNumber[item.itemType])
+        {
+            requiredItemTypes.Remove(item.itemType);
+            if (requiredItemTypes.Count <= 0)
+            {
+                isFinished = true;
+
+                building = Instantiate(buildingPrefab, transform.position, transform.rotation);
+                building.SetBuilding(currentCell);
+
+                DestoryBaseUnit();
+            }
+        }
     }
 }

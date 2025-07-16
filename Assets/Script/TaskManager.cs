@@ -9,7 +9,17 @@ public enum TaskType
     Build,
     MoveItem,
 }
-[Serializable]
+public class CreatureTaskNode
+{
+    public Creature creature;
+    public float cost;
+
+    public CreatureTaskNode(Creature creature, float cost)
+    {
+        this.creature = creature;
+        this.cost = cost;
+    }
+}
 public class Task
 {
     public TaskType taskType;
@@ -26,7 +36,7 @@ public class TaskManager : MonoBehaviour
 
     public List<Task> tasks = new List<Task>();
     public List<Creature> creatures = new List<Creature>();
-    public Dictionary<Task, List<Creature>> taskToCreatures = new Dictionary<Task, List<Creature>>();
+    public Dictionary<Task, List<CreatureTaskNode>> taskToCreatureTaskNodes = new Dictionary<Task, List<CreatureTaskNode>>();
 
     public Item item;
 
@@ -45,12 +55,13 @@ public class TaskManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Debug.Log(tasks.Count);
     }
     public void AddTask(Task t)
     {
+        if (t == null) return;
         tasks.Add(t);
-        taskToCreatures[t] = new List<Creature>();
+        taskToCreatureTaskNodes[t] = new List<CreatureTaskNode>();
         foreach (Creature creature in creatures)
         {
             creature.FindTask();
@@ -58,12 +69,21 @@ public class TaskManager : MonoBehaviour
     }
     public void RemoveTask(Task t)
     {
-        if (!tasks.Contains(t)) return;
+        if (t == null && !tasks.Contains(t)) return;
         tasks.Remove(t);
-        foreach (Creature c in taskToCreatures[t])
+
+        foreach (var creatureTaskNode in taskToCreatureTaskNodes[t])
         {
-            c.CancelTask();
+            creatureTaskNode.creature.CancelTask();
         }
-        taskToCreatures.Remove(t);
+        taskToCreatureTaskNodes.Remove(t);
+    }
+    public void DistributeTask(Task t)
+    {
+        foreach (var creature in creatures)
+        {
+
+        }
+
     }
 }

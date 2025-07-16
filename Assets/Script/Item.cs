@@ -8,6 +8,12 @@ public struct ItemNode
 {
     public ItemType itemType;
     public int number;
+
+    public ItemNode(ItemType itemType, int number)
+    {
+        this.itemType = itemType;
+        this.number = number;
+    }
 }
 public enum ItemType
 {
@@ -50,6 +56,7 @@ public class Item : BaseUnit
         Cell belowCell = currentCell.neighbourCellNodes[1].cell;
         isInAir = !(belowCell != null && belowCell.canStand && (currentCell.radiusIdx - 1f / 2f) * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= -itemHeight / 2f);
         isInAirLastFrame = isInAir;
+        if (!isInAir) HitGround();
     }
 
     // Update is called once per frame
@@ -87,7 +94,9 @@ public class Item : BaseUnit
     }
     public void HitGround()
     {
-        planet.items.Add(this);
+        planet.ItemHitGround(this);
+
+        Debug.Log(Time.time);
 
     }
     public void LeaveGround()

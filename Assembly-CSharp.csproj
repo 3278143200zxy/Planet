@@ -75,6 +75,7 @@
     <Compile Include="Assets\Script\Building\Wood.cs" />
     <Compile Include="Assets\Script\Building\Ladder.cs" />
     <Compile Include="Assets\Script\PlacedObjectButton.cs" />
+    <Compile Include="Assets\Script\Building\Warehouse.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\PlacedObjectMaterial\PlacedObject.shader" />

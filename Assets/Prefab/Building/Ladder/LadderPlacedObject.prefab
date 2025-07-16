@@ -97,7 +97,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: itemNodes.Array.data[0].number
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6335397028208873884, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: m_Name
@@ -106,7 +106,7 @@ PrefabInstance:
     - target: {fileID: 6408165377007441128, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: c3d5cfcd56bc33c49b6c0101a32d3c09, type: 3}
+      objectReference: {fileID: 21300000, guid: 70c879b14331a6c4c8ffc3614475585d, type: 3}
     - target: {fileID: 6408165377007441128, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: m_Color.a
       value: 1

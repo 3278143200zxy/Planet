@@ -18,6 +18,7 @@ public class Creature : BaseUnit
     [Header("Creature")]
     public CreatureState creatureState;
     private Animator animator;
+    public bool isChangingAnimationFrame = false;
     public float lastNormalizedTime;
     public PolarCoord polarCoord
     {
@@ -31,6 +32,7 @@ public class Creature : BaseUnit
     public Vector3 velocity;
 
     public Task task;
+    public bool isSettingTask = false;
 
     public float idleWalkSpeed;
     public float minIdleWalkInterval, maxIdleWalkInterval;
@@ -67,6 +69,8 @@ public class Creature : BaseUnit
 
         idleWalkInterval = UnityEngine.Random.Range(minIdleWalkInterval, maxIdleWalkInterval);
         idleWalkAngleOffset = UnityEngine.Random.Range(-planet.cellIntervalAngle / 2, planet.cellIntervalAngle / 2);
+
+        task = null;
     }
     public override void Update()
     {
@@ -193,17 +197,13 @@ public class Creature : BaseUnit
                                 if (reseverdItem.isPickedUp)
                                 {
                                     buildingPlacedObject.AddItem(reseverdItem);
-                                    reseverdItem = null;
-                                    if (buildingPlacedObject != null)
+                                    List<Cell> tempPath = pathToClosetItem(buildingPlacedObject.requiredItemTypes, out reseverdItem);
+                                    if (reseverdItem == null) buildingPlacedObject.CancelBuildingTask();
+                                    else
                                     {
-                                        List<Cell> tempPath = pathToClosetItem(buildingPlacedObject.requiredItemTypes, out reseverdItem);
-                                        if (reseverdItem == null) buildingPlacedObject.CancelBuildingTask();
-                                        else
-                                        {
-                                            path = tempPath;
-                                            ChangeCreatureState(CreatureState.Walk);
-                                            reseverdItem.reserver = this;
-                                        }
+                                        path = tempPath;
+                                        ChangeCreatureState(CreatureState.Walk);
+                                        reseverdItem.reserver = this;
                                     }
                                 }
                                 else
@@ -220,7 +220,7 @@ public class Creature : BaseUnit
                 AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 float current = stateInfo.normalizedTime % 1f;
 
-                if (lastNormalizedTime > current)
+                if (lastNormalizedTime > current && !isChangingAnimationFrame)
                 {
                     wood.CutTree(processPerCutTree);
                 }
@@ -229,6 +229,13 @@ public class Creature : BaseUnit
                 break;
 
         }
+    }
+    public override void LateUpdate()
+    {
+        base.LateUpdate();
+
+        isChangingAnimationFrame = false;
+        isSettingTask = false;
     }
     public void ChangeCreatureState(CreatureState cs)
     {
@@ -252,6 +259,8 @@ public class Creature : BaseUnit
                 velocity = velocity.normalized;
                 break;
         }
+
+        isChangingAnimationFrame = true;
     }
     public void PickUpItem(Item it)
     {
@@ -274,7 +283,7 @@ public class Creature : BaseUnit
             ChangeCreatureState(CreatureState.Walk);
         }
     }
-    public void SetTask(Task t)
+    public void SetTask(Task t, float c)
     {
         if (t == null)
         {
@@ -282,7 +291,7 @@ public class Creature : BaseUnit
             return;
         }
         task = t;
-        TaskManager.instance.taskToCreatures[t].Add(this);
+        TaskManager.instance.taskToCreatureTaskNodes[t].Add(new CreatureTaskNode(this, c));
         switch (task.taskType)
         {
             case TaskType.CutTree:
@@ -310,9 +319,33 @@ public class Creature : BaseUnit
         if (task != null) return;
         //float tempDis = float.MaxValue;
         Task tempTask = null;
+        float cost = float.MaxValue;
+        List<Task> priorityTasks = new List<Task>();
+        List<Task> normalTasks = new List<Task>();
         foreach (var t in TaskManager.instance.tasks)
         {
-            if ((TaskManager.instance.taskToCreatures.ContainsKey(t) && (TaskManager.instance.taskToCreatures[t].Count > 0))) continue;
+            if (TaskManager.instance.taskToCreatureTaskNodes.ContainsKey(t) && TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0 && !TaskManager.instance.taskToCreatureTaskNodes[t][0].creature.isSettingTask) continue;
+            if (priorityTaskTypes.Contains(t.taskType)) priorityTasks.Add(t);
+            else normalTasks.Add(t);
+        }
+        foreach (var t in TaskManager.instance.tasks)
+        {
+
+            if (TaskManager.instance.taskToCreatureTaskNodes.ContainsKey(t) && TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0)
+            {
+                //float tempCost = planet.GetPathLength(planet.FindPath(currentCell, t.baseUnits[0].currentCell));
+                //if (tempCost > cost) continue;
+                continue;
+            }
+
+
+            switch (t.taskType)
+            {
+                case TaskType.CutTree:
+                case TaskType.Build:
+                    if (planet.FindPath(currentCell, t.baseUnits[0].currentCell) == null) continue;
+                    break;
+            }
             if (tempTask == null) tempTask = t;
             else if (priorityTaskTypes.Contains(t.taskType) && !priorityTaskTypes.Contains(tempTask.taskType)) tempTask = t;
             else
@@ -320,7 +353,7 @@ public class Creature : BaseUnit
                 tempTask = t;
             }
         }
-        SetTask(tempTask);
+        SetTask(tempTask, cost);
     }
     public void CancelTask()
     {
@@ -339,7 +372,7 @@ public class Creature : BaseUnit
         itm = null;
         foreach (Item it in planet.items)
         {
-            if (itemTypes.Contains(it.itemType))
+            if (itemTypes.Contains(it.itemType) && it.reserver == null)
             {
                 List<Cell> tempPath = planet.FindPath(currentCell, it.currentCell);
                 //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);
