@@ -293,10 +293,6 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 409752173c57c8445a24776004ea4b6c, type: 3}
-    - target: {fileID: 2169449883036482745, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
     - target: {fileID: 3134180221200808268, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -465,7 +461,9 @@ MonoBehaviour:
   cutTreeTip: {fileID: 5800721489854629238}
   treeCuttingProcess: 1
   treeCuttingProcessSlider: {fileID: 5057087428123491262}
+  sliderTickMarkPrefab: {fileID: 0}
   woodItemPrefab: {fileID: 3828036112033535789, guid: babf8322627f0e747802095e8afc160b, type: 3}
+  woodItemNumber: 0
   spawnItemRange: 1
 --- !u!1001 &5989305983409048892
 PrefabInstance:
@@ -585,6 +583,10 @@ PrefabInstance:
     - target: {fileID: 6690186057001815133, guid: 56c445fd19b196740bd2e7860567eebe, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 148.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7733438976571721304, guid: 56c445fd19b196740bd2e7860567eebe, type: 3}
+      propertyPath: m_PresetInfoIsWorld
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 56c445fd19b196740bd2e7860567eebe, type: 3}

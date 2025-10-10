@@ -419,14 +419,14 @@ MonoBehaviour:
   selectionRectangle: {fileID: 7930540848110413738}
   baseUnitInfo:
     baseUnitName: Creature
-    baseUnitDescription: 
+    baseUnitDescription: A small creature of nature. You can order him to do anything.
     actionTypes: 
   planet: {fileID: 0}
   creatureState: 0
-  isChangingAnimationFrame: 0
   lastNormalizedTime: 0
   lastCurrentCell: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
+  isSettingTask: 0
   idleWalkSpeed: 1
   minIdleWalkInterval: 3
   maxIdleWalkInterval: 6

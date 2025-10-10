@@ -63,6 +63,7 @@
     <Compile Include="Assets\Script\TaskManager.cs" />
     <Compile Include="Assets\Script\BaseUnitInfo\BaseUnitInfo.cs" />
     <Compile Include="Assets\Script\CameraController.cs" />
+    <Compile Include="Assets\Script\Building\Warehouse.cs" />
     <Compile Include="Assets\Script\Building.cs" />
     <Compile Include="Assets\Script\Cell.cs" />
     <Compile Include="Assets\ConditionAttribute\EnumConditionAttribute.cs" />
@@ -75,9 +76,11 @@
     <Compile Include="Assets\Script\Building\Wood.cs" />
     <Compile Include="Assets\Script\Building\Ladder.cs" />
     <Compile Include="Assets\Script\PlacedObjectButton.cs" />
-    <Compile Include="Assets\Script\Building\Warehouse.cs" />
+    <Compile Include="Assets\Shader\SunLight2D.cs" />
+    <Compile Include="Assets\Shader\ForceLightFresh.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shader\2D_BuildingEmission.shader" />
     <None Include="Assets\PlacedObjectMaterial\PlacedObject.shader" />
   </ItemGroup>
   <ItemGroup>

@@ -48,6 +48,7 @@ public class BaseUnitInfoPanel : MonoBehaviour
     public void SetBaseUnitInfoPanel(BaseUnitInfo bsi)
     {
         nameText.text = bsi.baseUnitName;
+        descriptionText.text = bsi.baseUnitDescription;
 
         foreach (var button in activeActionButtons)
         {

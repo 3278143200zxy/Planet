@@ -11,8 +11,10 @@ public class Wood : MonoBehaviour
     public GameObject cutTreeTip;
     public float treeCuttingProcess = 1f;
     public Slider treeCuttingProcessSlider;
+    public GameObject sliderTickMarkPrefab;
 
     public Item woodItemPrefab;
+    public int woodItemNumber;
     public float spawnItemRange;
     public void Awake()
     {
@@ -34,7 +36,7 @@ public class Wood : MonoBehaviour
     public void CutTree(float p)
     {
         treeCuttingProcess -= p;
-        if (!treeCuttingProcessSlider.gameObject.activeInHierarchy) treeCuttingProcessSlider.gameObject.SetActive(true);
+        if ( !treeCuttingProcessSlider.gameObject.activeInHierarchy) treeCuttingProcessSlider.gameObject.SetActive(true);
         treeCuttingProcessSlider.value = treeCuttingProcess / 1;
         if (treeCuttingProcess <= 0f) OnCuttedDown();
     }

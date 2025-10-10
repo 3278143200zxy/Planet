@@ -96,7 +96,7 @@ public class Item : BaseUnit
     {
         planet.ItemHitGround(this);
 
-        Debug.Log(Time.time);
+        //Debug.Log(Time.time);
 
     }
     public void LeaveGround()

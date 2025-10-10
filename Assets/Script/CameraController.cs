@@ -20,10 +20,13 @@ public class CameraController : MonoBehaviour
     public float creatureZoomVelocity;
 
     public float maxCameraSize;
+    private void Awake()
+    {
+        Camera.main.cullingMask |= 1 << LayerMask.NameToLayer("Light");
+    }
     // Start is called before the first frame update
     void Start()
     {
-
     }
 
     // Update is called once per frame
@@ -43,6 +46,7 @@ public class CameraController : MonoBehaviour
             Camera.main.orthographicSize += scroll * zoomVelocity;
             Camera.main.orthographicSize = Mathf.Max(maxCameraSize, Camera.main.orthographicSize);
         }
+
         /*
     }
     else

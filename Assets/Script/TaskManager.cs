@@ -69,12 +69,13 @@ public class TaskManager : MonoBehaviour
     }
     public void RemoveTask(Task t)
     {
-        if (t == null && !tasks.Contains(t)) return;
+        if (t == null || !tasks.Contains(t)) return;
         tasks.Remove(t);
 
-        foreach (var creatureTaskNode in taskToCreatureTaskNodes[t])
+        for (int i = 0; i < taskToCreatureTaskNodes[t].Count; i++)
         {
-            creatureTaskNode.creature.CancelTask();
+
+            taskToCreatureTaskNodes[t][i].creature.CancelTask();
         }
         taskToCreatureTaskNodes.Remove(t);
     }

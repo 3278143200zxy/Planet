@@ -168,7 +168,7 @@ public class Planet : MonoBehaviour
             //cell.SetCanReach(true);
         }
 
-        
+
         for (int i = innerRadius; i < surfaceRadius + 1; i++)
         {
 
@@ -180,7 +180,7 @@ public class Planet : MonoBehaviour
                 stoneBuilding.SetBuilding(grid[i, j]);
             }
         }
-        
+
 
     }
     public List<Cell> FindPath(Cell start, Cell end)
@@ -310,6 +310,7 @@ public class Planet : MonoBehaviour
 
     public float GetPathLength(List<Cell> path)
     {
+        if (path == null || path.Count == 0) return float.MaxValue;
         float totalLength = 0f;
 
         for (int i = 0; i < path.Count - 1; i++) totalLength += path[i].GetMoveCostTo(path[i + 1]);
