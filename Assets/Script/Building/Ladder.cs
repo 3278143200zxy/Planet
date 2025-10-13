@@ -27,9 +27,9 @@ public class Ladder : MonoBehaviour
     public void SetBuilding()
 
     {
-        foreach (Dot d in building.dots)
+        foreach (Dot d in building.standDots)
         {
-            int radiusIdx = d.y + building.cell.radiusIdx, angleIdx = d.x + building.cell.angleIdx;
+            int radiusIdx = d.y + building.cell.radiusIdx, angleIdx = -d.x + building.cell.angleIdx;
             if (radiusIdx >= building.cell.planet.innerRadius && radiusIdx < building.cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / building.cell.planet.cellIntervalAngle);

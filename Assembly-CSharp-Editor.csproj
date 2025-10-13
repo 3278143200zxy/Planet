@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\EnumConditionDrawer.cs" />
+    <Compile Include="Assets\Editor\CalculateCodeLine.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

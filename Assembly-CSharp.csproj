@@ -66,18 +66,20 @@
     <Compile Include="Assets\Script\Building\Warehouse.cs" />
     <Compile Include="Assets\Script\Building.cs" />
     <Compile Include="Assets\Script\Cell.cs" />
+    <Compile Include="Assets\Script\MathEx.cs" />
     <Compile Include="Assets\ConditionAttribute\EnumConditionAttribute.cs" />
     <Compile Include="Assets\Script\BaseUnitInfo\BaseUnitInfoPanel.cs" />
+    <Compile Include="Assets\Shader\SunLight2D.cs" />
     <Compile Include="Assets\Script\Planet.cs" />
+    <Compile Include="Assets\Shader\ForceLightFresh.cs" />
     <Compile Include="Assets\Script\BaseUnit.cs" />
     <Compile Include="Assets\Script\Item.cs" />
+    <Compile Include="Assets\Script\Sun.cs" />
     <Compile Include="Assets\Script\GridManager.cs" />
     <Compile Include="Assets\Script\Creature.cs" />
     <Compile Include="Assets\Script\Building\Wood.cs" />
     <Compile Include="Assets\Script\Building\Ladder.cs" />
     <Compile Include="Assets\Script\PlacedObjectButton.cs" />
-    <Compile Include="Assets\Shader\SunLight2D.cs" />
-    <Compile Include="Assets\Shader\ForceLightFresh.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2D_BuildingEmission.shader" />

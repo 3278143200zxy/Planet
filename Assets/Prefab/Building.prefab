@@ -128,10 +128,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canClick: 1
-  clickCircles:
-  - x: 0
-    y: -0.21
-    radius: 0.3
+  clickCircles: []
   clickRectangles: []
   selectionRectangle: {fileID: 511035901349818147}
   baseUnitInfo:

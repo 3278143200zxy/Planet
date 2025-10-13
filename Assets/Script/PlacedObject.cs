@@ -55,7 +55,7 @@ public class PlacedObject : BaseUnit
 
         foreach (Dot d in dots)
         {
-            int radiusIdx = d.y + cell.radiusIdx, angleIdx = d.x + cell.angleIdx;
+            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx;
             if (radiusIdx >= cell.planet.innerRadius && radiusIdx < cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
@@ -70,16 +70,16 @@ public class PlacedObject : BaseUnit
 
         //building.SetBuilding(cell, dots, standDots);
         //Destroy(gameObject);
-        if (IsItemAvailable()) StartBuildingTask();
-        else CancelBuildingTask();
+        if (IsItemAvailable()) StartBuildTask();
+        else CancelBuildTask();
     }
-    public void StartBuildingTask()
+    public void StartBuildTask()
     {
         buildTask = new Task(TaskType.Build, new BaseUnit[] { this });
         TaskManager.instance.AddTask(buildTask);
         planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
     }
-    public void CancelBuildingTask()
+    public void CancelBuildTask()
     {
         TaskManager.instance.RemoveTask(buildTask);
         planet.ItemHitGroundEvent.AddListener(ItemHitGround);
@@ -117,12 +117,11 @@ public class PlacedObject : BaseUnit
     public void ItemHitGround(ItemType itemType)
     {
         if (!requiredItemTypes.Contains(itemType)) return;
-        StartBuildingTask();
+        StartBuildTask();
     }
     public void AddItem(Item item)
     {
         itemTypeToNumber[item.itemType]++;
-        item.DestoryBaseUnit();
 
         if (itemTypeToNumber[item.itemType] >= requiredItemTypeToNumber[item.itemType])
         {

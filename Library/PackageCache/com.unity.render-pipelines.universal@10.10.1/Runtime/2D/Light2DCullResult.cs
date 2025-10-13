@@ -94,9 +94,10 @@ namespace UnityEngine.Experimental.Rendering.Universal
                     }
                 }
                 Profiler.EndSample();
+                /*
                 if (culled)
                     continue;
-
+                */
                 m_VisibleLights.Add(light);
             }
 

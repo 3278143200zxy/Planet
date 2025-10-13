@@ -40,7 +40,7 @@ public class Building : BaseUnit
         cell = c;
         foreach (Dot d in dots)
         {
-            int radiusIdx = d.y + cell.radiusIdx, angleIdx = d.x + cell.angleIdx;
+            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx;
             if (radiusIdx >= cell.planet.innerRadius && radiusIdx < cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
@@ -50,6 +50,7 @@ public class Building : BaseUnit
                 processingCell.building = this;
             }
         }
+        /*
         foreach (Dot d in standDots)
         {
             int radiusIdx = d.y + cell.radiusIdx, angleIdx = d.x + cell.angleIdx;
@@ -62,6 +63,7 @@ public class Building : BaseUnit
                 processingCell.standNumber++;
             }
         }
+        */
         SetBuildingEvent.Invoke();
     }
     public override void DestoryBaseUnit()

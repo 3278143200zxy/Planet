@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Transactions;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 public enum CreatureState
@@ -48,8 +49,8 @@ public class Creature : BaseUnit
     public float processPerCutTree;
     public Wood wood;
 
-    public PlacedObject buildingPlacedObject;
-    public Item reseverdItem;
+    public Item reservedItem;
+    public Warehouse reservedWarehouse;
     public Transform itemPos;
     public override void Awake()
     {
@@ -179,35 +180,45 @@ public class Creature : BaseUnit
                                 ChangeCreatureState(CreatureState.CutTree);
                                 break;
                             case TaskType.MoveItem:
-                                if (reseverdItem == null)
+                                Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
+                                if (reservedItem.isPickedUp)
                                 {
-                                    Item it = task.baseUnits[0].GetComponent<Item>();
-                                    PickUpItem(it);
-                                    it.PickUp();
-                                    SetTargetCell(planet.PosToCell(task.baseUnits[1].transform.position));
-                                }
-                                else
-                                {
-
-                                }
-                                break;
-                            case TaskType.Build:
-                                if (reseverdItem.isPickedUp)
-                                {
-                                    buildingPlacedObject.AddItem(reseverdItem);
-                                    List<Cell> tempPath = PathToClosetItem(buildingPlacedObject.requiredItemTypes, out reseverdItem);
-                                    if (reseverdItem == null) buildingPlacedObject.CancelBuildingTask();
+                                    warehouse.AddItem(reservedItem.itemType);
+                                    reservedItem.DestoryBaseUnit();
+                                    List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
+                                    if (reservedItem == null) warehouse.CancelMoveItemTask();
                                     else
                                     {
-                                        path = tempPath;
+                                        path = moveItemTempPath;
                                         ChangeCreatureState(CreatureState.Walk);
-                                        reseverdItem.reserver = this;
+                                        reservedItem.reserver = this;
                                     }
                                 }
                                 else
                                 {
-                                    PickUpItem(reseverdItem);
-                                    SetTargetCell(buildingPlacedObject.currentCell);
+                                    PickUpItem(reservedItem);
+                                    SetTargetCell(warehouse.building.currentCell);
+                                }
+                                break;
+                            case TaskType.Build:
+                                PlacedObject placedObject = task.baseUnits[0].GetComponent<PlacedObject>();
+                                if (reservedItem.isPickedUp)
+                                {
+                                    placedObject.AddItem(reservedItem);
+                                    reservedItem.DestoryBaseUnit();
+                                    List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem);
+                                    if (reservedItem == null) placedObject.CancelBuildTask();
+                                    else
+                                    {
+                                        path = buildTempPath;
+                                        ChangeCreatureState(CreatureState.Walk);
+                                        reservedItem.reserver = this;
+                                    }
+                                }
+                                else
+                                {
+                                    PickUpItem(reservedItem);
+                                    SetTargetCell(placedObject.currentCell);
                                 }
                                 break;
                         }
@@ -273,7 +284,7 @@ public class Creature : BaseUnit
     public void ReserveItem(Item it)
     {
         it.reserver = this;
-        reseverdItem = it;
+        reservedItem = it;
     }
     public void SetTargetCell(Cell tc)
     {
@@ -300,17 +311,25 @@ public class Creature : BaseUnit
                 wood = task.baseUnits[0].GetComponent<Wood>();
                 break;
             case TaskType.MoveItem:
-                SetTargetCell(planet.PosToCell(task.baseUnits[0].transform.position));
-                break;
-            case TaskType.Build:
-                buildingPlacedObject = task.baseUnits[0].GetComponent<PlacedObject>();
-                List<Cell> tempPath = PathToClosetItem(buildingPlacedObject.requiredItemTypes, out reseverdItem);
-                if (reseverdItem == null) buildingPlacedObject.CancelBuildingTask();
+                Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
+                List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
+                if (reservedItem == null) warehouse.CancelMoveItemTask();
                 else
                 {
-                    path = tempPath;
+                    path = moveItemTempPath;
                     ChangeCreatureState(CreatureState.Walk);
-                    reseverdItem.reserver = this;
+                    reservedItem.reserver = this;
+                }
+                break;
+            case TaskType.Build:
+                PlacedObject placedObject = task.baseUnits[0].GetComponent<PlacedObject>();
+                List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem);
+                if (reservedItem == null) placedObject.CancelBuildTask();
+                else
+                {
+                    path = buildTempPath;
+                    ChangeCreatureState(CreatureState.Walk);
+                    reservedItem.reserver = this;
                 }
                 break;
         }
@@ -387,6 +406,31 @@ public class Creature : BaseUnit
         foreach (Item it in planet.items)
         {
             if (itemTypes.Contains(it.itemType) && it.reserver == null)
+            {
+                List<Cell> tempPath = planet.FindPath(currentCell, it.currentCell);
+                //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);
+                if (tempPath != null)
+                {
+                    float cost = planet.GetPathLength(tempPath);
+                    if (cost < minCost)
+                    {
+                        result = tempPath;
+                        itm = it;
+                        minCost = cost;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+    public List<Cell> PathToClosetItem(out Item itm)
+    {
+        List<Cell> result = null;
+        float minCost = float.MaxValue;
+        itm = null;
+        foreach (Item it in planet.items)
+        {
+            if (it.reserver == null)
             {
                 List<Cell> tempPath = planet.FindPath(currentCell, it.currentCell);
                 //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);

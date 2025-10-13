@@ -463,7 +463,7 @@ MonoBehaviour:
   treeCuttingProcessSlider: {fileID: 5057087428123491262}
   sliderTickMarkPrefab: {fileID: 0}
   woodItemPrefab: {fileID: 3828036112033535789, guid: babf8322627f0e747802095e8afc160b, type: 3}
-  woodItemNumber: 0
+  woodItemNumber: 2
   spawnItemRange: 1
 --- !u!1001 &5989305983409048892
 PrefabInstance:

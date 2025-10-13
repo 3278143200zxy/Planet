@@ -106,6 +106,7 @@ public class Planet : MonoBehaviour
     public float cellHeight, cellIntervalAngle;
 
     public List<Item> items = new List<Item>();
+    public List<Warehouse> warehouses = new List<Warehouse>();
 
     public float gravity;
 

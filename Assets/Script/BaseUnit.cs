@@ -44,6 +44,8 @@ public class BaseUnit : MonoBehaviour
     public Dictionary<ActionType, UnityEvent> actionTypeToEvent = new Dictionary<ActionType, UnityEvent>();
 
     public Planet planet;
+
+    public UnityEvent OnDestoryEvent = new UnityEvent();
     public Cell currentCell
     {
         get { return planet.PosToCell(transform.position); }
@@ -63,31 +65,35 @@ public class BaseUnit : MonoBehaviour
     {
         if (canClick && Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
         {
-            bool isFinished = false;
             Vector3 mousePos = MouseManager.instance.mousePos;
-            foreach (Circle c in clickCircles)
+            if (Vector2.Distance(transform.position, mousePos) < 15f)
             {
-                if (isFinished) break;
-                float sqrDistance = Vector2.SqrMagnitude(transform.position + new Vector3(c.x, c.y) - mousePos);
-                if (sqrDistance < c.radius * c.radius)
+                bool isFinished = false;
+                float offsetRad = MathEx.SignedAngleRad(transform.position, Vector2.up);
+                mousePos = (Vector3)MathEx.RotateVector2(mousePos - transform.position, offsetRad) + transform.position;
+                foreach (Circle c in clickCircles)
                 {
-                    MouseManager.instance.SelectBaseUnit(this);
-                    isFinished = true;
+                    if (isFinished) break;
+                    float sqrDistance = Vector2.SqrMagnitude(transform.position + new Vector3(c.x, c.y) - mousePos);
+                    if (sqrDistance < c.radius * c.radius)
+                    {
+                        MouseManager.instance.SelectBaseUnit(this);
+                        isFinished = true;
+                    }
+                }
+                foreach (Rectangle r in clickRectangles)
+                {
+                    if (isFinished) break;
+                    Vector3 center = transform.position + new Vector3(r.x, r.y);
+                    float halfWidth = r.width / 2f;
+                    float halfHeight = r.height / 2f;
+                    if (mousePos.x >= center.x - halfWidth && mousePos.x <= center.x + halfWidth && mousePos.y >= center.y - halfHeight && mousePos.y <= center.y + halfHeight)
+                    {
+                        isFinished = true;
+                        MouseManager.instance.SelectBaseUnit(this);
+                    }
                 }
             }
-            foreach (Rectangle r in clickRectangles)
-            {
-                if (isFinished) break;
-                Vector3 center = transform.position + new Vector3(r.x, r.y);
-                float halfWidth = r.width / 2f;
-                float halfHeight = r.height / 2f;
-                if (mousePos.x >= center.x - halfWidth && mousePos.x <= center.x + halfWidth && mousePos.y >= center.y - halfHeight && mousePos.y <= center.y + halfHeight)
-                {
-                    isFinished = true;
-                    MouseManager.instance.SelectBaseUnit(this);
-                }
-            }
-
         }
     }
     public virtual void LateUpdate()
@@ -132,6 +138,8 @@ public class BaseUnit : MonoBehaviour
     public virtual void DestoryBaseUnit()
     {
         if (MouseManager.instance.baseUnit == this) MouseManager.instance.DeselectBaseUnit();
+
+        OnDestoryEvent.Invoke();
 
         Destroy(gameObject);
     }

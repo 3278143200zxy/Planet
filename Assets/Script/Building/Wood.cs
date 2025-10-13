@@ -36,7 +36,7 @@ public class Wood : MonoBehaviour
     public void CutTree(float p)
     {
         treeCuttingProcess -= p;
-        if ( !treeCuttingProcessSlider.gameObject.activeInHierarchy) treeCuttingProcessSlider.gameObject.SetActive(true);
+        if (!treeCuttingProcessSlider.gameObject.activeInHierarchy) treeCuttingProcessSlider.gameObject.SetActive(true);
         treeCuttingProcessSlider.value = treeCuttingProcess / 1;
         if (treeCuttingProcess <= 0f) OnCuttedDown();
     }
@@ -46,7 +46,7 @@ public class Wood : MonoBehaviour
     }
     public void OnCuttedDown()
     {
-        Item woodItem = Instantiate(woodItemPrefab, transform.position + Random.Range(-spawnItemRange / 2, spawnItemRange / 2) * transform.right, Quaternion.identity);
+        for (int i = 0; i < woodItemNumber; i++) Instantiate(woodItemPrefab, transform.position + Random.Range(-spawnItemRange / 2, spawnItemRange / 2) * transform.right, Quaternion.identity);
 
         CancelCuttingTreeTask();
         building.DestoryBaseUnit();
