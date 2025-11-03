@@ -137,6 +137,7 @@ public class Planet : MonoBehaviour
     }
     private void GenerateMap()
     {
+        List<Cell> tempCells = new List<Cell>();
         for (int i = innerRadius; i < outerRadius; i++)
         {
             for (int j = 0; j < Mathf.RoundToInt(360f / cellIntervalAngle); j++)
@@ -147,10 +148,13 @@ public class Planet : MonoBehaviour
                 cell.transform.localScale = new Vector3(1 + (i - surfaceRadius) * cellSizeCorrection, 1, 1);
                 grid[i, j] = cell;// new Cell(i, j);
                 cell.SetCell(this, i, j);
+                tempCells.Add(cell);
                 //if (i == surfaceRadius + 1) cell.AddCircleNeighbours();
                 //cell.SetCanReach(true);
             }
         }
+        foreach (var cell in tempCells) cell.SetCellNeighbours();
+
         for (int i = 0; i < Mathf.RoundToInt(360f / cellIntervalAngle); i++)
         {
             int tempIdx = surfaceRadius + 1;
@@ -315,13 +319,16 @@ public class Planet : MonoBehaviour
         float totalLength = 0f;
 
         for (int i = 0; i < path.Count - 1; i++) totalLength += path[i].GetMoveCostTo(path[i + 1]);
-
         return totalLength;
     }
     public void ItemHitGround(Item item)
     {
         items.Add(item);
         ItemHitGroundEvent.Invoke(item.itemType);
+    }
+    public void ItemHitGround(ItemType itemType)
+    {
+        ItemHitGroundEvent.Invoke(itemType);
     }
     public Cell PosToCell(Vector3 pos)
     {

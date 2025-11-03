@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.InteropServices.WindowsRuntime;
-using System.Transactions;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 
 public enum CreatureState
@@ -13,10 +10,25 @@ public enum CreatureState
     Idle,
     Walk,
     CutTree,
+    MineStone,
+}
+public enum ProfessionType
+{
+    None,
+    Lumberjack,
+}
+[Serializable]
+public class ProfessionTypeShowNode
+{
+    public ProfessionType ProfessionType;
+    public List<GameObject> showGameobjects;
 }
 public class Creature : BaseUnit
 {
     [Header("Creature")]
+    public ProfessionType professionType = ProfessionType.None;
+
+
     public CreatureState creatureState;
     private Animator animator;
     public float lastNormalizedTime;
@@ -30,6 +42,7 @@ public class Creature : BaseUnit
         get { return Vector2.SignedAngle(Vector2.right, transform.position - planet.transform.position); }
     }
     public Vector3 velocity;
+    public float creatureHeight;
 
     public Task task;
     public bool isSettingTask = false;
@@ -48,6 +61,8 @@ public class Creature : BaseUnit
 
     public float processPerCutTree;
     public Wood wood;
+    public float processPreMineStone;
+    public Stone stone;
 
     public Item reservedItem;
     public Warehouse reservedWarehouse;
@@ -63,6 +78,8 @@ public class Creature : BaseUnit
     {
         base.Start();
 
+        QtreeManager.instance.AddBaseUnit(this);
+
         planet = MouseManager.instance.planets[0];
         lastCurrentCell = currentCell;
         //ChangeCreatureState(CreatureState.Idle);
@@ -71,6 +88,8 @@ public class Creature : BaseUnit
         idleWalkAngleOffset = UnityEngine.Random.Range(-planet.cellIntervalAngle / 2, planet.cellIntervalAngle / 2);
 
         task = null;
+
+        ChangeCreatureState(CreatureState.Air);
     }
     public override void Update()
     {
@@ -83,6 +102,7 @@ public class Creature : BaseUnit
         Vector3 direction = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
         transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
+        if (currentCell != null && currentCell.neighbourCellNodes[1].cell.canStand == false && creatureState != CreatureState.Air) ChangeCreatureState(CreatureState.Air);
         /*
         Cell belowCell = currentCell.neighbourCellNodes[1].cell;
         if ((belowCell != null && !belowCell.canStand) || currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) < 0) ChangeCreatureState(CreatureState.Air);
@@ -90,16 +110,21 @@ public class Creature : BaseUnit
 
         switch (creatureState)
         {
-            /*
+
             case CreatureState.Air:
                 transform.position += velocity * Time.deltaTime;
+                //if (currentCell == null) break;
+                Cell belowCell = null;
+                belowCell = currentCell.neighbourCellNodes[1].cell;
+                if (belowCell != null && belowCell.canStand && (currentCell.radiusIdx - 1f / 2f) * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= -creatureHeight) CancelTask();
+                /*
                 if (belowCell != null && belowCell.canStand && currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= 0)
                 {
                     FindTask();
                 }
-
-                break;
                 */
+                break;
+
             case CreatureState.Idle:
                 /*
                 if (isIdleWalking)
@@ -179,12 +204,21 @@ public class Creature : BaseUnit
                             case TaskType.CutTree:
                                 ChangeCreatureState(CreatureState.CutTree);
                                 break;
+                            case TaskType.MineStone:
+                                ChangeCreatureState(CreatureState.MineStone);
+                                break;
                             case TaskType.MoveItem:
                                 Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
                                 if (reservedItem.isPickedUp)
                                 {
                                     warehouse.AddItem(reservedItem.itemType);
                                     reservedItem.DestoryBaseUnit();
+                                    if (warehouse.IsFull())
+                                    {
+                                        ChangeCreatureState(CreatureState.Idle);
+                                        TaskManager.instance.RemoveTask(warehouse.moveItemTask);
+                                        break;
+                                    }
                                     List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
                                     if (reservedItem == null) warehouse.CancelMoveItemTask();
                                     else
@@ -206,7 +240,7 @@ public class Creature : BaseUnit
                                 {
                                     placedObject.AddItem(reservedItem);
                                     reservedItem.DestoryBaseUnit();
-                                    List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem);
+                                    List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem, out reservedWarehouse);
                                     if (reservedItem == null) placedObject.CancelBuildTask();
                                     else
                                     {
@@ -219,6 +253,11 @@ public class Creature : BaseUnit
                                 {
                                     PickUpItem(reservedItem);
                                     SetTargetCell(placedObject.currentCell);
+                                    if (reservedWarehouse != null)
+                                    {
+                                        reservedWarehouse.RemoveItem(reservedItem.itemType);
+                                        reservedWarehouse = null;
+                                    }
                                 }
                                 break;
                         }
@@ -264,9 +303,13 @@ public class Creature : BaseUnit
                 animator.Play("PunchTree", 0, 0f);
                 //animator.Update(0f);
                 break;
+            case CreatureState.MineStone:
+                animator.Play("PunchStone", 0, 0f);
+                break;
             case CreatureState.Air:
                 velocity = planet.transform.position - transform.position;
                 velocity = velocity.normalized;
+                animator.Play("Fall", 0, 0f);
                 break;
         }
     }
@@ -274,17 +317,17 @@ public class Creature : BaseUnit
     {
         wood.CutTree(processPerCutTree);
     }
+    public void MineStone()
+    {
+        stone.MineStone(processPreMineStone);
+    }
     public void PickUpItem(Item it)
     {
         it.transform.SetParent(transform);
         it.transform.position = itemPos.position;
+        it.gameObject.SetActive(true);
         it.PickUp();
 
-    }
-    public void ReserveItem(Item it)
-    {
-        it.reserver = this;
-        reservedItem = it;
     }
     public void SetTargetCell(Cell tc)
     {
@@ -302,13 +345,20 @@ public class Creature : BaseUnit
             //ChangeCreatureState(CreatureState.Idle);
             return;
         }
+        //Debug.Log(1 + " " + transform.position);
+        isSettingTask = true;
         task = t;
+        TaskManager.instance.taskToCreatureTaskNodes[t].Clear();
         TaskManager.instance.taskToCreatureTaskNodes[t].Add(new CreatureTaskNode(this, c));
         switch (task.taskType)
         {
             case TaskType.CutTree:
-                SetTargetCell(planet.PosToCell(task.baseUnits[0].transform.position));
+                SetTargetCell(task.baseUnits[0].currentCell);
                 wood = task.baseUnits[0].GetComponent<Wood>();
+                break;
+            case TaskType.MineStone:
+                SetTargetCell(task.baseUnits[0].currentCell.neighbourCellNodes[0].cell);
+                stone = task.baseUnits[0].GetComponent<Stone>();
                 break;
             case TaskType.MoveItem:
                 Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
@@ -323,26 +373,33 @@ public class Creature : BaseUnit
                 break;
             case TaskType.Build:
                 PlacedObject placedObject = task.baseUnits[0].GetComponent<PlacedObject>();
-                List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem);
-                if (reservedItem == null) placedObject.CancelBuildTask();
+                List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem, out reservedWarehouse);
+                if (reservedItem == null && reservedWarehouse == null) placedObject.CancelBuildTask();
                 else
                 {
                     path = buildTempPath;
                     ChangeCreatureState(CreatureState.Walk);
-                    reservedItem.reserver = this;
+                    if (reservedItem != null) reservedItem.reserver = this;
+                    else
+                    {
+                        reservedItem = reservedWarehouse.ReserveItem(placedObject.requiredItemTypes.GetIntersection(reservedWarehouse.itemTypeToNumber.Keys)[0]);
+                        reservedItem.reserver = this;
+                    }
                 }
                 break;
         }
     }
     public void FindTask()
     {
-        if (task != null) return;
+        if (task != null && !isSettingTask) return;
+        isSettingTask = false;
         //float tempDis = float.MaxValue;
         Task tempTask = null;
         float tempCost = float.MaxValue;
         List<Task> priorityTasks = new List<Task>();
         List<Task> normalTasks = new List<Task>();
         List<Task> tasks = new List<Task>();
+        Creature tempCreature = null;
         foreach (var t in TaskManager.instance.tasks)
         {
             if (TaskManager.instance.taskToCreatureTaskNodes.ContainsKey(t) && TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0 && !TaskManager.instance.taskToCreatureTaskNodes[t][0].creature.isSettingTask) continue;
@@ -352,24 +409,30 @@ public class Creature : BaseUnit
         }
         foreach (var t in tasks)
         {
-            float cost = planet.GetPathLength(planet.FindPath(currentCell, t.baseUnits[0].currentCell));
+            List<Cell> tempPath = null;
+            switch (t.taskType)
+            {
+                case TaskType.MineStone:
+                    tempPath = planet.FindPath(currentCell, t.baseUnits[0].currentCell.neighbourCellNodes[0].cell);
+                    break;
+                default:
+                    tempPath = planet.FindPath(currentCell, t.baseUnits[0].currentCell);
+                    break;
+            }
+            float cost = planet.GetPathLength(tempPath);
+            //Debug.Log(cost + " " + Time.time);
             if (cost >= tempCost) continue;
 
-            if (TaskManager.instance.taskToCreatureTaskNodes.ContainsKey(t) && TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0)
+            if (TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0)
             {
+                //Debug.Log(cost + " " + TaskManager.instance.taskToCreatureTaskNodes[t][0].cost + " " + currentCell.angleIdx);
                 if (cost >= TaskManager.instance.taskToCreatureTaskNodes[t][0].cost) continue;
-                TaskManager.instance.taskToCreatureTaskNodes[t][0].creature.CancelTask();
+                tempCreature = TaskManager.instance.taskToCreatureTaskNodes[t][0].creature;
                 //continue;
             }
 
             tempCost = cost;
-            switch (t.taskType)
-            {
-                case TaskType.CutTree:
-                case TaskType.Build:
-                    if (planet.FindPath(currentCell, t.baseUnits[0].currentCell) == null) continue;
-                    break;
-            }
+
             if (tempTask == null) tempTask = t;
             else if (priorityTaskTypes.Contains(t.taskType) && !priorityTaskTypes.Contains(tempTask.taskType)) tempTask = t;
             else
@@ -377,11 +440,16 @@ public class Creature : BaseUnit
                 tempTask = t;
             }
         }
-        SetTask(tempTask, tempCost);
+        if (tempCreature != null && tempTask != null && TaskManager.instance.taskToCreatureTaskNodes[tempTask].Count > 0 && tempCreature != TaskManager.instance.taskToCreatureTaskNodes[tempTask][0].creature) tempCreature = null;
+        if (tempCreature != null) tempCreature.UnbindReservedItem();
+        if (tempCost != float.MaxValue) SetTask(tempTask, tempCost);
+        if (tempCreature != null) tempCreature.CancelTask();
     }
     public void CancelTask()
     {
         isSettingTask = false;
+        UnbindReservedItem();
+        /*
         if (task != null)
         {
             for (int i = 0; i < TaskManager.instance.taskToCreatureTaskNodes[task].Count; i++)
@@ -390,24 +458,44 @@ public class Creature : BaseUnit
                 if (taskNode.creature == this) TaskManager.instance.taskToCreatureTaskNodes[task].RemoveAt(i);
             }
         }
+        */
         task = null;
-        SetTargetCell(currentCell);
+        ChangeCreatureState(CreatureState.Idle);
+        //SetTargetCell(currentCell);
         FindTask();
+    }
+    public void UnbindReservedItem()
+    {
+
+        if (reservedWarehouse != null)
+        {
+            reservedItem.DestoryBaseUnit();
+        }
+        else if (reservedItem != null)
+        {
+            reservedItem.reserver = null;
+            reservedItem = null;
+        }
     }
     public override void DestoryBaseUnit()
     {
+        QtreeManager.instance.baseUnits.Remove(this);
+
         base.DestoryBaseUnit();
+
     }
-    public List<Cell> PathToClosetItem(List<ItemType> itemTypes, out Item itm)
+    public List<Cell> PathToClosetItem(List<ItemType> itemTypes, out Item itm, out Warehouse wh)
     {
         List<Cell> result = null;
         float minCost = float.MaxValue;
         itm = null;
-        foreach (Item it in planet.items)
+        wh = null;
+        foreach (Item item in planet.items)
         {
-            if (itemTypes.Contains(it.itemType) && it.reserver == null)
+            if (itemTypes.Contains(item.itemType) && item.reserver == null && !item.isInAir)
             {
-                List<Cell> tempPath = planet.FindPath(currentCell, it.currentCell);
+                List<Cell> tempPath = planet.FindPath(currentCell, item.currentCell);
+                //Debug.Log(item.itemType);
                 //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);
                 if (tempPath != null)
                 {
@@ -415,12 +503,32 @@ public class Creature : BaseUnit
                     if (cost < minCost)
                     {
                         result = tempPath;
-                        itm = it;
+                        itm = item;
                         minCost = cost;
                     }
                 }
             }
         }
+
+        foreach (Warehouse warehouse in planet.warehouses)
+        {
+            if (warehouse.IsItemAvailable(itemTypes))
+            {
+                List<Cell> tempPath = planet.FindPath(currentCell, warehouse.building.currentCell);
+                //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);
+                if (tempPath != null)
+                {
+                    float cost = planet.GetPathLength(tempPath);
+                    if (cost < minCost)
+                    {
+                        result = tempPath;
+                        wh = warehouse;
+                        minCost = cost;
+                    }
+                }
+            }
+        }
+
         return result;
     }
     public List<Cell> PathToClosetItem(out Item itm)
@@ -451,5 +559,8 @@ public class Creature : BaseUnit
     public override void OnDrawGizmos()
     {
         base.OnDrawGizmos();
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(transform.position, transform.position - new Vector3(0, creatureHeight));
     }
 }

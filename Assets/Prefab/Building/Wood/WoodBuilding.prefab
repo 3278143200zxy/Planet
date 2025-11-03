@@ -238,6 +238,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: baseUnitType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: isRefreshQtree
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: dots.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -247,19 +255,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickCircles.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickCircles.Array.data[0].y
-      value: -0.06
+      value: 0.95
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickCircles.Array.data[1].y
       value: 0.76
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[0].x
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[0].y
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[1].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[1].y
+      value: -0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickCircles.Array.data[0].radius
-      value: 0.52
+      value: 0.45
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickCircles.Array.data[1].radius
@@ -268,6 +296,22 @@ PrefabInstance:
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: baseUnitInfo.actionTypes.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[0].width
+      value: 0.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[1].width
+      value: 0.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[0].height
+      value: 1.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: clickRectangles.Array.data[1].height
+      value: 0.19
       objectReference: {fileID: 0}
     - target: {fileID: 511035901349818147, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: m_IsActive
@@ -445,6 +489,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7091102197787786081, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
   m_PrefabInstance: {fileID: 5429731072317193619}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &5253969137004069569 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+  m_PrefabInstance: {fileID: 5429731072317193619}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6504485366218867806}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b594a10c8aea5e640a6018c4e60515ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6437611041720978417
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -457,13 +512,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5115e0df625380a468cb6a6c4191416a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 0}
+  building: {fileID: 5253969137004069569}
+  cutTreeTask:
+    taskType: 0
+    baseUnits: []
   cutTreeTip: {fileID: 5800721489854629238}
   treeCuttingProcess: 1
   treeCuttingProcessSlider: {fileID: 5057087428123491262}
   sliderTickMarkPrefab: {fileID: 0}
-  woodItemPrefab: {fileID: 3828036112033535789, guid: babf8322627f0e747802095e8afc160b, type: 3}
-  woodItemNumber: 2
+  woodItemNumber: 1
   spawnItemRange: 1
 --- !u!1001 &5989305983409048892
 PrefabInstance:

@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build.Reporting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,7 +12,6 @@ public class Wood : MonoBehaviour
     public Slider treeCuttingProcessSlider;
     public GameObject sliderTickMarkPrefab;
 
-    public Item woodItemPrefab;
     public int woodItemNumber;
     public float spawnItemRange;
     public void Awake()
@@ -22,9 +20,8 @@ public class Wood : MonoBehaviour
     // Start is called before the first frame update
     public void Start()
     {
-        building = GetComponent<Building>();
-        building.actionTypeToEvent[ActionType.CutTree].AddListener(StartCuttingTreeTask);
-        building.actionTypeToEvent[ActionType.CancelCuttingTree].AddListener(CancelCuttingTreeTask);
+        building.actionTypeToEvent[ActionType.CutTree].AddListener(StartCutTreeTask);
+        building.actionTypeToEvent[ActionType.CancelCutTree].AddListener(CancelCutTreeTask);
 
     }
 
@@ -46,27 +43,31 @@ public class Wood : MonoBehaviour
     }
     public void OnCuttedDown()
     {
-        for (int i = 0; i < woodItemNumber; i++) Instantiate(woodItemPrefab, transform.position + Random.Range(-spawnItemRange / 2, spawnItemRange / 2) * transform.right, Quaternion.identity);
+        for (int i = 0; i < woodItemNumber; i++)
+        {
+            Item woodItem = PoolManager.instance.InstantiateItem(ItemType.Wood);
+            woodItem.transform.position = transform.position + Random.Range(-spawnItemRange / 2, spawnItemRange / 2) * transform.right;
+        }
 
-        CancelCuttingTreeTask();
+        CancelCutTreeTask();
         building.DestoryBaseUnit();
 
     }
 
-    public void StartCuttingTreeTask()
+    public void StartCutTreeTask()
     {
         cutTreeTip.SetActive(true);
-        building.AddActionType(ActionType.CancelCuttingTree);
-        building.RemoveActionType(ActionType.CutTree);
+        building.AddActionType(building, ActionType.CancelCutTree);
+        building.RemoveActionType(building, ActionType.CutTree);
         cutTreeTask = new Task(TaskType.CutTree, new BaseUnit[] { building });
         TaskManager.instance.AddTask(cutTreeTask);
 
     }
-    public void CancelCuttingTreeTask()
+    public void CancelCutTreeTask()
     {
         cutTreeTip.SetActive(false);
-        building.AddActionType(ActionType.CutTree);
-        building.RemoveActionType(ActionType.CancelCuttingTree);
+        building.AddActionType(building, ActionType.CutTree);
+        building.RemoveActionType(building, ActionType.CancelCutTree);
         TaskManager.instance.RemoveTask(cutTreeTask);
     }
     public void OnDrawGizmos()

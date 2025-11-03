@@ -38,24 +38,7 @@ public class Ladder : MonoBehaviour
                 Cell processingCell = building.cell.planet.grid[radiusIdx, angleIdx];
                 processingCell.AddAboveNeighbour(climbSpeed);
                 Cell aboveCell = processingCell.neighbourCellNodes[0].cell;
-
-                if (aboveCell != null)
-                {
-                    aboveCell.standNumber++;
-                    aboveCell.AddBelowNeighbour(climbSpeed);
-                    Cell aboveLeftCell = aboveCell.neighbourCellNodes[2].cell;
-                    if (aboveLeftCell.canStand)
-                    {
-                        aboveCell.AddLeftNeighbour(walkSpeed);
-                        aboveLeftCell.AddRightNeighbour(walkSpeed);
-                    }
-                    Cell aboveRightCell = aboveCell.neighbourCellNodes[3].cell;
-                    if (aboveRightCell.canStand)
-                    {
-                        aboveCell.AddRightNeighbour(walkSpeed);
-                        aboveRightCell.AddLeftNeighbour(walkSpeed);
-                    }
-                }
+                aboveCell.AddBelowNeighbour(climbSpeed);
             }
         }
 

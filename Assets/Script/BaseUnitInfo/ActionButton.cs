@@ -7,7 +7,9 @@ using UnityEngine;
 public enum ActionType
 {
     CutTree,
-    CancelCuttingTree,
+    CancelCutTree,
+    MineStone,
+    CancelMineStone,
 }
 public class ActionButton : MonoBehaviour
 {

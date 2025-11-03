@@ -18,12 +18,14 @@ public struct ItemNode
 public enum ItemType
 {
     Wood,
+    Stone,
 }
 public class Item : BaseUnit
 {
+    public SpriteRenderer spriteRenderer;
+
     public ItemType itemType;
     public float itemHeight;
-
 
     public PolarCoord polarCoord
     {
@@ -38,6 +40,7 @@ public class Item : BaseUnit
     public float pickUpSize;
     public bool isPickedUp;
     public Creature reserver;
+
 
     public override void Awake()
     {
@@ -94,9 +97,9 @@ public class Item : BaseUnit
     }
     public void HitGround()
     {
-        planet.ItemHitGround(this);
+        if (reserver == null)
+            planet.ItemHitGround(this);
 
-        //Debug.Log(Time.time);
 
     }
     public void LeaveGround()
@@ -107,12 +110,14 @@ public class Item : BaseUnit
     {
         isPickedUp = true;
         transform.localScale = Vector3.one * pickUpSize;
-    }
-    public override void DestoryBaseUnit()
-    {
-        base.DestoryBaseUnit();
-
         planet.items.Remove(this);
+    }
+    public void ResetItem()
+    {
+        //planet.items.Add(this);
+        isPickedUp = false;
+        reserver = null;
+        transform.SetParent(null);
     }
     public override void OnDrawGizmos()
     {

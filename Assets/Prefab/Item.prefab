@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6daefea3314fa8147bc1e21fbb4da14e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseUnitType: 6
   canClick: 1
   clickCircles:
   - x: 0
@@ -57,6 +58,10 @@ MonoBehaviour:
     baseUnitDescription: 
     actionTypes: 
   planet: {fileID: 0}
+  OnDestoryEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  spriteRenderer: {fileID: 1367713636282002150}
   itemType: 0
   itemHeight: 0.35
   isInAir: 0

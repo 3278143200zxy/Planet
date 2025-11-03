@@ -90,6 +90,10 @@ public class PlacedObject : BaseUnit
         {
             if (requiredItemTypes.Contains(it.itemType) && !it.isInAir) return true;
         }
+        foreach (var warehouse in planet.warehouses)
+        {
+            if (warehouse.IsItemAvailable(requiredItemTypes)) return true;
+        }
         return false;
     }
     public override void DestoryBaseUnit()
@@ -98,7 +102,7 @@ public class PlacedObject : BaseUnit
 
         foreach (Dot d in dots)
         {
-            int radiusIdx = d.y + currentCell.radiusIdx, angleIdx = d.x + currentCell.angleIdx;
+            int radiusIdx = d.y + currentCell.radiusIdx, angleIdx = -d.x + currentCell.angleIdx;
             if (radiusIdx >= currentCell.planet.innerRadius && radiusIdx < currentCell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / currentCell.planet.cellIntervalAngle);
@@ -132,6 +136,8 @@ public class PlacedObject : BaseUnit
 
                 building = Instantiate(buildingPrefab, transform.position, transform.rotation);
                 building.SetBuilding(currentCell);
+
+                //QtreeManager.instance.baseUnits.Add(building);
 
                 DestoryBaseUnit();
             }

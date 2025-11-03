@@ -28,6 +28,8 @@ public class Building : BaseUnit
     public override void Start()
     {
         base.Start();
+
+        //QtreeManager.instance.AddBaseUnit(this);
     }
 
     // Update is called once per frame
@@ -50,27 +52,26 @@ public class Building : BaseUnit
                 processingCell.building = this;
             }
         }
-        /*
         foreach (Dot d in standDots)
         {
-            int radiusIdx = d.y + cell.radiusIdx, angleIdx = d.x + cell.angleIdx;
+            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx;
             if (radiusIdx >= cell.planet.innerRadius && radiusIdx < cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
                 Cell processingCell = cell.planet.grid[radiusIdx, angleIdx];
-                processingCell.standNumber++;
+                processingCell.AddStandNumber(1);
+
             }
         }
-        */
         SetBuildingEvent.Invoke();
     }
     public override void DestoryBaseUnit()
     {
         foreach (Dot d in dots)
         {
-            int radiusIdx = d.y + cell.radiusIdx, angleIdx = d.x + cell.angleIdx;
+            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx;
             if (radiusIdx >= cell.planet.innerRadius && radiusIdx < cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
@@ -80,7 +81,18 @@ public class Building : BaseUnit
                 processingCell.building = null;
             }
         }
-
+        foreach (Dot d in standDots)
+        {
+            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx;
+            if (radiusIdx >= cell.planet.innerRadius && radiusIdx < cell.planet.outerRadius)
+            {
+                int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
+                if (angleIdx < 0) angleIdx += temp;
+                if (angleIdx >= temp) angleIdx -= temp;
+                Cell processingCell = cell.planet.grid[radiusIdx, angleIdx];
+                processingCell.AddStandNumber(-1);
+            }
+        }
         base.DestoryBaseUnit();
     }
 }

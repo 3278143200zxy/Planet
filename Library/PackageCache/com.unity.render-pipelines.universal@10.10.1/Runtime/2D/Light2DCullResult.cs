@@ -69,23 +69,26 @@ namespace UnityEngine.Experimental.Rendering.Universal
                     continue;
 
 #if UNITY_EDITOR
-                if (!UnityEditor.SceneManagement.StageUtility.IsGameObjectRenderedByCamera(light.gameObject, camera))
-                    continue;
+        if (!UnityEditor.SceneManagement.StageUtility.IsGameObjectRenderedByCamera(light.gameObject, camera))
+            continue;
 #endif
 
+                // 不剔除任何光，所有光都加入
+                m_VisibleLights.Add(light);
+
+                /*
+                // 原本的剔除逻辑注释掉
                 if (light.lightType == Light2D.LightType.Global)
                 {
                     m_VisibleLights.Add(light);
                     continue;
                 }
 
-                Profiler.BeginSample("Test Planes");
                 var position = light.boundingSphere.position;
                 var culled = false;
                 for (var i = 0; i < cullingParameters.cullingPlaneCount; ++i)
                 {
                     var plane = cullingParameters.GetCullingPlane(i);
-                    // most of the time is spent getting world position
                     var distance = math.dot(position, plane.normal) + plane.distance;
                     if (distance < -light.boundingSphere.radius)
                     {
@@ -93,17 +96,17 @@ namespace UnityEngine.Experimental.Rendering.Universal
                         break;
                     }
                 }
-                Profiler.EndSample();
-                /*
                 if (culled)
                     continue;
-                */
+
                 m_VisibleLights.Add(light);
+                */
             }
 
-            // must be sorted here because light order could change
+            // 依然排序保持光照顺序
             m_VisibleLights.Sort((l1, l2) => l1.lightOrder - l2.lightOrder);
             Profiler.EndSample();
         }
+
     }
 }

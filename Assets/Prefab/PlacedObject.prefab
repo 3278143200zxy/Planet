@@ -210,6 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d193801640c2a294487010253826933a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  baseUnitType: 0
   canClick: 1
   clickCircles: []
   clickRectangles: []
@@ -219,6 +220,9 @@ MonoBehaviour:
     baseUnitDescription: 
     actionTypes: 
   planet: {fileID: 0}
+  OnDestoryEvent:
+    m_PersistentCalls:
+      m_Calls: []
   dots:
   - x: 0
     y: 0
@@ -226,6 +230,9 @@ MonoBehaviour:
   requiredItemTypes: 
   isFinished: 0
   buildingPrefab: {fileID: 8089100300959023357, guid: 66749ff24cd5b7e46891185419ac5309, type: 3}
+  buildTask:
+    taskType: 0
+    baseUnits: []
 --- !u!1 &8535227638125865931
 GameObject:
   m_ObjectHideFlags: 0

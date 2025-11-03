@@ -31,11 +31,27 @@ public struct Rectangle
         this.height = height;
     }
 }
+[Serializable]
+public enum BaseUnitType
+{
+    Creature,
+    Warehouse,
+    Campfire,
+    Ladder,
+    Wood,
+    Stone,
+    ArbalestTower,
+    Item,
+}
 public class BaseUnit : MonoBehaviour
 {
+    public BaseUnitType baseUnitType;
+
     public bool canClick = true;
     public List<Circle> clickCircles = new List<Circle>();
     public List<Rectangle> clickRectangles = new List<Rectangle>();
+
+    public bool isRefreshQtree = true;
 
     public GameObject selectionRectangle;
 
@@ -54,12 +70,11 @@ public class BaseUnit : MonoBehaviour
     {
         planet = MouseManager.instance.planets[0];
 
-        actionTypeToEvent[ActionType.CutTree] = new UnityEvent();
-        actionTypeToEvent[ActionType.CancelCuttingTree] = new UnityEvent();
+        foreach (ActionType type in Enum.GetValues(typeof(ActionType))) actionTypeToEvent[type] = new UnityEvent();
     }
     public virtual void Start()
     {
-
+        //QtreeManager.instance.baseUnits.Add(this);
     }
     public virtual void Update()
     {
@@ -123,24 +138,35 @@ public class BaseUnit : MonoBehaviour
             Gizmos.DrawLine(bottomLeft, topLeft);
         }
     }
-    public void AddActionType(ActionType type)
+    public void AddActionType(BaseUnit baseUnit, ActionType type)
     {
         if (baseUnitInfo.actionTypes.Contains(type)) return;
         baseUnitInfo.actionTypes.Add(type);
-        MouseManager.instance.baseUnitInfoPanel.ActivateActionButton(type);
+        if (MouseManager.instance.baseUnit == baseUnit) MouseManager.instance.baseUnitInfoPanel.ActivateActionButton(type);
     }
-    public void RemoveActionType(ActionType type)
+    public void RemoveActionType(BaseUnit baseUnit, ActionType type)
     {
         if (!baseUnitInfo.actionTypes.Contains(type)) return;
         baseUnitInfo.actionTypes.Remove(type);
-        MouseManager.instance.baseUnitInfoPanel.DisableActionButton(type);
+        if (MouseManager.instance.baseUnit == baseUnit) MouseManager.instance.baseUnitInfoPanel.DisableActionButton(type);
+    }
+    public virtual void TakeDamage(float damage)
+    {
+
+    }
+    public virtual void TakeDamage(float damage, Vector3 pos)
+    {
+
+    }
+    public List<BaseUnit> BaseUnitsInCollisionRange()
+    {
+
+        return null;
     }
     public virtual void DestoryBaseUnit()
     {
-        if (MouseManager.instance.baseUnit == this) MouseManager.instance.DeselectBaseUnit();
 
-        OnDestoryEvent.Invoke();
-
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        PoolManager.instance.DestoryBaseUnit(this);
     }
 }

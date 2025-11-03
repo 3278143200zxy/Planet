@@ -98,7 +98,7 @@ public class MouseManager : MonoBehaviour
                     placedObject.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
                     bool canMousePlace = true;
-                    Debug.Log(placedObject.dots.Count);
+                    //Debug.Log(placedObject.dots.Count);
                     foreach (Dot d in placedObject.dots)
                     {
                         int radiusIdx = d.y + mouseCell.radiusIdx, angleIdx = -d.x + mouseCell.angleIdx;
@@ -120,7 +120,6 @@ public class MouseManager : MonoBehaviour
                     {
                         placedObject.SetPlacedObject(mouseCell);
                         placedObject = null;
-                        Debug.Log(3);
                     }
                     if (Input.GetMouseButtonDown(1))
                     {

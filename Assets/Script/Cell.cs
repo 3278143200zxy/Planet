@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [Serializable]
 public struct NeighbourCellNode
@@ -19,9 +20,13 @@ public struct NeighbourCellNode
     {
         number++;
     }
+    public void SubtractCellNumber()
+    {
+        number--;
+    }
     public void SetDistance(float d)
     {
-        distance = d;
+        distance = 1;
     }
 }
 public class Cell : MonoBehaviour
@@ -46,8 +51,15 @@ public class Cell : MonoBehaviour
 
 
     public GameObject noPlacingSign;
+    public void SetCell(Planet p, int _ri, int _ai)
+    {
+        planet = p;
+        radiusIdx = _ri;
+        angleIdx = _ai;
 
-    private void Start()
+
+    }
+    public void SetCellNeighbours()
     {
         for (int i = 0; i < 4; i++)
         {
@@ -60,18 +72,7 @@ public class Cell : MonoBehaviour
             if (ai < 0) ai += planet.circleCellNumber;
             neighbourCellNodes[i] = new NeighbourCellNode(planet.grid[ri, ai]);
         }
-        if (radiusIdx == planet.surfaceRadius) standNumber++;
-        if (radiusIdx == planet.surfaceRadius + 1)
-        {
-            AddCircleNeighbours(1);
-        }
 
-    }
-    public void SetCell(Planet p, int ri, int ai)
-    {
-        planet = p;
-        radiusIdx = ri;
-        angleIdx = ai;
     }
     public List<Cell> GetNeighbours()
     {
@@ -94,29 +95,63 @@ public class Cell : MonoBehaviour
         }
         return float.MaxValue; // 如果没有找到邻居，返回一个非常大的值，表示无法到达
     }
+    public void AddStandNumber(int number)
+    {
+        if (standNumber == 0 && number > 0)
+        {
+            Cell aboveCell = neighbourCellNodes[0].cell;
+            if (aboveCell != null) aboveCell.AddCircleNeighbours(1);
+        }
+        standNumber += number;
+        if (standNumber == 0 && number != 0)
+        {
+            Cell aboveCell = neighbourCellNodes[0].cell;
+            if (aboveCell != null) aboveCell.RemoveCircleNeighbours(1);
+        }
+    }
     public void AddCircleNeighbours(float d)
     {
         AddRightNeighbour(d);
         AddLeftNeighbour(d);
+    }
+    public void RemoveCircleNeighbours(float d)
+    {
+
     }
     public void AddAboveNeighbour(float d)
     {
         neighbourCellNodes[0].AddCellNumber();
         neighbourCellNodes[0].SetDistance(d);
     }
+    public void RemoveAboveNeighbour(float d)
+    {
+        neighbourCellNodes[0].SubtractCellNumber();
+    }
     public void AddBelowNeighbour(float d)
     {
         neighbourCellNodes[1].AddCellNumber();
         neighbourCellNodes[1].SetDistance(d);
+    }
+    public void RemoveBelowNeighbour(float d)
+    {
+        neighbourCellNodes[1].SubtractCellNumber();
     }
     public void AddLeftNeighbour(float d)
     {
         neighbourCellNodes[2].AddCellNumber();
         neighbourCellNodes[2].SetDistance(d);
     }
+    public void RemoveLeftNeighbour(float d)
+    {
+        neighbourCellNodes[2].SubtractCellNumber();
+    }
     public void AddRightNeighbour(float d)
     {
         neighbourCellNodes[3].AddCellNumber();
         neighbourCellNodes[3].SetDistance(d);
+    }
+    public void RemoveRightNeighbour(float d)
+    {
+        neighbourCellNodes[3].SubtractCellNumber();
     }
 }

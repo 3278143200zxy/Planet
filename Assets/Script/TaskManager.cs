@@ -6,6 +6,7 @@ using UnityEngine;
 public enum TaskType
 {
     CutTree,
+    MineStone,
     Build,
     MoveItem,
 }
@@ -20,6 +21,7 @@ public class CreatureTaskNode
         this.cost = cost;
     }
 }
+[Serializable]
 public class Task
 {
     public TaskType taskType;
@@ -39,6 +41,8 @@ public class TaskManager : MonoBehaviour
     public Dictionary<Task, List<CreatureTaskNode>> taskToCreatureTaskNodes = new Dictionary<Task, List<CreatureTaskNode>>();
 
     public Item item;
+
+    public bool isAddTaskFrame = false;
 
     private void Awake()
     {
@@ -62,10 +66,8 @@ public class TaskManager : MonoBehaviour
         if (t == null) return;
         tasks.Add(t);
         taskToCreatureTaskNodes[t] = new List<CreatureTaskNode>();
-        foreach (Creature creature in creatures)
-        {
-            creature.FindTask();
-        }
+        isAddTaskFrame = true;
+
     }
     public void RemoveTask(Task t)
     {
@@ -74,17 +76,19 @@ public class TaskManager : MonoBehaviour
 
         for (int i = 0; i < taskToCreatureTaskNodes[t].Count; i++)
         {
-
             taskToCreatureTaskNodes[t][i].creature.CancelTask();
         }
         taskToCreatureTaskNodes.Remove(t);
     }
-    public void DistributeTask(Task t)
+    private void LateUpdate()
     {
-        foreach (var creature in creatures)
+        if (isAddTaskFrame)
         {
-
+            foreach (Creature creature in creatures)
+            {
+                creature.FindTask();
+            }
+            isAddTaskFrame = false;
         }
-
     }
 }
