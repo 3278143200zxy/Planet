@@ -29,7 +29,7 @@ public class Trebuchet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (target == null) target = QtreeManager.instance.FindClosestTarget(center.position, attackRange);
+        if (target == null) target = QtreeManager.instance.FindClosestTarget(center.position, attackRange, typeof(Enemy));
         if (target != null && Vector3.Distance(target.transform.position, center.position) > attackRange) target = null;
 
         if (target != null)

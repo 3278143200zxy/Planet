@@ -40,6 +40,8 @@ public class TaskManager : MonoBehaviour
     public List<Creature> creatures = new List<Creature>();
     public Dictionary<Task, List<CreatureTaskNode>> taskToCreatureTaskNodes = new Dictionary<Task, List<CreatureTaskNode>>();
 
+    public List<TaskType> sharedTaskTypes = new List<TaskType>();
+
     public Item item;
 
     public bool isAddTaskFrame = false;

@@ -11,23 +11,25 @@ public enum CreatureState
     Walk,
     CutTree,
     MineStone,
+    Build,
 }
 public enum ProfessionType
 {
     None,
     Lumberjack,
 }
-[Serializable]
-public class ProfessionTypeShowNode
+
+[System.Serializable]
+public class GameObjectList
 {
-    public ProfessionType ProfessionType;
-    public List<GameObject> showGameobjects;
+    public List<GameObject> gameObjects = new List<GameObject>();
 }
+[System.Serializable]
+public class ProfessionShowItemDictionary : SerializableDictionary<ProfessionType, GameObjectList> { }
+
 public class Creature : BaseUnit
 {
     [Header("Creature")]
-    public ProfessionType professionType = ProfessionType.None;
-
 
     public CreatureState creatureState;
     private Animator animator;
@@ -53,20 +55,25 @@ public class Creature : BaseUnit
     public float idleWalkAngleOffset;
     public bool isIdleWalking;
 
-    public List<Cell> path = new List<Cell>();
+    [HideInInspector] public List<Cell> path = new List<Cell>();
     public float walkSpeed;
     public float climbSpeed;
 
     public List<TaskType> priorityTaskTypes = new List<TaskType>();
 
     public float processPerCutTree;
-    public Wood wood;
+    [HideInInspector] public Wood wood;
     public float processPreMineStone;
-    public Stone stone;
+    [HideInInspector] public Stone stone;
+    public float processPerBuildPlacedObject;
 
     public Item reservedItem;
     public Warehouse reservedWarehouse;
     public Transform itemPos;
+
+    [Header("Profession")]
+    public ProfessionType professionType = ProfessionType.None;
+    public ProfessionShowItemDictionary professionTypeToGameobjects = new ProfessionShowItemDictionary();
     public override void Awake()
     {
         base.Awake();
@@ -207,34 +214,9 @@ public class Creature : BaseUnit
                             case TaskType.MineStone:
                                 ChangeCreatureState(CreatureState.MineStone);
                                 break;
-                            case TaskType.MoveItem:
-                                Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
-                                if (reservedItem.isPickedUp)
-                                {
-                                    warehouse.AddItem(reservedItem.itemType);
-                                    reservedItem.DestoryBaseUnit();
-                                    if (warehouse.IsFull())
-                                    {
-                                        ChangeCreatureState(CreatureState.Idle);
-                                        TaskManager.instance.RemoveTask(warehouse.moveItemTask);
-                                        break;
-                                    }
-                                    List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
-                                    if (reservedItem == null) warehouse.CancelMoveItemTask();
-                                    else
-                                    {
-                                        path = moveItemTempPath;
-                                        ChangeCreatureState(CreatureState.Walk);
-                                        reservedItem.reserver = this;
-                                    }
-                                }
-                                else
-                                {
-                                    PickUpItem(reservedItem);
-                                    SetTargetCell(warehouse.building.currentCell);
-                                }
-                                break;
                             case TaskType.Build:
+                                ChangeCreatureState(CreatureState.Build);
+                                /*
                                 PlacedObject placedObject = task.baseUnits[0].GetComponent<PlacedObject>();
                                 if (reservedItem.isPickedUp)
                                 {
@@ -259,7 +241,74 @@ public class Creature : BaseUnit
                                         reservedWarehouse = null;
                                     }
                                 }
+                                */
                                 break;
+                            case TaskType.MoveItem:
+                                PlacedObject moveItemPlacedObject = task.baseUnits[0] as PlacedObject;
+                                if (moveItemPlacedObject != null)
+                                {
+                                    if (reservedItem.isPickedUp)
+                                    {
+                                        moveItemPlacedObject.AddItem(reservedItem);
+                                        UnbindReservedItem();
+                                        if (moveItemPlacedObject.requiredItemTypes.Count != 0)
+                                        {
+                                            List<Cell> moveItemTempPath = PathToClosetItem(moveItemPlacedObject.requiredItemTypes, out reservedItem, out reservedWarehouse);
+                                            if (reservedItem == null && reservedWarehouse == null)
+                                            {
+                                                if (moveItemPlacedObject != null) moveItemPlacedObject.CancelMoveItemTask();
+                                            }
+                                            else
+                                            {
+                                                if (reservedWarehouse != null) reservedItem = reservedWarehouse.ReserveItem(reservedWarehouse.AvailableItemTypes(moveItemPlacedObject.requiredItemTypes)[0]);
+
+                                                path = moveItemTempPath;
+                                                ChangeCreatureState(CreatureState.Walk);
+                                                reservedItem.reserver = this;
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        PickUpItem(reservedItem);
+                                        SetTargetCell(moveItemPlacedObject.currentCell);
+                                        if (reservedWarehouse != null)
+                                        {
+                                            reservedWarehouse.RemoveItem(reservedItem.itemType);
+                                            reservedWarehouse = null;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
+                                    if (reservedItem.isPickedUp)
+                                    {
+                                        warehouse.AddItem(reservedItem.itemType);
+                                        reservedItem.DestoryBaseUnit();
+                                        if (warehouse.IsFull())
+                                        {
+                                            ChangeCreatureState(CreatureState.Idle);
+                                            TaskManager.instance.RemoveTask(warehouse.moveItemTask);
+                                            break;
+                                        }
+                                        List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
+                                        if (reservedItem == null) warehouse.CancelMoveItemTask();
+                                        else
+                                        {
+                                            path = moveItemTempPath;
+                                            ChangeCreatureState(CreatureState.Walk);
+                                            reservedItem.reserver = this;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        PickUpItem(reservedItem);
+                                        SetTargetCell(warehouse.building.currentCell);
+                                    }
+                                }
+                                break;
+
                         }
 
                 }
@@ -311,6 +360,9 @@ public class Creature : BaseUnit
                 velocity = velocity.normalized;
                 animator.Play("Fall", 0, 0f);
                 break;
+            case CreatureState.Build:
+                animator.Play("Build", 0, 0f);
+                break;
         }
     }
     public void CutTree()
@@ -320,6 +372,10 @@ public class Creature : BaseUnit
     public void MineStone()
     {
         stone.MineStone(processPreMineStone);
+    }
+    public void BuildPlacedObject()
+    {
+        ((PlacedObject)task.baseUnits[0]).BuildPlacedObject(processPerBuildPlacedObject);
     }
     public void PickUpItem(Item it)
     {
@@ -348,7 +404,7 @@ public class Creature : BaseUnit
         //Debug.Log(1 + " " + transform.position);
         isSettingTask = true;
         task = t;
-        TaskManager.instance.taskToCreatureTaskNodes[t].Clear();
+        if (!TaskManager.instance.sharedTaskTypes.Contains(t.taskType)) TaskManager.instance.taskToCreatureTaskNodes[t].Clear();
         TaskManager.instance.taskToCreatureTaskNodes[t].Add(new CreatureTaskNode(this, c));
         switch (task.taskType)
         {
@@ -361,31 +417,38 @@ public class Creature : BaseUnit
                 stone = task.baseUnits[0].GetComponent<Stone>();
                 break;
             case TaskType.MoveItem:
-                Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
-                List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
-                if (reservedItem == null) warehouse.CancelMoveItemTask();
-                else
+                PlacedObject moveItemPlacedObject = task.baseUnits[0] as PlacedObject;
+                if (moveItemPlacedObject != null)
                 {
-                    path = moveItemTempPath;
-                    ChangeCreatureState(CreatureState.Walk);
-                    reservedItem.reserver = this;
-                }
-                break;
-            case TaskType.Build:
-                PlacedObject placedObject = task.baseUnits[0].GetComponent<PlacedObject>();
-                List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem, out reservedWarehouse);
-                if (reservedItem == null && reservedWarehouse == null) placedObject.CancelBuildTask();
-                else
-                {
-                    path = buildTempPath;
-                    ChangeCreatureState(CreatureState.Walk);
-                    if (reservedItem != null) reservedItem.reserver = this;
+                    List<Cell> buildTempPath = PathToClosetItem(moveItemPlacedObject.requiredItemTypes, out reservedItem, out reservedWarehouse);
+                    if (reservedItem == null && reservedWarehouse == null) moveItemPlacedObject.CancelMoveItemTask();
                     else
                     {
-                        reservedItem = reservedWarehouse.ReserveItem(placedObject.requiredItemTypes.GetIntersection(reservedWarehouse.itemTypeToNumber.Keys)[0]);
+                        path = buildTempPath;
+                        ChangeCreatureState(CreatureState.Walk);
+                        if (reservedWarehouse != null)
+                        {
+                            reservedItem = reservedWarehouse.ReserveItem(moveItemPlacedObject.requiredItemTypes.GetIntersection(reservedWarehouse.itemTypeToNumber.Keys)[0]);
+                            reservedItem.reserver = this;
+                        }
+                        else reservedItem.reserver = this;
+                    }
+                }
+                else
+                {
+                    Warehouse warehouse = task.baseUnits[0].GetComponent<Warehouse>();
+                    List<Cell> moveItemTempPath = PathToClosetItem(out reservedItem);
+                    if (reservedItem == null) warehouse.CancelMoveItemTask();
+                    else
+                    {
+                        path = moveItemTempPath;
+                        ChangeCreatureState(CreatureState.Walk);
                         reservedItem.reserver = this;
                     }
                 }
+                break;
+            case TaskType.Build:
+                SetTargetCell(task.baseUnits[0].currentCell);
                 break;
         }
     }
@@ -444,6 +507,7 @@ public class Creature : BaseUnit
         if (tempCreature != null) tempCreature.UnbindReservedItem();
         if (tempCost != float.MaxValue) SetTask(tempTask, tempCost);
         if (tempCreature != null) tempCreature.CancelTask();
+
     }
     public void CancelTask()
     {
@@ -466,14 +530,17 @@ public class Creature : BaseUnit
     }
     public void UnbindReservedItem()
     {
-
+        //Debug.Log(Time.time);
         if (reservedWarehouse != null)
         {
+            if (!reservedWarehouse.itemTypeToNumber.ContainsKey(reservedItem.itemType)) reservedWarehouse.itemTypeToNumber[reservedItem.itemType] = 0;
+            reservedWarehouse.itemTypeToNumber[reservedItem.itemType]++;
             reservedItem.DestoryBaseUnit();
         }
         else if (reservedItem != null)
         {
-            reservedItem.reserver = null;
+            reservedItem.ResetItem();
+            //reservedItem.reserver = null;
             reservedItem = null;
         }
     }
@@ -555,6 +622,13 @@ public class Creature : BaseUnit
             }
         }
         return result;
+    }
+    public void ChangeProfession(ProfessionType pt)
+    {
+        foreach (var gameObject in professionTypeToGameobjects[professionType].gameObjects) gameObject.SetActive(false);
+        professionType = pt;
+        foreach (var gameObject in professionTypeToGameobjects[professionType].gameObjects) gameObject.SetActive(true);
+
     }
     public override void OnDrawGizmos()
     {

@@ -1,20 +1,23 @@
-Shader "Custom/PlacedObject"
+Shader "Custom/SpriteInnerWhiteOutline_DualFill"
 {
     Properties
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
-        _GrayThreshold ("Gray Threshold", Range(0,1)) = 0.5
+        _OutlineThickness ("Outline Thickness", Range(0.001, 0.05)) = 0.01
+
+        _FillAmount_Original ("Fill Amount Original", Range(0,1)) = 1.0
+        _FillAmount_White ("Fill Amount White", Range(0,1)) = 0.0
     }
 
     SubShader
     {
         Tags
-        { 
-            "Queue"="Transparent" 
-            "IgnoreProjector"="True" 
-            "RenderType"="Transparent" 
+        {
+            "Queue"="Transparent"
+            "IgnoreProjector"="True"
+            "RenderType"="Transparent"
             "PreviewType"="Plane"
             "CanUseSpriteAtlas"="True"
         }
@@ -22,7 +25,7 @@ Shader "Custom/PlacedObject"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -42,12 +45,15 @@ Shader "Custom/PlacedObject"
             struct v2f
             {
                 float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                fixed4 color    : COLOR;
             };
 
+            sampler2D _MainTex;
             fixed4 _Color;
-            float _GrayThreshold;
+            float _OutlineThickness;
+            float _FillAmount_Original;
+            float _FillAmount_White;
 
             v2f vert(appdata_t IN)
             {
@@ -56,46 +62,75 @@ Shader "Custom/PlacedObject"
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color;
                 #ifdef PIXELSNAP_ON
-                OUT.vertex = UnityPixelSnap (OUT.vertex);
+                OUT.vertex = UnityPixelSnap(OUT.vertex);
                 #endif
                 return OUT;
             }
 
-            sampler2D _MainTex;
-            sampler2D _AlphaTex;
-            float _AlphaSplitEnabled;
-
-            fixed4 SampleSpriteTexture (float2 uv)
+            fixed4 SampleSafe(float2 uv)
             {
-                fixed4 color = tex2D(_MainTex, uv);
-
-#if UNITY_TEXTURE_ALPHASPLIT_ALLOWED
-                if (_AlphaSplitEnabled)
-                    color.a = tex2D(_AlphaTex, uv).r;
-#endif
-
-                // 保持原始透明像素不变
-                if (color.a <= 0.001)
-                    return fixed4(0, 0, 0, 0);
-
-                // 计算灰度
-                float gray = color.r * 0.299 + color.g * 0.587 + color.b * 0.114;
-
-                if (gray <= _GrayThreshold)
-                {
-                    return fixed4(1, 1, 1, 1); // 显示白色
-                }
-                else
-                {
-                    return fixed4(0, 0, 0, 0); // 其余透明
-                }
+                if (uv.x < 0.0f || uv.x > 1.0f || uv.y < 0.0f || uv.y > 1.0f)
+                    return fixed4(0,0,0,0);
+                return tex2D(_MainTex, uv);
             }
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
-                return c;
+                float2 uv = IN.texcoord;
+
+                fixed4 centerCol = SampleSafe(uv);
+                float isOpaque = (centerCol.a > 0.1) ? 1.0 : 0.0;
+
+                float hasTransparentNeighbor = 0.0;
+                float hasMissingNeighbor = 0.0;
+
+                float2 offsets[8] = {
+                    float2( _OutlineThickness, 0),
+                    float2(-_OutlineThickness, 0),
+                    float2(0,  _OutlineThickness),
+                    float2(0, -_OutlineThickness),
+                    float2( _OutlineThickness,  _OutlineThickness),
+                    float2(-_OutlineThickness,  _OutlineThickness),
+                    float2( _OutlineThickness, -_OutlineThickness),
+                    float2(-_OutlineThickness, -_OutlineThickness)
+                };
+
+                for (int i = 0; i < 8; i++)
+                {
+                    float2 sampleUV = uv + offsets[i];
+                    if (sampleUV.x < 0.0 || sampleUV.x > 1.0 || sampleUV.y < 0.0 || sampleUV.y > 1.0)
+                        hasMissingNeighbor = 1.0;
+                    else if (SampleSafe(sampleUV).a <= 0.1f)
+                        hasTransparentNeighbor = 1.0;
+                }
+
+                float needOutline = max(hasTransparentNeighbor, hasMissingNeighbor);
+
+                // 描边优先显示
+                if (isOpaque > 0.5 && needOutline > 0.5)
+                {
+                    return fixed4(1.0, 1.0, 1.0, _Color.a);
+                }
+
+                // 非描边区域，分层显示原图和白色区间
+                if (centerCol.a > 0.01)
+                {
+                    if (uv.y <= _FillAmount_Original)
+                    {
+                        // 显示原图
+                        return centerCol * _Color;
+                    }
+                    else if (uv.y >= _FillAmount_Original && uv.y <= _FillAmount_White)
+                    {
+                        // 超出原图显示范围但在白色区间内，显示白色，透明度同材质
+                        return fixed4(1, 1, 1, _Color.a);
+                    }
+                }
+
+                // 其余透明
+                return fixed4(0, 0, 0, 0);
             }
+
             ENDCG
         }
     }

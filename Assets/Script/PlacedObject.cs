@@ -11,32 +11,50 @@ public class PlacedObject : BaseUnit
     public Dictionary<ItemType, int> itemTypeToNumber = new Dictionary<ItemType, int>();
     public Dictionary<ItemType, int> requiredItemTypeToNumber = new Dictionary<ItemType, int>();
     public List<ItemType> requiredItemTypes = new List<ItemType>();
-    public bool isFinished = false;
 
     public Dictionary<Item, Task> itemToTask = new Dictionary<Item, Task>();
 
     public Building buildingPrefab;
     private Building building;
 
-    public Task buildTask = null;
+    public Task task = null;
+
+    public float totalItemNumber;
+    public float itemNumber;
+    public float totalBuildingProgress;
+    public float buildingProgress;
+
+    public SpriteRenderer spriteRenderer;
+    public MaterialPropertyBlock mpb;
 
     public override void Awake()
     {
         base.Awake();
 
+        //spriteRenderer = GetComponent<SpriteRenderer>();
+        mpb = new MaterialPropertyBlock();
+
         clickCircles = buildingPrefab.clickCircles;
         baseUnitInfo = buildingPrefab.baseUnitInfo;
         dots = buildingPrefab.dots;
 
+        totalBuildingProgress = 0;
         foreach (var itemNode in itemNodes)
         {
             requiredItemTypeToNumber[itemNode.itemType] = itemNode.number;
             itemTypeToNumber[itemNode.itemType] = 0;
             requiredItemTypes.Add(itemNode.itemType);
 
+            totalBuildingProgress += itemNode.number;
+            totalItemNumber += itemNode.number;
         }
 
         canClick = false;
+
+        spriteRenderer.GetPropertyBlock(mpb);
+        mpb.SetFloat("_FillAmount_White", 0);
+        mpb.SetFloat("_FillAmount_Original", 0);
+        spriteRenderer.SetPropertyBlock(mpb);
     }
     // Start is called before the first frame update
     public override void Start()
@@ -70,19 +88,28 @@ public class PlacedObject : BaseUnit
 
         //building.SetBuilding(cell, dots, standDots);
         //Destroy(gameObject);
-        if (IsItemAvailable()) StartBuildTask();
-        else CancelBuildTask();
+        if (IsItemAvailable()) StartMoveItemTask();
+        else CancelMoveItemTask();
+    }
+    public void StartMoveItemTask()
+    {
+        task = new Task(TaskType.MoveItem, new BaseUnit[] { this });
+        TaskManager.instance.AddTask(task);
+        planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
+    }
+    public void CancelMoveItemTask()
+    {
+        TaskManager.instance.RemoveTask(task);
+        planet.ItemHitGroundEvent.AddListener(ItemHitGround);
     }
     public void StartBuildTask()
     {
-        buildTask = new Task(TaskType.Build, new BaseUnit[] { this });
-        TaskManager.instance.AddTask(buildTask);
-        planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
+        task = new Task(TaskType.Build, new BaseUnit[] { this });
+        TaskManager.instance.AddTask(task);
     }
     public void CancelBuildTask()
     {
-        TaskManager.instance.RemoveTask(buildTask);
-        planet.ItemHitGroundEvent.AddListener(ItemHitGround);
+        TaskManager.instance.RemoveTask(task);
     }
     public bool IsItemAvailable()
     {
@@ -121,26 +148,53 @@ public class PlacedObject : BaseUnit
     public void ItemHitGround(ItemType itemType)
     {
         if (!requiredItemTypes.Contains(itemType)) return;
-        StartBuildTask();
+        StartMoveItemTask();
     }
     public void AddItem(Item item)
     {
         itemTypeToNumber[item.itemType]++;
+        item.DestoryBaseUnit();
 
         if (itemTypeToNumber[item.itemType] >= requiredItemTypeToNumber[item.itemType])
         {
+            itemNumber++;
             requiredItemTypes.Remove(item.itemType);
-            if (requiredItemTypes.Count <= 0)
+
+
+            spriteRenderer.GetPropertyBlock(mpb);
+            mpb.SetFloat("_FillAmount_White", Mathf.Clamp01(itemNumber / totalItemNumber));
+            spriteRenderer.SetPropertyBlock(mpb);
+
+            if (itemNumber >= totalItemNumber)
             {
-                isFinished = true;
-
-                building = Instantiate(buildingPrefab, transform.position, transform.rotation);
-                building.SetBuilding(currentCell);
-
-                //QtreeManager.instance.baseUnits.Add(building);
-
-                DestoryBaseUnit();
+                CancelMoveItemTask();
+                StartBuildTask();
             }
+
+
         }
+    }
+    public void BuildPlacedObject(float p)
+    {
+        buildingProgress += p;
+
+        spriteRenderer.GetPropertyBlock(mpb);
+        mpb.SetFloat("_FillAmount_Original", Mathf.Clamp01(buildingProgress / totalBuildingProgress));
+        spriteRenderer.SetPropertyBlock(mpb);
+
+        if (buildingProgress >= totalBuildingProgress) SetBuilding();
+    }
+    public void SetBuilding()
+    {
+
+        building = Instantiate(buildingPrefab, transform.position, transform.rotation);
+        building.SetBuilding(currentCell);
+
+        CancelBuildTask();
+
+        //QtreeManager.instance.baseUnits.Add(building);
+
+        DestoryBaseUnit();
+
     }
 }
