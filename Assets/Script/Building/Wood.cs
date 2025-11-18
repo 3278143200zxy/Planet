@@ -8,14 +8,19 @@ public class Wood : MonoBehaviour
     public Building building;
     public Task cutTreeTask;
     public GameObject cutTreeTip;
-    public float treeCuttingProcess = 1f;
-    public Slider treeCuttingProcessSlider;
+    [HideInInspector]
+    public float treeCutProgress;
+    public float totalTreeCutProgress;
+    public Slider treeCutProcessSlider;
     public GameObject sliderTickMarkPrefab;
 
     public int woodItemNumber;
-    public float spawnItemRange;
+    public float spawnItemWidthRange;
+    public float spawnItemHeightRange;
     public void Awake()
     {
+        treeCutProgress = totalTreeCutProgress;
+        
     }
     // Start is called before the first frame update
     public void Start()
@@ -32,10 +37,10 @@ public class Wood : MonoBehaviour
     }
     public void CutTree(float p)
     {
-        treeCuttingProcess -= p;
-        if (!treeCuttingProcessSlider.gameObject.activeInHierarchy) treeCuttingProcessSlider.gameObject.SetActive(true);
-        treeCuttingProcessSlider.value = treeCuttingProcess / 1;
-        if (treeCuttingProcess <= 0f) OnCuttedDown();
+        treeCutProgress -= p;
+        if (!treeCutProcessSlider.gameObject.activeInHierarchy) treeCutProcessSlider.gameObject.SetActive(true);
+        treeCutProcessSlider.value = treeCutProgress / totalTreeCutProgress;
+        if (treeCutProgress <= 0f) OnCuttedDown();
     }
     public void SetBuilding()
     {
@@ -46,7 +51,7 @@ public class Wood : MonoBehaviour
         for (int i = 0; i < woodItemNumber; i++)
         {
             Item woodItem = PoolManager.instance.InstantiateItem(ItemType.Wood);
-            woodItem.transform.position = transform.position + Random.Range(-spawnItemRange / 2, spawnItemRange / 2) * transform.right;
+            woodItem.transform.position = transform.position + Random.Range(-spawnItemWidthRange / 2, spawnItemWidthRange / 2) * transform.right + Random.Range(-spawnItemHeightRange / 2, spawnItemHeightRange / 2) * transform.up;
         }
 
         CancelCutTreeTask();
@@ -73,6 +78,7 @@ public class Wood : MonoBehaviour
     public void OnDrawGizmos()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawLine(transform.position - new Vector3(spawnItemRange / 2, 0, 0), transform.position + new Vector3(spawnItemRange / 2, 0, 0));
+        Gizmos.DrawLine(transform.position - new Vector3(spawnItemWidthRange / 2, 0, 0), transform.position + new Vector3(spawnItemWidthRange / 2, 0, 0));
+        Gizmos.DrawLine(transform.position - new Vector3(0, spawnItemHeightRange / 2, 0), transform.position + new Vector3(0, spawnItemHeightRange / 2, 0));
     }
 }

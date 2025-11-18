@@ -3,13 +3,20 @@ using System.Collections.Generic;
 using System.Numerics;
 using UnityEngine;
 
+[System.Serializable]
+public class ItemTypeToNumberDictionary : SerializableDictionary<ItemType, int> { }
 public class PlacedObject : BaseUnit
 {
     public List<Dot> dots = new List<Dot>() { new Dot(0, 0) };
 
-    public List<ItemNode> itemNodes = new List<ItemNode>();
-    public Dictionary<ItemType, int> itemTypeToNumber = new Dictionary<ItemType, int>();
-    public Dictionary<ItemType, int> requiredItemTypeToNumber = new Dictionary<ItemType, int>();
+    //public List<ItemNode> itemNodes = new List<ItemNode>();
+    //stored items
+    [HideInInspector]
+    public ItemTypeToNumberDictionary itemTypeToNumber = new ItemTypeToNumberDictionary();
+    //required items, need to validate in the inspector
+    public ItemTypeToNumberDictionary requiredItemTypeToNumber = new ItemTypeToNumberDictionary();
+    //requiring items' types
+    [HideInInspector]
     public List<ItemType> requiredItemTypes = new List<ItemType>();
 
     public Dictionary<Item, Task> itemToTask = new Dictionary<Item, Task>();
@@ -19,9 +26,12 @@ public class PlacedObject : BaseUnit
 
     public Task task = null;
 
+    [HideInInspector]
     public float totalItemNumber;
+    [HideInInspector]
     public float itemNumber;
     public float totalBuildingProgress;
+    [HideInInspector]
     public float buildingProgress;
 
     public SpriteRenderer spriteRenderer;
@@ -29,32 +39,43 @@ public class PlacedObject : BaseUnit
 
     public override void Awake()
     {
+        //Debug.Log(baseUnitInfo.actionTypes.Count + " " + Time.time);
         base.Awake();
 
-        //spriteRenderer = GetComponent<SpriteRenderer>();
-        mpb = new MaterialPropertyBlock();
+        //Debug.Log(baseUnitInfo.actionTypes.Count);
+        actionTypeToEvent[ActionType.CancelBuild].AddListener(CancelTaskButton);
+        actionTypeToEvent[ActionType.Build].AddListener(StartTaskButton);
 
         clickCircles = buildingPrefab.clickCircles;
-        baseUnitInfo = buildingPrefab.baseUnitInfo;
         dots = buildingPrefab.dots;
 
-        totalBuildingProgress = 0;
+        mpb = new MaterialPropertyBlock();
+        spriteRenderer.GetPropertyBlock(mpb);
+        mpb.SetFloat("_FillAmount_White", 0);
+        mpb.SetFloat("_FillAmount_Original", 0);
+        spriteRenderer.SetPropertyBlock(mpb);
+
+        foreach (var itemNode in requiredItemTypeToNumber)
+        {
+            totalItemNumber += requiredItemTypeToNumber[itemNode.Key];
+            requiredItemTypes.Add(itemNode.Key);
+            itemTypeToNumber[itemNode.Key] = 0;
+        }
+        //totalBuildingProgress = 0;
+        /*
         foreach (var itemNode in itemNodes)
         {
             requiredItemTypeToNumber[itemNode.itemType] = itemNode.number;
             itemTypeToNumber[itemNode.itemType] = 0;
             requiredItemTypes.Add(itemNode.itemType);
 
-            totalBuildingProgress += itemNode.number;
+            //totalBuildingProgress += itemNode.number;
             totalItemNumber += itemNode.number;
         }
-
+        */
         canClick = false;
 
-        spriteRenderer.GetPropertyBlock(mpb);
-        mpb.SetFloat("_FillAmount_White", 0);
-        mpb.SetFloat("_FillAmount_Original", 0);
-        spriteRenderer.SetPropertyBlock(mpb);
+        //Debug.Log(baseUnitInfo.actionTypes.Count);
     }
     // Start is called before the first frame update
     public override void Start()
@@ -90,26 +111,68 @@ public class PlacedObject : BaseUnit
         //Destroy(gameObject);
         if (IsItemAvailable()) StartMoveItemTask();
         else CancelMoveItemTask();
+
+        MouseManager.instance.placedObject = null;
+        MouseManager.instance.SelectBaseUnit(this);
     }
     public void StartMoveItemTask()
     {
         task = new Task(TaskType.MoveItem, new BaseUnit[] { this });
-        TaskManager.instance.AddTask(task);
+        TaskManager.instance.AddTaskWithoutCreatureFindTask(task);
+        TaskManager.instance.isCreatureFindTaskFrame = true;
         planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
     }
     public void CancelMoveItemTask()
     {
         TaskManager.instance.RemoveTask(task);
         planet.ItemHitGroundEvent.AddListener(ItemHitGround);
+        task = null;
     }
     public void StartBuildTask()
     {
         task = new Task(TaskType.Build, new BaseUnit[] { this });
-        TaskManager.instance.AddTask(task);
+        TaskManager.instance.AddTaskWithoutCreatureFindTask(task);
+        TaskManager.instance.isCreatureFindTaskFrame = true;
     }
     public void CancelBuildTask()
     {
         TaskManager.instance.RemoveTask(task);
+        task = null;
+    }
+    public void StartTaskButton()
+    {
+        AddActionType(this, ActionType.CancelBuild);
+        RemoveActionType(this, ActionType.Build);
+
+        if (itemNumber < totalItemNumber)
+        {
+            if (IsItemAvailable()) StartMoveItemTask();
+            else CancelMoveItemTask();
+        }
+        else
+        {
+            StartBuildTask();
+        }
+    }
+    public void CancelTaskButton()
+    {
+
+        AddActionType(this, ActionType.Build);
+        RemoveActionType(this, ActionType.CancelBuild);
+
+        if (task == null) planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
+        else
+            switch (task.taskType)
+            {
+                case TaskType.MoveItem:
+                    TaskManager.instance.RemoveTask(task);
+                    planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
+                    task = null;
+                    break;
+                case TaskType.Build:
+                    CancelBuildTask();
+                    break;
+            }
     }
     public bool IsItemAvailable()
     {
@@ -154,25 +217,28 @@ public class PlacedObject : BaseUnit
     {
         itemTypeToNumber[item.itemType]++;
         item.DestoryBaseUnit();
+        // Debug.Log(1);
+
+        itemNumber++;
+        spriteRenderer.GetPropertyBlock(mpb);
+        //Debug.Log(Mathf.Clamp01(itemNumber / totalItemNumber));
+        mpb.SetFloat("_FillAmount_White", Mathf.Clamp01(itemNumber / totalItemNumber));
+        spriteRenderer.SetPropertyBlock(mpb);
+
 
         if (itemTypeToNumber[item.itemType] >= requiredItemTypeToNumber[item.itemType])
         {
-            itemNumber++;
             requiredItemTypes.Remove(item.itemType);
 
 
-            spriteRenderer.GetPropertyBlock(mpb);
-            mpb.SetFloat("_FillAmount_White", Mathf.Clamp01(itemNumber / totalItemNumber));
-            spriteRenderer.SetPropertyBlock(mpb);
-
             if (itemNumber >= totalItemNumber)
             {
-                CancelMoveItemTask();
+                TaskManager.instance.RemoveTaskWithoutCancelCreatureTask(task);
                 StartBuildTask();
             }
 
-
         }
+        RefreshBaseUnitInfoPanel();
     }
     public void BuildPlacedObject(float p)
     {
@@ -183,6 +249,8 @@ public class PlacedObject : BaseUnit
         spriteRenderer.SetPropertyBlock(mpb);
 
         if (buildingProgress >= totalBuildingProgress) SetBuilding();
+
+        RefreshBaseUnitInfoPanel();
     }
     public void SetBuilding()
     {
@@ -196,5 +264,9 @@ public class PlacedObject : BaseUnit
 
         DestoryBaseUnit();
 
+    }
+    public void RefreshBaseUnitInfoPanel()
+    {
+        if (MouseManager.instance.baseUnit == this) MouseManager.instance.baseUnitInfoPanel.SetBaseUnitInfoPanel(this.baseUnitInfo, this);
     }
 }

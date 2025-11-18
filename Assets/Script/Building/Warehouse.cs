@@ -53,7 +53,8 @@ public class Warehouse : MonoBehaviour
     public void StartMoveItemTask()
     {
         moveItemTask = new Task(TaskType.MoveItem, new BaseUnit[] { building });
-        TaskManager.instance.AddTask(moveItemTask);
+        TaskManager.instance.AddTaskWithoutCreatureFindTask(moveItemTask);
+        TaskManager.instance.isCreatureFindTaskFrame = true;
         building.planet.ItemHitGroundEvent.RemoveListener(ItemHitGround);
 
     }
@@ -62,6 +63,7 @@ public class Warehouse : MonoBehaviour
         TaskManager.instance.RemoveTask(moveItemTask);
         building.planet.ItemHitGroundEvent.AddListener(ItemHitGround);
     }
+
     public void ItemHitGround(ItemType itemType)
     {
         StartMoveItemTask();
@@ -92,14 +94,16 @@ public class Warehouse : MonoBehaviour
     public void AddItem(ItemType itemType)
     {
         storage++;
-        if (itemTypeToNumber.Keys.Contains(itemType)) itemTypeToNumber[itemType]++;
-
+        if (itemTypeToNumber.ContainsKey(itemType)) itemTypeToNumber[itemType]++;
         else
         {
             itemTypeToNumber[itemType] = 1;
 
-            ShowItemNode showItemNode = itemTypeToShowItemNode[itemType] = Instantiate(showItemNodePrefab);
-            showItemNode.SetShowItemNode(itemTypeToSprite[itemType], showItemNodePool);
+            if (!itemTypeToShowItemNode.ContainsKey(itemType))
+            {
+                ShowItemNode showItemNode = itemTypeToShowItemNode[itemType] = Instantiate(showItemNodePrefab);
+                showItemNode.SetShowItemNode(itemTypeToSprite[itemType], showItemNodePool);
+            }
         }
         itemTypeToShowItemNode[itemType].AddNumber(1);
 
@@ -107,10 +111,10 @@ public class Warehouse : MonoBehaviour
     }
     public void RemoveItem(ItemType itemType)
     {
-        if (IsFull()) TaskManager.instance.AddTask(moveItemTask);
+        //if (IsFull()) TaskManager.instance.AddTask(moveItemTask);
         storage--;
         itemTypeToShowItemNode[itemType].AddNumber(-1);
-        if (itemTypeToShowItemNode[itemType].number == 0)
+        if (itemTypeToShowItemNode[itemType].number <= 0)
         {
             Destroy(itemTypeToShowItemNode[itemType].gameObject);
             itemTypeToShowItemNode.Remove(itemType);

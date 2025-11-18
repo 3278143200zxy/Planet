@@ -42,6 +42,7 @@ public class MouseManager : MonoBehaviour
     public List<GameObject> lastFrameNoPlacingSigns = new List<GameObject>();
 
     public BaseUnit baseUnit;
+    public BaseUnit lastBaseUnit;
     private bool isChoosingBaseUnitFrame = false;
     public BaseUnitInfoPanel baseUnitInfoPanel;
 
@@ -49,6 +50,8 @@ public class MouseManager : MonoBehaviour
 
 
     public List<Planet> planets = new List<Planet>();
+
+    public bool isPushIn = false;
     private void Awake()
     {
         instance = this;
@@ -119,7 +122,6 @@ public class MouseManager : MonoBehaviour
                     if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()) && canMousePlace)
                     {
                         placedObject.SetPlacedObject(mouseCell);
-                        placedObject = null;
                     }
                     if (Input.GetMouseButtonDown(1))
                     {
@@ -151,7 +153,13 @@ public class MouseManager : MonoBehaviour
     }
     public void LateUpdate()
     {
-        isChoosingBaseUnitFrame = false;
+        if (isChoosingBaseUnitFrame)
+        {
+            if (isPushIn && lastBaseUnit == baseUnit) CameraController.instance.PushIn(baseUnit.transform.position);
+            isChoosingBaseUnitFrame = false;
+            lastBaseUnit = baseUnit;
+
+        }
     }
     public void SelectBaseUnit(BaseUnit bu)
     {
@@ -169,15 +177,24 @@ public class MouseManager : MonoBehaviour
         baseUnit = bu;
         baseUnit.selectionRectangle.SetActive(true);
 
-        baseUnitInfoPanel.SetBaseUnitInfoPanel(baseUnit.baseUnitInfo);
+        baseUnitInfoPanel.SetBaseUnitInfoPanel(baseUnit.baseUnitInfo, baseUnit);
         baseUnitInfoPanel.gameObject.SetActive(true);
 
     }
     public void DeselectBaseUnit()
     {
+        baseUnitInfoPanel.gameObject.SetActive(false);
         if (baseUnit == null) return;
         baseUnit.selectionRectangle.SetActive(false);
         baseUnit = null;
-        baseUnitInfoPanel.gameObject.SetActive(false);
+    }
+    public void ReviewPlacedObject(PlacedObject po)
+    {
+        DeselectBaseUnit();
+        baseUnitInfoPanel.gameObject.SetActive(true);
+        List<ActionType> tempActionTypes = new List<ActionType>(po.baseUnitInfo.actionTypes);
+        po.baseUnitInfo.actionTypes.Clear();
+        baseUnitInfoPanel.SetBaseUnitInfoPanel(po.baseUnitInfo, po);
+        po.baseUnitInfo.actionTypes = tempActionTypes;
     }
 }

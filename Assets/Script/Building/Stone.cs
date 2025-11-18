@@ -11,8 +11,8 @@ public class Stone : MonoBehaviour
 
     public Task mineStoneTask;
 
-    public float stoneMiningProcess = 1f;
-    public Slider stoneMiningProcessSlider;
+    public float stoneMiningProgress = 1f;
+    public Slider stoneMiningProgressSlider;
     public GameObject sliderTickMarkPrefab;
 
     public int stoneItemNumber;
@@ -27,10 +27,10 @@ public class Stone : MonoBehaviour
 
     public void MineStone(float p)
     {
-        stoneMiningProcess -= p;
-        if (!stoneMiningProcessSlider.gameObject.activeInHierarchy) stoneMiningProcessSlider.gameObject.SetActive(true);
-        stoneMiningProcessSlider.value = stoneMiningProcess / 1;
-        if (stoneMiningProcess <= 0f) OnMinedOut();
+        stoneMiningProgress -= p;
+        if (!stoneMiningProgressSlider.gameObject.activeInHierarchy) stoneMiningProgressSlider.gameObject.SetActive(true);
+        stoneMiningProgressSlider.value = stoneMiningProgress / 1;
+        if (stoneMiningProgress <= 0f) OnMinedOut();
     }
     public void OnMinedOut()
     {

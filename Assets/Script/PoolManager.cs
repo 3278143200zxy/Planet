@@ -31,6 +31,8 @@ public class PoolManager : MonoBehaviour
     public Dictionary<ItemType, Sprite> itemTypeToSprite = new Dictionary<ItemType, Sprite>();
 
     public Planet planet;
+
+    [Range(0f, 3f)] public float gameSpeed = 1f;
     private void Awake()
     {
         instance = this;
@@ -52,25 +54,23 @@ public class PoolManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        //Time.timeScale = gameSpeed;
     }
     public void DestoryBaseUnit(BaseUnit baseUnit)
     {
         if (MouseManager.instance.baseUnit == baseUnit) MouseManager.instance.DeselectBaseUnit();
         baseUnit.OnDestoryEvent.Invoke();
-
+        baseUnit.gameObject.SetActive(false);
         switch (baseUnit.baseUnitType)
         {
             case BaseUnitType.Item:
                 Item item = (Item)baseUnit;
-                if (item.reserver != null) item.reserver.reservedItem = null;
+                if (item.reserver != null) item.reserver.UnbindReservedItem();
                 item.transform.SetParent(null);
-                baseUnit.gameObject.SetActive(false);
                 itemPool[item.itemType].Add(item);
                 if (planet.items.Contains(item)) planet.items.Remove(item);
                 break;
             default:
-                baseUnit.gameObject.SetActive(false);
                 baseUnitPool[baseUnit.baseUnitType].Add(baseUnit);
                 break;
         }

@@ -1,26 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PlacedObjectButton : MonoBehaviour
+public class PlacedObjectButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public PlacedObject placedObjectPrefab;
-    // Start is called before the first frame update
-    void Start()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-
+        MouseManager.instance.ReviewPlacedObject(placedObjectPrefab);
     }
-
-    // Update is called once per frame
-    void Update()
+    public void OnPointerExit(PointerEventData eventData)
     {
-
+        MouseManager.instance.DeselectBaseUnit();
     }
     public void SetMousePlacedObject()
     {
         PlacedObject p = MouseManager.instance.placedObject;
         if (p != null) Destroy(p.gameObject);
-        MouseManager.instance.placedObject = Instantiate(placedObjectPrefab);
+        PlacedObject placedObject = Instantiate(placedObjectPrefab);
+        //MouseManager.instance.SelectBaseUnit(MouseManager.instance.placedObject);
+        MouseManager.instance.placedObject = placedObject;
         MouseManager.instance.DeselectBaseUnit();
         //Debug.Log(1);
 

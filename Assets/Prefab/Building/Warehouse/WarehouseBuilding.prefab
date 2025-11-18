@@ -196,6 +196,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: baseUnitInfo.baseUnitName
+      value: Warehouse
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: standDots.Array.data[0].x
       value: -1
       objectReference: {fileID: 0}
@@ -345,6 +349,5 @@ MonoBehaviour:
     baseUnits: []
   capacity: 10
   storage: 0
-  showItemSpriteNodes: []
   showItemNodePrefab: {fileID: 6534274373687822299, guid: 6e3b2ea22295d474ab2ca7ac40834520, type: 3}
   showItemNodePool: {fileID: 6832042223447152525}

@@ -117,6 +117,7 @@ public class Item : BaseUnit
         //planet.items.Add(this);
         isPickedUp = false;
         reserver = null;
+        transform.localScale = Vector3.one;
         transform.SetParent(null);
     }
     public override void OnDrawGizmos()

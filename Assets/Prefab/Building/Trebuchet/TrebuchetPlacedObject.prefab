@@ -79,6 +79,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2688899598331864257, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5448
+      objectReference: {fileID: 0}
+    - target: {fileID: 2688899598331864257, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.1921
+      objectReference: {fileID: 0}
+    - target: {fileID: 3406959329679705299, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: buildingPrefab
       value: 
@@ -86,6 +98,14 @@ PrefabInstance:
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: itemNodes.Array.size
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: totalBuildingProgress
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: baseUnitInfo.baseUnitName
+      value: Trebuchet(building)
       objectReference: {fileID: 0}
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: clickRectangles.Array.size
@@ -143,6 +163,18 @@ PrefabInstance:
       propertyPath: clickRectangles.Array.data[2].height
       value: 0.42
       objectReference: {fileID: 0}
+    - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: requiredItemTypeToNumber.m_keys.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: requiredItemTypeToNumber.m_values.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: requiredItemTypeToNumber.m_values.Array.data[0]
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 6335397028208873884, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: m_Name
       value: TrebuchetPlacedObject
@@ -151,5 +183,9 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 398bb5043eb44f54bb18afcc86e6c7d4, type: 3}
+    - target: {fileID: 8535227638125865931, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}

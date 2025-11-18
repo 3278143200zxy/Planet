@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -58,6 +59,8 @@ public class Creature : BaseUnit
     [HideInInspector] public List<Cell> path = new List<Cell>();
     public float walkSpeed;
     public float climbSpeed;
+    //horizontal walk offset
+    //public float walkAngleOffset = 0f;
 
     public List<TaskType> priorityTaskTypes = new List<TaskType>();
 
@@ -70,6 +73,9 @@ public class Creature : BaseUnit
     public Item reservedItem;
     public Warehouse reservedWarehouse;
     public Transform itemPos;
+
+    public Transform groundEffectPos;
+    public GameObject groundEffectPrefab;
 
     [Header("Profession")]
     public ProfessionType professionType = ProfessionType.None;
@@ -97,19 +103,22 @@ public class Creature : BaseUnit
         task = null;
 
         ChangeCreatureState(CreatureState.Air);
+        //CancelTaskWithoutFindTask();
     }
     public override void Update()
     {
         base.Update();
         //Debug.Log(currentCell.radiusIdx + " " + currentCell.angleIdx + " " + lastCurrentCell.radiusIdx + " " + lastCurrentCell.angleIdx);
 
-        Vector3 dir = transform.position - planet.transform.position;
-        float angle = Vector2.SignedAngle(Vector2.right, dir);
-        float angleRad = angle * Mathf.Deg2Rad;
-        Vector3 direction = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad)).normalized;
-        transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
+        Vector2 dir = transform.position - planet.transform.position;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
+        transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        if (currentCell != null && currentCell.neighbourCellNodes[1].cell.canStand == false && creatureState != CreatureState.Air) ChangeCreatureState(CreatureState.Air);
+        if (currentCell != null && currentCell.neighbourCellNodes[1].cell.canStand == false && creatureState != CreatureState.Air)
+        {
+            CancelTaskWithoutFindTask();
+            ChangeCreatureState(CreatureState.Air);
+        }
         /*
         Cell belowCell = currentCell.neighbourCellNodes[1].cell;
         if ((belowCell != null && !belowCell.canStand) || currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) < 0) ChangeCreatureState(CreatureState.Air);
@@ -123,7 +132,13 @@ public class Creature : BaseUnit
                 //if (currentCell == null) break;
                 Cell belowCell = null;
                 belowCell = currentCell.neighbourCellNodes[1].cell;
-                if (belowCell != null && belowCell.canStand && (currentCell.radiusIdx - 1f / 2f) * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= -creatureHeight) CancelTask();
+                if (belowCell != null && belowCell.canStand && (currentCell.radiusIdx - 1f / 2f) * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= -creatureHeight)
+                {
+                    ChangeCreatureState(CreatureState.Idle);
+                    FindTask();
+                    Instantiate(groundEffectPrefab, groundEffectPos.position, transform.rotation);
+                }
+
                 /*
                 if (belowCell != null && belowCell.canStand && currentCell.radiusIdx * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= 0)
                 {
@@ -247,10 +262,12 @@ public class Creature : BaseUnit
                                 PlacedObject moveItemPlacedObject = task.baseUnits[0] as PlacedObject;
                                 if (moveItemPlacedObject != null)
                                 {
+                                    Debug.Log((reservedItem == null) + " " + Time.time);
                                     if (reservedItem.isPickedUp)
                                     {
+                                        //Debug.Log(2);
                                         moveItemPlacedObject.AddItem(reservedItem);
-                                        UnbindReservedItem();
+                                        //UnbindReservedItem();
                                         if (moveItemPlacedObject.requiredItemTypes.Count != 0)
                                         {
                                             List<Cell> moveItemTempPath = PathToClosetItem(moveItemPlacedObject.requiredItemTypes, out reservedItem, out reservedWarehouse);
@@ -266,6 +283,11 @@ public class Creature : BaseUnit
                                                 ChangeCreatureState(CreatureState.Walk);
                                                 reservedItem.reserver = this;
                                             }
+                                        }
+                                        else
+                                        {
+                                            CancelTaskWithoutFindTask();
+                                            ChangeCreatureState(CreatureState.Idle);
                                         }
                                     }
                                     else
@@ -401,11 +423,13 @@ public class Creature : BaseUnit
             //ChangeCreatureState(CreatureState.Idle);
             return;
         }
+        //Debug.Log(Time.time);
         //Debug.Log(1 + " " + transform.position);
         isSettingTask = true;
         task = t;
         if (!TaskManager.instance.sharedTaskTypes.Contains(t.taskType)) TaskManager.instance.taskToCreatureTaskNodes[t].Clear();
         TaskManager.instance.taskToCreatureTaskNodes[t].Add(new CreatureTaskNode(this, c));
+        Debug.Log("SetTask" + " " + task.taskType + " " + Time.time);
         switch (task.taskType)
         {
             case TaskType.CutTree:
@@ -455,7 +479,9 @@ public class Creature : BaseUnit
     public void FindTask()
     {
         if (task != null && !isSettingTask) return;
+        Debug.Log("FindingTask" + " " + Time.time);
         isSettingTask = false;
+        //UnbindReservedItem();
         //float tempDis = float.MaxValue;
         Task tempTask = null;
         float tempCost = float.MaxValue;
@@ -465,6 +491,10 @@ public class Creature : BaseUnit
         Creature tempCreature = null;
         foreach (var t in TaskManager.instance.tasks)
         {
+            if (t == task) continue;
+            Debug.Log(t.taskType + " " + t.baseUnits[0].transform.position);
+            Debug.Log(TaskManager.instance.taskToCreatureTaskNodes.ContainsKey(t));
+            Debug.Log(TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0);
             if (TaskManager.instance.taskToCreatureTaskNodes.ContainsKey(t) && TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0 && !TaskManager.instance.taskToCreatureTaskNodes[t][0].creature.isSettingTask) continue;
             tasks.Add(t);
             if (priorityTaskTypes.Contains(t.taskType)) priorityTasks.Add(t);
@@ -472,6 +502,7 @@ public class Creature : BaseUnit
         }
         foreach (var t in tasks)
         {
+            //Debug.Log(t.taskType + " " + t.baseUnits[0].transform.position);
             List<Cell> tempPath = null;
             switch (t.taskType)
             {
@@ -486,6 +517,7 @@ public class Creature : BaseUnit
             //Debug.Log(cost + " " + Time.time);
             if (cost >= tempCost) continue;
 
+            UnbindReservedItem();
             if (TaskManager.instance.taskToCreatureTaskNodes[t].Count > 0)
             {
                 //Debug.Log(cost + " " + TaskManager.instance.taskToCreatureTaskNodes[t][0].cost + " " + currentCell.angleIdx);
@@ -511,22 +543,18 @@ public class Creature : BaseUnit
     }
     public void CancelTask()
     {
-        isSettingTask = false;
-        UnbindReservedItem();
-        /*
-        if (task != null)
-        {
-            for (int i = 0; i < TaskManager.instance.taskToCreatureTaskNodes[task].Count; i++)
-            {
-                CreatureTaskNode taskNode = TaskManager.instance.taskToCreatureTaskNodes[task][i];
-                if (taskNode.creature == this) TaskManager.instance.taskToCreatureTaskNodes[task].RemoveAt(i);
-            }
-        }
-        */
-        task = null;
-        ChangeCreatureState(CreatureState.Idle);
+        CancelTaskWithoutFindTask();
         //SetTargetCell(currentCell);
         FindTask();
+    }
+    public void CancelTaskWithoutFindTask()
+    {
+        isSettingTask = false;
+        UnbindReservedItem();
+        if (task != null && TaskManager.instance.taskToCreatureTaskNodes.Keys.Contains(task)) for (int i = 0; i < TaskManager.instance.taskToCreatureTaskNodes[task].Count; i++) if (TaskManager.instance.taskToCreatureTaskNodes[task][i].creature == this) TaskManager.instance.taskToCreatureTaskNodes[task].RemoveAt(i);
+        task = null;
+        ChangeCreatureState(CreatureState.Idle);
+
     }
     public void UnbindReservedItem()
     {
@@ -605,7 +633,7 @@ public class Creature : BaseUnit
         itm = null;
         foreach (Item it in planet.items)
         {
-            if (it.reserver == null)
+            if (it.reserver == null && !it.isInAir)
             {
                 List<Cell> tempPath = planet.FindPath(currentCell, it.currentCell);
                 //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);

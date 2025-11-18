@@ -10,6 +10,8 @@ public enum ActionType
     CancelCutTree,
     MineStone,
     CancelMineStone,
+    Build,
+    CancelBuild,
 }
 public class ActionButton : MonoBehaviour
 {

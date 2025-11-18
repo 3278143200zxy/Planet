@@ -68,6 +68,7 @@
     <Compile Include="Assets\Script\PlanetRigidbody.cs" />
     <Compile Include="Assets\Script\Building\Warehouse.cs" />
     <Compile Include="Assets\Prefab\Building\Trebuchet\Projectile.cs" />
+    <Compile Include="Assets\SimpleButton.cs" />
     <Compile Include="Assets\Script\SimpleEvent.cs" />
     <Compile Include="Assets\Script\Qtree\Qtree.cs" />
     <Compile Include="Assets\Prefab\Building\Warehouse\ShowItemNode.cs" />

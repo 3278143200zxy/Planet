@@ -59,8 +59,10 @@ public class BaseUnit : MonoBehaviour
 
     public Dictionary<ActionType, UnityEvent> actionTypeToEvent = new Dictionary<ActionType, UnityEvent>();
 
+    [HideInInspector]
     public Planet planet;
 
+    [HideInInspector]
     public UnityEvent OnDestoryEvent = new UnityEvent();
     public Cell currentCell
     {
@@ -68,9 +70,12 @@ public class BaseUnit : MonoBehaviour
     }
     public virtual void Awake()
     {
+
         planet = MouseManager.instance.planets[0];
 
         foreach (ActionType type in Enum.GetValues(typeof(ActionType))) actionTypeToEvent[type] = new UnityEvent();
+        //foreach (ActionType type in baseUnitInfo.actionTypes) actionTypeToEvent[type] = new UnityEvent();
+        //Debug.Log(baseUnitInfo.actionTypes.Count + " " + Time.time);
     }
     public virtual void Start()
     {

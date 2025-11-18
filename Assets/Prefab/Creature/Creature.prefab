@@ -178,6 +178,7 @@ Transform:
   - {fileID: 3329486230111101642}
   - {fileID: 586410725128648175}
   - {fileID: 3349176140989779743}
+  - {fileID: 8839065230824090993}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -232,14 +233,16 @@ MonoBehaviour:
   walkSpeed: 2
   climbSpeed: 1
   priorityTaskTypes: 
-  processPerCutTree: 0.5
+  processPerCutTree: 1
   wood: {fileID: 0}
-  processPreMineStone: 0.5
+  processPreMineStone: 1
   stone: {fileID: 0}
-  processPerBuildPlacedObject: 0.5
+  processPerBuildPlacedObject: 1
   reservedItem: {fileID: 0}
   reservedWarehouse: {fileID: 0}
   itemPos: {fileID: 3349176140989779743}
+  groundEffectPos: {fileID: 8839065230824090993}
+  groundEffectPrefab: {fileID: 1030527219859122257, guid: 8e26d543b821a2a478a7d4e7ba75a22e, type: 3}
   professionType: 0
   professionTypeToGameobjects:
     m_keys: 0000000001000000
@@ -516,6 +519,36 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &4729966474547205596
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8839065230824090993}
+  m_Layer: 0
+  m_Name: GroundEffectPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8839065230824090993
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4729966474547205596}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.514, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4038889567112293126}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5170846513071405471
 GameObject:
   m_ObjectHideFlags: 0

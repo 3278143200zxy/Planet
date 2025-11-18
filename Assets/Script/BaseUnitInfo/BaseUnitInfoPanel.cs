@@ -11,6 +11,7 @@ public class BaseUnitButtonNode
     public ActionType actionType;
     public ActionButton actionButton;
 }
+
 public class BaseUnitInfoPanel : MonoBehaviour
 {
     public Text nameText;
@@ -23,6 +24,9 @@ public class BaseUnitInfoPanel : MonoBehaviour
     public List<ActionButton> activeActionButtons = new List<ActionButton>();
     public GameObject disabledActionButtonPool;
     public List<ActionButton> disabledActionButtons = new List<ActionButton>();
+
+    public Transform showWorkProgressTextsPool;
+    public List<Text> showWorkProgressTexts = new List<Text>();
     private void Awake()
     {
         foreach (BaseUnitButtonNode bubn in baseUnitButtonNodes)
@@ -33,36 +37,48 @@ public class BaseUnitInfoPanel : MonoBehaviour
             bubn.actionButton.actionType = bubn.actionType;
         }
         gameObject.SetActive(false);
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        showWorkProgressTexts = new List<Text>(showWorkProgressTextsPool.GetComponentsInChildren<Text>());
+        DisableAllShowWorkProgressTexts();
     }
     public void SetBaseUnitInfoPanel(BaseUnitInfo bsi)
     {
+        DisableAllActionButtons();
+
         nameText.text = bsi.baseUnitName;
         descriptionText.text = bsi.baseUnitDescription;
 
-        foreach (var button in activeActionButtons)
-        {
-            button.transform.SetParent(disabledActionButtonPool.transform);
-            disabledActionButtons.Add(button);
-        }
-        activeActionButtons.Clear();
+        foreach (var type in bsi.actionTypes) ActivateActionButton(type);
 
-        foreach (var type in bsi.actionTypes)
+        DisableAllShowWorkProgressTexts();
+    }
+    public void SetBaseUnitInfoPanel(BaseUnitInfo bsi, BaseUnit bu)
+    {
+        DisableAllActionButtons();
+        DisableAllShowWorkProgressTexts();
+
+        nameText.text = bsi.baseUnitName;
+        descriptionText.text = bsi.baseUnitDescription;
+
+        foreach (var type in bsi.actionTypes) ActivateActionButton(type);
+
+        DisableAllShowWorkProgressTexts();
+        switch (bu)
         {
-            ActionButton button = actionTypeToButton[type];
-            button.transform.SetParent(activeActionButtonPool.transform);
-            disabledActionButtons.Remove(button);
-            activeActionButtons.Add(button);
+            case PlacedObject po:
+                ActivateShowWorkProgressTexts(po.requiredItemTypeToNumber.Count + 1);
+                showWorkProgressTexts[0].text = "Work left:" + po.buildingProgress.ToString() + "/" + po.totalBuildingProgress.ToString();
+                int i = 0;
+                foreach (var itemType in po.requiredItemTypeToNumber.Keys)
+                {
+                    i++;
+                    if (po.itemTypeToNumber.ContainsKey(itemType)) showWorkProgressTexts[i].text = itemType.ToString() + ": " + po.itemTypeToNumber[itemType].ToString() + "/" + po.requiredItemTypeToNumber[itemType].ToString();
+                    else showWorkProgressTexts[i].text = itemType.ToString() + ": " + 0 + "/" + po.requiredItemTypeToNumber[itemType].ToString();
+
+                }
+                break;
+            default:
+                break;
         }
     }
     public void ActivateActionButton(ActionType type)
@@ -80,5 +96,18 @@ public class BaseUnitInfoPanel : MonoBehaviour
         activeActionButtons.Remove(button);
         disabledActionButtons.Add(button);
         button.gameObject.transform.SetParent(disabledActionButtonPool.transform);
+    }
+    public void DisableAllActionButtons()
+    {
+        foreach (ActionType type in System.Enum.GetValues(typeof(ActionType))) DisableActionButton(type);
+    }
+    public void DisableAllShowWorkProgressTexts()
+    {
+        foreach (var text in showWorkProgressTexts) text.gameObject.SetActive(false);
+
+    }
+    public void ActivateShowWorkProgressTexts(int number)
+    {
+        for (int i = 0; i < number; i++) showWorkProgressTexts[i].gameObject.SetActive(true);
     }
 }

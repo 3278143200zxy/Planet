@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum TaskType
@@ -44,7 +45,7 @@ public class TaskManager : MonoBehaviour
 
     public Item item;
 
-    public bool isAddTaskFrame = false;
+    public bool isCreatureFindTaskFrame = false;
 
     private void Awake()
     {
@@ -61,6 +62,7 @@ public class TaskManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //if (taskToCreatureTaskNodes.Count > 0) Debug.Log(taskToCreatureTaskNodes[taskToCreatureTaskNodes.Keys.First()].Count());
         //Debug.Log(tasks.Count);
     }
     public void AddTask(Task t)
@@ -68,8 +70,18 @@ public class TaskManager : MonoBehaviour
         if (t == null) return;
         tasks.Add(t);
         taskToCreatureTaskNodes[t] = new List<CreatureTaskNode>();
-        isAddTaskFrame = true;
+        foreach (Creature creature in creatures)
+        {
+            creature.FindTask();
+        }
+        // isCreatureFindTaskFrame = true;
 
+    }
+    public void AddTaskWithoutCreatureFindTask(Task t)
+    {
+        if (t == null) return;
+        tasks.Add(t);
+        taskToCreatureTaskNodes[t] = new List<CreatureTaskNode>();
     }
     public void RemoveTask(Task t)
     {
@@ -82,15 +94,33 @@ public class TaskManager : MonoBehaviour
         }
         taskToCreatureTaskNodes.Remove(t);
     }
+    public void RemoveTaskWithoutCancelCreatureTask(Task t)
+    {
+        if (t == null || !tasks.Contains(t)) return;
+        tasks.Remove(t);
+        taskToCreatureTaskNodes.Remove(t);
+    }
+    public void RemoveTaskWithoutCreatureFindTask(Task t)
+    {
+        if (t == null || !tasks.Contains(t)) return;
+        tasks.Remove(t);
+        for (int i = 0; i < taskToCreatureTaskNodes[t].Count; i++)
+        {
+            taskToCreatureTaskNodes[t][i].creature.CancelTaskWithoutFindTask();
+        }
+        taskToCreatureTaskNodes.Remove(t);
+    }
     private void LateUpdate()
     {
-        if (isAddTaskFrame)
+        
+        if ( isCreatureFindTaskFrame)
         {
             foreach (Creature creature in creatures)
             {
                 creature.FindTask();
             }
-            isAddTaskFrame = false;
+             isCreatureFindTaskFrame = false;
         }
+        
     }
 }

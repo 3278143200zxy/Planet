@@ -120,6 +120,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: baseUnitInfo.baseUnitName
+      value: Tesla Tower
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickRectangles.Array.size
       value: 2
       objectReference: {fileID: 0}

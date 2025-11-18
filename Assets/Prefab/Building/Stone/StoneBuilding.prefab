@@ -436,8 +436,8 @@ MonoBehaviour:
   mineStoneTask:
     taskType: 0
     baseUnits: []
-  stoneMiningProcess: 1
-  stoneMiningProcessSlider: {fileID: 1203669287580314034}
+  stoneMiningProgress: 1
+  stoneMiningProgressSlider: {fileID: 1203669287580314034}
   sliderTickMarkPrefab: {fileID: 0}
   stoneItemNumber: 1
   spawnItemHeight: 0.76

@@ -250,7 +250,7 @@ MonoBehaviour:
   baseUnitInfo:
     baseUnitName: 
     baseUnitDescription: 
-    actionTypes: 
+    actionTypes: 05000000
   planet: {fileID: 0}
   OnDestoryEvent:
     m_PersistentCalls:

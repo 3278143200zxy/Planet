@@ -258,6 +258,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: baseUnitInfo.baseUnitName
+      value: Tree
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickRectangles.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -517,11 +521,13 @@ MonoBehaviour:
     taskType: 0
     baseUnits: []
   cutTreeTip: {fileID: 5800721489854629238}
-  treeCuttingProcess: 1
-  treeCuttingProcessSlider: {fileID: 5057087428123491262}
+  treeCutProgress: 0
+  totalTreeCutProgress: 5
+  treeCutProcessSlider: {fileID: 5057087428123491262}
   sliderTickMarkPrefab: {fileID: 0}
-  woodItemNumber: 1
-  spawnItemRange: 1
+  woodItemNumber: 3
+  spawnItemWidthRange: 0.69
+  spawnItemHeightRange: 0.43
 --- !u!1001 &5989305983409048892
 PrefabInstance:
   m_ObjectHideFlags: 0
