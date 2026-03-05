@@ -11,13 +11,21 @@ public class Stone : MonoBehaviour
 
     public Task mineStoneTask;
 
-    public float stoneMiningProgress = 1f;
+    [HideInInspector]
+    public float stoneMineProgress;
+    public float totalStoneMineProgress;
     public Slider stoneMiningProgressSlider;
     public GameObject sliderTickMarkPrefab;
 
-    public int stoneItemNumber;
+    public int minStoneItemNumber;
+    public int maxStoneItemNumber;
     public float spawnItemHeight;
     public float spawnItemRange;
+
+    private void Awake()
+    {
+        stoneMineProgress = totalStoneMineProgress;
+    }
 
     void Start()
     {
@@ -27,21 +35,25 @@ public class Stone : MonoBehaviour
 
     public void MineStone(float p)
     {
-        stoneMiningProgress -= p;
+        stoneMineProgress -= p;
         if (!stoneMiningProgressSlider.gameObject.activeInHierarchy) stoneMiningProgressSlider.gameObject.SetActive(true);
-        stoneMiningProgressSlider.value = stoneMiningProgress / 1;
-        if (stoneMiningProgress <= 0f) OnMinedOut();
+        stoneMiningProgressSlider.value = stoneMineProgress / totalStoneMineProgress;
+        if ((stoneMineProgress) <= 0f) OnMinedOut();
     }
     public void OnMinedOut()
     {
+        int stoneItemNumber = Random.Range(minStoneItemNumber, maxStoneItemNumber);
         for (int i = 0; i < stoneItemNumber; i++)
         {
             Item stoneItem = PoolManager.instance.InstantiateItem(ItemType.Stone);
             stoneItem.transform.position = transform.position + new Vector3(Random.Range(-spawnItemRange / 2, spawnItemRange / 2), spawnItemHeight, 0);
+
+            stoneItem.ChangeLayer(stoneItem.gameObject, building.spriteRenderers[0].gameObject.layer);
         }
 
+        building.ClearState();
         CancelMineStoneTask();
-        building.DestoryBaseUnit();
+        building.OnlyDestory();
     }
     public void StartMineStoneTask()
     {

@@ -1,13 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
 
 [System.Serializable]
-public class ItemTypeToNumberDictionary : SerializableDictionary<ItemType, int> { }
+public class ItemTypeToNumberDictionary : SerializableDictionary<ItemType, int>
+{
+    public ItemTypeToNumberDictionary(ItemTypeToNumberDictionary other)
+    {
+        if (other != null)
+        {
+            foreach (var kvp in other)
+            {
+                Add(kvp.Key, kvp.Value);
+            }
+        }
+    }
+    public ItemTypeToNumberDictionary() { }
+}
 public class PlacedObject : BaseUnit
 {
-    public List<Dot> dots = new List<Dot>() { new Dot(0, 0) };
+    public List<Dot> dots = new List<Dot>() { new Dot(0, 0, 0) };
 
     //public List<ItemNode> itemNodes = new List<ItemNode>();
     //stored items
@@ -22,7 +34,6 @@ public class PlacedObject : BaseUnit
     public Dictionary<Item, Task> itemToTask = new Dictionary<Item, Task>();
 
     public Building buildingPrefab;
-    private Building building;
 
     public Task task = null;
 
@@ -94,13 +105,13 @@ public class PlacedObject : BaseUnit
 
         foreach (Dot d in dots)
         {
-            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx;
+            int radiusIdx = d.y + cell.radiusIdx, angleIdx = -d.x + cell.angleIdx, layerIdx = -d.z + cell.layerIdx;
             if (radiusIdx >= cell.planet.innerRadius && radiusIdx < cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
-                Cell processingCell = cell.planet.grid[radiusIdx, angleIdx];
+                Cell processingCell = cell.planet.grid[radiusIdx, angleIdx, layerIdx];
                 processingCell.placedObject = this;
             }
         }
@@ -114,6 +125,8 @@ public class PlacedObject : BaseUnit
 
         MouseManager.instance.placedObject = null;
         MouseManager.instance.SelectBaseUnit(this);
+
+        transform.localScale = new Vector3(1 + (cell.radiusIdx - planet.surfaceRadius) * planet.cellSizeCorrection, 1, 1);
     }
     public void StartMoveItemTask()
     {
@@ -180,7 +193,7 @@ public class PlacedObject : BaseUnit
         {
             if (requiredItemTypes.Contains(it.itemType) && !it.isInAir) return true;
         }
-        foreach (var warehouse in planet.warehouses)
+        foreach (var warehouse in planet.warehouseModules)
         {
             if (warehouse.IsItemAvailable(requiredItemTypes)) return true;
         }
@@ -192,13 +205,13 @@ public class PlacedObject : BaseUnit
 
         foreach (Dot d in dots)
         {
-            int radiusIdx = d.y + currentCell.radiusIdx, angleIdx = -d.x + currentCell.angleIdx;
+            int radiusIdx = d.y + currentCell.radiusIdx, angleIdx = -d.x + currentCell.angleIdx, layerIdx = -d.z + currentCell.layerIdx;
             if (radiusIdx >= currentCell.planet.innerRadius && radiusIdx < currentCell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / currentCell.planet.cellIntervalAngle);
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
-                Cell processingCell = currentCell.planet.grid[radiusIdx, angleIdx];
+                Cell processingCell = currentCell.planet.grid[radiusIdx, angleIdx, layerIdx];
                 processingCell.placedObject = this;
             }
         }
@@ -255,8 +268,10 @@ public class PlacedObject : BaseUnit
     public void SetBuilding()
     {
 
-        building = Instantiate(buildingPrefab, transform.position, transform.rotation);
+        Building building = Instantiate(buildingPrefab, transform.position, transform.rotation);
+        building.ChangeLayer(building.gameObject, gameObject.layer);
         building.SetBuilding(currentCell);
+        if (MouseManager.instance.IsBaseUnitSelected(this)) MouseManager.instance.SelectBaseUnit(building);
 
         CancelBuildTask();
 
@@ -267,6 +282,6 @@ public class PlacedObject : BaseUnit
     }
     public void RefreshBaseUnitInfoPanel()
     {
-        if (MouseManager.instance.baseUnit == this) MouseManager.instance.baseUnitInfoPanel.SetBaseUnitInfoPanel(this.baseUnitInfo, this);
+        if (MouseManager.instance.baseUnit == this) MouseManager.instance.baseUnitInfoPanel.SetBaseUnitInfoPanel(this);
     }
 }

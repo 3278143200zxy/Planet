@@ -19,6 +19,8 @@ public enum ItemType
 {
     Wood,
     Stone,
+    Axe,
+    Pickaxe,
 }
 public class Item : BaseUnit
 {
@@ -80,9 +82,9 @@ public class Item : BaseUnit
         {
 
             Cell belowCell = currentCell.neighbourCellNodes[1].cell;
-            isInAir = !(belowCell != null && belowCell.canStand && (currentCell.radiusIdx - 1f / 2f) * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= -itemHeight / 2f);
+            isInAir = !(belowCell != null && belowCell.canStand && Vector2.Distance(transform.position, planet.transform.position) - planet.CellRadiusDistance(belowCell.radiusIdx) - planet.CellHeight(belowCell.radiusIdx) / 2 <= itemHeight / 2f);
 
-            if (isInAir) transform.position += velocity * Time.deltaTime;
+            if (isInAir) transform.position += velocity * TimeManager.deltaTime;
 
             if (isInAir && !isInAirLastFrame) LeaveGround();
             if (!isInAir && isInAirLastFrame) HitGround();
@@ -99,7 +101,6 @@ public class Item : BaseUnit
     {
         if (reserver == null)
             planet.ItemHitGround(this);
-
 
     }
     public void LeaveGround()
@@ -120,6 +121,7 @@ public class Item : BaseUnit
         transform.localScale = Vector3.one;
         transform.SetParent(null);
     }
+
     public override void OnDrawGizmos()
     {
         base.OnDrawGizmos();

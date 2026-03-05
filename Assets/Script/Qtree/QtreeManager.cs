@@ -15,12 +15,15 @@ public class QtreeManager : MonoBehaviour
     public float maxWidth;
     public float maxHeight;
     public Qtree qtree;
+    public Qtree stillQtree;
 
     public List<BaseUnit> baseUnits = new List<BaseUnit>();
+    public List<BaseUnit> stillBaseUnits = new List<BaseUnit>();
     private void Awake()
     {
         instance = this;
         qtree = new Qtree(0, Vector2.zero, maxWidth, maxHeight, maxDepth, maxChild);
+        stillQtree = new Qtree(0, Vector2.zero, maxWidth, maxHeight, maxDepth, maxChild);
     }
     // Start is called before the first frame update
     void Start()
@@ -187,6 +190,11 @@ public class QtreeManager : MonoBehaviour
     {
         baseUnits.Add(b);
         qtree.Insert(qtree, b);
+    }
+    public void AddStillBaseunit(BaseUnit b)
+    {
+        stillBaseUnits.Add(b);
+        stillQtree.Insert(qtree, b);
     }
     private void OnDrawGizmos()
     {

@@ -80,4 +80,27 @@ public static class MathEx
         return true;
     }
 
+    public static bool IsInsideScaledCircle(Vector2 point, Vector2 center, float radius, Vector3 scale)
+    {
+        float rx = radius * scale.x; // x方向缩放后的半径
+        float ry = radius * scale.y; // y方向缩放后的半径
+
+        float dx = point.x - center.x;
+        float dy = point.y - center.y;
+
+        // 椭圆内判断公式
+        float value = (dx * dx) / (rx * rx) + (dy * dy) / (ry * ry);
+
+        return value <= 1f;
+    }
+    public static bool IsInsideScaledRect(Vector2 point, Vector2 center, float width, float length, Vector3 scale)
+    {
+        float halfW = (width * scale.x) / 2f;
+        float halfL = (length * scale.y) / 2f;
+
+        float dx = point.x - center.x;
+        float dy = point.y - center.y;
+
+        return Mathf.Abs(dx) <= halfW && Mathf.Abs(dy) <= halfL;
+    }
 }

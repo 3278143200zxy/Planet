@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2311506913271621759}
   - component: {fileID: 3345873933876233721}
   - component: {fileID: 3446177922811310639}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: StoneProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -75,7 +75,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3675656403509276176}
   - component: {fileID: 3751477559912511201}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}

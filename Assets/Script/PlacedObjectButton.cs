@@ -19,6 +19,7 @@ public class PlacedObjectButton : MonoBehaviour, IPointerEnterHandler, IPointerE
         PlacedObject p = MouseManager.instance.placedObject;
         if (p != null) Destroy(p.gameObject);
         PlacedObject placedObject = Instantiate(placedObjectPrefab);
+        placedObject.ChangeLayer(placedObject.gameObject, LayerMask.NameToLayer(MouseManager.instance.planets[0].currentLayer.ToString()));
         //MouseManager.instance.SelectBaseUnit(MouseManager.instance.placedObject);
         MouseManager.instance.placedObject = placedObject;
         MouseManager.instance.DeselectBaseUnit();

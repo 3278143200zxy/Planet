@@ -23,12 +23,12 @@ public class PlanetRigidbody : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        velocity -= (transform.position - planet.transform.position).normalized * gravity * Time.deltaTime;
+        velocity -= (transform.position - planet.transform.position).normalized * gravity * TimeManager.deltaTime;
 
     }
     private void LateUpdate()
     {
         //Debug.Log(velocity);
-        transform.position += velocity * Time.deltaTime;
+        transform.position += velocity * TimeManager.deltaTime;
     }
 }

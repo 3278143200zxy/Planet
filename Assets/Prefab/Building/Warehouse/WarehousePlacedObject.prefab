@@ -125,7 +125,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: totalBuildingProgress
-      value: 8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: baseUnitInfo.baseUnitName
@@ -165,7 +165,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5338598238869742911, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: requiredItemTypeToNumber.m_values.Array.data[0]
-      value: 8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6335397028208873884, guid: c7dc54cd71cda0d4ab3ebf753932379f, type: 3}
       propertyPath: m_Name

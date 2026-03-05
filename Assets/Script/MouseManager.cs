@@ -3,17 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+//left,up,back(1,1,1)
 [Serializable]
 public struct Dot
 {
-    public int x, y;
-    public Dot(int x, int y)
+    public int x, y, z;
+    public Dot(int x, int y, int z)
     {
         this.x = x;
         this.y = y;
+        this.z = z;
     }
 }
 public enum MouseState
@@ -44,7 +47,9 @@ public class MouseManager : MonoBehaviour
     public BaseUnit baseUnit;
     public BaseUnit lastBaseUnit;
     private bool isChoosingBaseUnitFrame = false;
+
     public BaseUnitInfoPanel baseUnitInfoPanel;
+    public BillInfoPanel billInfoPanel;
 
     public Color placedObjectColor;
 
@@ -56,7 +61,7 @@ public class MouseManager : MonoBehaviour
     {
         instance = this;
 
-
+        //billInfoPanel.dropDown.onValueChanged.AddListener(OnBillInfoValueChanged);
     }
     // Start is called before the first frame update
     void Start()
@@ -78,26 +83,33 @@ public class MouseManager : MonoBehaviour
             Vector3 dir = mousePos - planet.transform.position;
             if (dir.magnitude >= (innerRadius - 1f / 2f) * cellHeight && dir.magnitude <= (outerRadius - 1f / 2f) * cellHeight)
             {
-                Cell mouseCell = planet.PosToCell(mousePos);
+                Cell mouseCell = planet.PosToCell(mousePos + new Vector3(0, 0, -mousePos.z + planet.currentLayer));
                 //if (mouseCell != null) Debug.Log(mouseCell.radiusIdx + " " + mouseCell.angleIdx);
                 //if (mouseCell != null) mouseCell.noPlacingSign.SetActive(true);
 
                 mouseTip.SetActive(true);
-                //mouseTip.transform.position = dir + transform.position;
-                float angle = Vector2.SignedAngle(Vector2.right, dir) + cellIntervalAngle / 2;
-                if (angle < 0) angle -= cellIntervalAngle;
-                angle = (int)(angle / cellIntervalAngle) * cellIntervalAngle;
-                //Debug.Log(angle);
-                float angleRad = angle * Mathf.Deg2Rad;
-                float distance = dir.magnitude + cellHeight / 2;
-                distance = (int)(distance / cellHeight) * cellHeight;
-                Vector3 direction = new Vector3(Mathf.Cos(angleRad), Mathf.Sin(angleRad)) * distance;
-                mouseTip.transform.position = planet.transform.position + direction;
-                mouseTip.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
+                if (mouseCell != null)
+                {
+                    mouseTip.transform.position = mouseCell.transform.position;
+                    mouseTip.transform.rotation = mouseCell.transform.rotation;
+                }
+                else mouseTip.SetActive(false);
+                //mouseTip.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
                 if (placedObject != null)
                 {
-                    placedObject.transform.position = planet.transform.position + direction;
+                    if (Input.GetMouseButtonDown(1))
+                    {
+                        Destroy(placedObject.gameObject);
+                        continue;
+                    }
+                    if (mouseCell == null)
+                    {
+                        placedObject.transform.position = mousePos;
+                        continue;
+                    }
+                    placedObject.transform.position = mouseCell.transform.position;
+                    Vector2 direction = mousePos - planet.transform.position;
                     placedObject.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
                     bool canMousePlace = true;
@@ -108,9 +120,9 @@ public class MouseManager : MonoBehaviour
                         if (radiusIdx >= planet.innerRadius && radiusIdx < planet.outerRadius)
                         {
                             int temp = Mathf.RoundToInt(360f / planet.cellIntervalAngle);
-                            if (angleIdx < 0) angle += temp;
+                            if (angleIdx < 0) angleIdx += temp;
                             if (angleIdx >= temp) angleIdx -= temp;
-                            Cell processingCell = planet.grid[radiusIdx, angleIdx];
+                            Cell processingCell = planet.grid[radiusIdx, angleIdx, planet.currentLayer];
                             if (!processingCell.canPlace)
                             {
                                 lastFrameNoPlacingSigns.Add(processingCell.noPlacingSign);
@@ -122,10 +134,6 @@ public class MouseManager : MonoBehaviour
                     if (Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()) && canMousePlace)
                     {
                         placedObject.SetPlacedObject(mouseCell);
-                    }
-                    if (Input.GetMouseButtonDown(1))
-                    {
-                        Destroy(placedObject.gameObject);
                     }
 
                 }
@@ -169,24 +177,29 @@ public class MouseManager : MonoBehaviour
         {
             SpriteRenderer sr1 = baseUnit.GetComponentInChildren<SpriteRenderer>();
             SpriteRenderer sr2 = bu.GetComponentInChildren<SpriteRenderer>();
-
-            if (sr1.sortingOrder > sr2.sortingOrder) return;
+            //Debug.Log(baseUnit.currentCell.layerIdx + " " + bu.currentCell.layerIdx);
+            if (Mathf.Abs(baseUnit.currentCell.layerIdx - planets[0].currentLayer) < Mathf.Abs(bu.currentCell.layerIdx - planets[0].currentLayer) || sr1.sortingOrder > sr2.sortingOrder) return;
         }
         isChoosingBaseUnitFrame = true;
         DeselectBaseUnit();
         baseUnit = bu;
         baseUnit.selectionRectangle.SetActive(true);
 
-        baseUnitInfoPanel.SetBaseUnitInfoPanel(baseUnit.baseUnitInfo, baseUnit);
-        baseUnitInfoPanel.gameObject.SetActive(true);
+        baseUnitInfoPanel.SetBaseUnitInfoPanel(baseUnit);
 
+        baseUnit.OnBaseUnitSelectedEvent.Invoke();
     }
     public void DeselectBaseUnit()
     {
         baseUnitInfoPanel.gameObject.SetActive(false);
         if (baseUnit == null) return;
         baseUnit.selectionRectangle.SetActive(false);
+        baseUnit.OnBaseUnitDeselectedEvent.Invoke();
         baseUnit = null;
+    }
+    public bool IsBaseUnitSelected(BaseUnit bu)
+    {
+        return baseUnit == bu;
     }
     public void ReviewPlacedObject(PlacedObject po)
     {
@@ -194,7 +207,11 @@ public class MouseManager : MonoBehaviour
         baseUnitInfoPanel.gameObject.SetActive(true);
         List<ActionType> tempActionTypes = new List<ActionType>(po.baseUnitInfo.actionTypes);
         po.baseUnitInfo.actionTypes.Clear();
-        baseUnitInfoPanel.SetBaseUnitInfoPanel(po.baseUnitInfo, po);
+        baseUnitInfoPanel.SetBaseUnitInfoPanel(po);
         po.baseUnitInfo.actionTypes = tempActionTypes;
+    }
+    public void OnBillInfoValueChanged(int index)
+    {
+        Debug.Log(index);
     }
 }

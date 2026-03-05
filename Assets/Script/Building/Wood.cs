@@ -14,13 +14,17 @@ public class Wood : MonoBehaviour
     public Slider treeCutProcessSlider;
     public GameObject sliderTickMarkPrefab;
 
-    public int woodItemNumber;
+    public int minWoodItemNumber;
+    public int maxWoodItemNumber;
     public float spawnItemWidthRange;
     public float spawnItemHeightRange;
+
+    public GameObject destoryEffectPrefab;
+    public Transform destoryEffectPos;
     public void Awake()
     {
         treeCutProgress = totalTreeCutProgress;
-        
+
     }
     // Start is called before the first frame update
     public void Start()
@@ -48,11 +52,18 @@ public class Wood : MonoBehaviour
     }
     public void OnCuttedDown()
     {
+        int woodItemNumber = Random.Range(minWoodItemNumber, maxWoodItemNumber);
         for (int i = 0; i < woodItemNumber; i++)
         {
             Item woodItem = PoolManager.instance.InstantiateItem(ItemType.Wood);
-            woodItem.transform.position = transform.position + Random.Range(-spawnItemWidthRange / 2, spawnItemWidthRange / 2) * transform.right + Random.Range(-spawnItemHeightRange / 2, spawnItemHeightRange / 2) * transform.up;
+            woodItem.transform.position = transform.position
+                + Random.Range(-spawnItemWidthRange / 2, spawnItemWidthRange / 2) * transform.right
+                + Random.Range(-spawnItemHeightRange / 2, spawnItemHeightRange / 2) * transform.up;
+
+            woodItem.ChangeLayer(woodItem.gameObject, building.spriteRenderers[0].gameObject.layer);
         }
+
+        //Instantiate(destoryEffectPrefab, destoryEffectPos.position, transform.rotation);
 
         CancelCutTreeTask();
         building.DestoryBaseUnit();

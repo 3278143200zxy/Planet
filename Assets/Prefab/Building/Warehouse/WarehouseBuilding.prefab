@@ -243,6 +243,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: b0264d4fae025a34f8cb09247cef7b7f, type: 3}
+    - target: {fileID: 2294545679934791345, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: b0264d4fae025a34f8cb09247cef7b7f, type: 3}
     - target: {fileID: 4571750073935352987, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.526
@@ -331,7 +335,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7091102197787786081, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
   m_PrefabInstance: {fileID: 8108256094093201533}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6230837837590127272
+--- !u!114 &8301771590009483055 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+  m_PrefabInstance: {fileID: 8108256094093201533}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7032540878832691632}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b594a10c8aea5e640a6018c4e60515ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &170506490252375424
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -340,14 +355,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 7032540878832691632}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ff72e9ad48defb4bbc73630850944ba, type: 3}
+  m_Script: {fileID: 11500000, guid: 84d6d53c1b3e7bd4e89e5c3526c366b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  building: {fileID: 0}
+  baseUnit: {fileID: 8301771590009483055}
   moveItemTask:
     taskType: 0
     baseUnits: []
-  capacity: 10
+  isAllItemTypesNeeded: 1
+  neededItemTypes: 
+  capacity: 100
   storage: 0
   showItemNodePrefab: {fileID: 6534274373687822299, guid: 6e3b2ea22295d474ab2ca7ac40834520, type: 3}
   showItemNodePool: {fileID: 6832042223447152525}

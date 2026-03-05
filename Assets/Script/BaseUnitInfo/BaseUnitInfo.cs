@@ -13,4 +13,5 @@ public class BaseUnitInfo
     public List<ActionType> actionTypes = new List<ActionType>();
 
     public Dictionary<string, ValueTuple<int, int>> showWorkProgressNodes = new Dictionary<string, (int, int)>();
+
 }

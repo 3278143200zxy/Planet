@@ -29,13 +29,13 @@ public class Ladder : MonoBehaviour
     {
         foreach (Dot d in building.standDots)
         {
-            int radiusIdx = d.y + building.cell.radiusIdx, angleIdx = -d.x + building.cell.angleIdx;
+            int radiusIdx = d.y + building.cell.radiusIdx, angleIdx = -d.x + building.cell.angleIdx, layerIdx = -d.z + building.cell.layerIdx;
             if (radiusIdx >= building.cell.planet.innerRadius && radiusIdx < building.cell.planet.outerRadius)
             {
                 int temp = Mathf.RoundToInt(360f / building.cell.planet.cellIntervalAngle);
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
-                Cell processingCell = building.cell.planet.grid[radiusIdx, angleIdx];
+                Cell processingCell = building.cell.planet.grid[radiusIdx, angleIdx, layerIdx];
                 processingCell.AddAboveNeighbour(climbSpeed);
                 Cell aboveCell = processingCell.neighbourCellNodes[0].cell;
                 aboveCell.AddBelowNeighbour(climbSpeed);

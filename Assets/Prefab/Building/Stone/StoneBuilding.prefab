@@ -99,9 +99,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: -2119420465
-  m_SortingLayer: 2
-  m_SortingOrder: 100
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 32767
   m_Sprite: {fileID: 21300000, guid: e9b1406fa21c85944a5efbdd995ebe77, type: 3}
   m_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
   m_FlipX: 0
@@ -261,6 +261,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: isBlock
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: baseUnitType
       value: 5
       objectReference: {fileID: 0}
@@ -317,6 +321,10 @@ PrefabInstance:
       value: 3.02
       objectReference: {fileID: 0}
     - target: {fileID: 2169449883036482745, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4286df4349f04154cb61f3c15d17cf0b, type: 3}
+    - target: {fileID: 2294545679934791345, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 4286df4349f04154cb61f3c15d17cf0b, type: 3}
@@ -436,9 +444,11 @@ MonoBehaviour:
   mineStoneTask:
     taskType: 0
     baseUnits: []
-  stoneMiningProgress: 1
+  stoneMineProgress: 0
+  totalStoneMineProgress: 5
   stoneMiningProgressSlider: {fileID: 1203669287580314034}
   sliderTickMarkPrefab: {fileID: 0}
-  stoneItemNumber: 1
+  minStoneItemNumber: 2
+  maxStoneItemNumber: 3
   spawnItemHeight: 0.76
   spawnItemRange: 0.87

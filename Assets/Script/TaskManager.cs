@@ -10,6 +10,7 @@ public enum TaskType
     MineStone,
     Build,
     MoveItem,
+    Craft,
 }
 public class CreatureTaskNode
 {

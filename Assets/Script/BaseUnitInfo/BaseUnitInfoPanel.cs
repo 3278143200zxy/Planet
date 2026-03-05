@@ -41,6 +41,7 @@ public class BaseUnitInfoPanel : MonoBehaviour
         showWorkProgressTexts = new List<Text>(showWorkProgressTextsPool.GetComponentsInChildren<Text>());
         DisableAllShowWorkProgressTexts();
     }
+    /*
     public void SetBaseUnitInfoPanel(BaseUnitInfo bsi)
     {
         DisableAllActionButtons();
@@ -52,8 +53,13 @@ public class BaseUnitInfoPanel : MonoBehaviour
 
         DisableAllShowWorkProgressTexts();
     }
-    public void SetBaseUnitInfoPanel(BaseUnitInfo bsi, BaseUnit bu)
+    */
+    public void SetBaseUnitInfoPanel(BaseUnit bu)
     {
+        BaseUnitInfo bsi = bu.baseUnitInfo;
+
+        gameObject.SetActive(true);
+
         DisableAllActionButtons();
         DisableAllShowWorkProgressTexts();
 
@@ -63,6 +69,8 @@ public class BaseUnitInfoPanel : MonoBehaviour
         foreach (var type in bsi.actionTypes) ActivateActionButton(type);
 
         DisableAllShowWorkProgressTexts();
+
+
         switch (bu)
         {
             case PlacedObject po:
@@ -80,6 +88,7 @@ public class BaseUnitInfoPanel : MonoBehaviour
             default:
                 break;
         }
+
     }
     public void ActivateActionButton(ActionType type)
     {

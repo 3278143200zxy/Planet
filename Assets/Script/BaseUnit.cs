@@ -47,6 +47,9 @@ public class BaseUnit : MonoBehaviour
 {
     public BaseUnitType baseUnitType;
 
+    public UnityEvent OnBaseUnitSelectedEvent = new UnityEvent();
+    public UnityEvent OnBaseUnitDeselectedEvent = new UnityEvent();
+
     public bool canClick = true;
     public List<Circle> clickCircles = new List<Circle>();
     public List<Rectangle> clickRectangles = new List<Rectangle>();
@@ -64,29 +67,40 @@ public class BaseUnit : MonoBehaviour
 
     [HideInInspector]
     public UnityEvent OnDestoryEvent = new UnityEvent();
+
     public Cell currentCell
     {
-        get { return planet.PosToCell(transform.position); }
+        get
+        {
+            if (planet == null) return null;
+            return planet.PosToCell(transform.position);
+        }
     }
+
+    public List<SpriteRenderer> spriteRenderers = new List<SpriteRenderer>();
     public virtual void Awake()
     {
-
         planet = MouseManager.instance.planets[0];
 
         foreach (ActionType type in Enum.GetValues(typeof(ActionType))) actionTypeToEvent[type] = new UnityEvent();
         //foreach (ActionType type in baseUnitInfo.actionTypes) actionTypeToEvent[type] = new UnityEvent();
         //Debug.Log(baseUnitInfo.actionTypes.Count + " " + Time.time);
+
+        spriteRenderers = new List<SpriteRenderer>(GetComponentsInChildren<SpriteRenderer>());
+
     }
     public virtual void Start()
     {
         //QtreeManager.instance.baseUnits.Add(this);
     }
+
     public virtual void Update()
     {
+
         if (canClick && Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
         {
             Vector3 mousePos = MouseManager.instance.mousePos;
-            if (Vector2.Distance(transform.position, mousePos) < 15f)
+            if (Vector2.Distance(transform.position, mousePos) < 10f)
             {
                 bool isFinished = false;
                 float offsetRad = MathEx.SignedAngleRad(transform.position, Vector2.up);
@@ -95,7 +109,7 @@ public class BaseUnit : MonoBehaviour
                 {
                     if (isFinished) break;
                     float sqrDistance = Vector2.SqrMagnitude(transform.position + new Vector3(c.x, c.y) - mousePos);
-                    if (sqrDistance < c.radius * c.radius)
+                    if (MathEx.IsInsideScaledCircle(mousePos - transform.position, new Vector2(c.x, c.y), c.radius, transform.localScale))
                     {
                         MouseManager.instance.SelectBaseUnit(this);
                         isFinished = true;
@@ -107,7 +121,7 @@ public class BaseUnit : MonoBehaviour
                     Vector3 center = transform.position + new Vector3(r.x, r.y);
                     float halfWidth = r.width / 2f;
                     float halfHeight = r.height / 2f;
-                    if (mousePos.x >= center.x - halfWidth && mousePos.x <= center.x + halfWidth && mousePos.y >= center.y - halfHeight && mousePos.y <= center.y + halfHeight)
+                    if (MathEx.IsInsideScaledRect(mousePos - transform.position, new Vector2(r.x, r.y), r.width, r.height, transform.localScale))
                     {
                         isFinished = true;
                         MouseManager.instance.SelectBaseUnit(this);
@@ -115,7 +129,9 @@ public class BaseUnit : MonoBehaviour
                 }
             }
         }
+
     }
+
     public virtual void LateUpdate()
     {
 
@@ -173,5 +189,15 @@ public class BaseUnit : MonoBehaviour
 
         //Destroy(gameObject);
         PoolManager.instance.DestoryBaseUnit(this);
+    }
+    public void ChangeLayer(GameObject go, int layer)
+    {
+        if (go == null) return;
+        go.layer = layer;
+
+        foreach (Transform child in go.transform)
+        {
+            ChangeLayer(child.gameObject, layer);
+        }
     }
 }
