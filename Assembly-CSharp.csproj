@@ -61,7 +61,10 @@
     <Compile Include="Assets\Prefab\Building\TeslaTower\Lighting.cs" />
     <Compile Include="Assets\Script\ResourceManager.cs" />
     <Compile Include="Assets\Script\MouseManager.cs" />
+    <Compile Include="Assets\Script\Building\RestPoint.cs" />
+    <Compile Include="Assets\Script\WeatherManager.cs" />
     <Compile Include="Assets\Script\TaskManager.cs" />
+    <Compile Include="Assets\Script\Planet\WaterModule.cs" />
     <Compile Include="Assets\Script\BaseUnitInfo\BaseUnitInfo.cs" />
     <Compile Include="Assets\Script\Camera\CameraController.cs" />
     <Compile Include="Assets\Script\GridLineManager.cs" />
@@ -69,9 +72,10 @@
     <Compile Include="Assets\Prefab\Building\Trebuchet\Projectile.cs" />
     <Compile Include="Assets\Script\UI\SimpleButton.cs" />
     <Compile Include="Assets\Script\SimpleEvent.cs" />
-    <Compile Include="Assets\Script\Qtree\Qtree.cs" />
+    <Compile Include="Assets\Script\DataStructure\Qtree\Qtree.cs" />
     <Compile Include="Assets\Script\Module\WarehouseModule.cs" />
     <Compile Include="Assets\Prefab\Building\Warehouse\ShowItemNode.cs" />
+    <Compile Include="Assets\Script\UI\ObjectSlider.cs" />
     <Compile Include="Assets\Script\Building.cs" />
     <Compile Include="Assets\SerializableDictionary\SerializableHashSet.cs" />
     <Compile Include="Assets\Script\TimeManager.cs" />
@@ -83,20 +87,22 @@
     <Compile Include="Assets\Script\Enemy\Bird.cs" />
     <Compile Include="Assets\Script\Cell.cs" />
     <Compile Include="Assets\Script\MathEx.cs" />
+    <Compile Include="Assets\Script\DataStructure\UnionFind\UnionFind.cs" />
     <Compile Include="Assets\Script\Building\Stone.cs" />
     <Compile Include="Assets\ConditionAttribute\EnumConditionAttribute.cs" />
     <Compile Include="Assets\Script\BaseUnitInfo\BaseUnitInfoPanel.cs" />
     <Compile Include="Assets\Shader\SunLight2D.cs" />
-    <Compile Include="Assets\Script\Planet.cs" />
+    <Compile Include="Assets\Script\Planet\Planet.cs" />
     <Compile Include="Assets\Script\Building\Armory.cs" />
     <Compile Include="Assets\Script\UI\OptionDataItem.cs" />
     <Compile Include="Assets\Script\Enemy.cs" />
     <Compile Include="Assets\SerializableDictionary\Example\SerializableDictionaryExample.cs" />
     <Compile Include="Assets\Script\BaseUnit.cs" />
     <Compile Include="Assets\Script\BaseUnitInfo\BillInfo\BillInfoPanel.cs" />
-    <Compile Include="Assets\Script\Qtree\QtreeManager.cs" />
+    <Compile Include="Assets\Script\DataStructure\Qtree\QtreeManager.cs" />
     <Compile Include="Assets\Script\Item.cs" />
     <Compile Include="Assets\Script\Sun.cs" />
+    <Compile Include="Assets\Script\DataStructure\PriorityQueue\PriorityQueue.cs" />
     <Compile Include="Assets\Script\Creature.cs" />
     <Compile Include="Assets\Script\Building\Wood.cs" />
     <Compile Include="Assets\Prefab\Building\TeslaTower\TeslaTower.cs" />
@@ -107,6 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2D_BuildingEmission.shader" />
+    <None Include="Assets\Shader\CloudPolarShader.shader" />
     <None Include="Assets\PlacedObjectMaterial\PlacedObject.shader" />
   </ItemGroup>
   <ItemGroup>
@@ -136,6 +143,9 @@
     </Reference>
     <Reference Include="UnityEngine.ClothModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CloudFoundationModule">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.CloudFoundationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ClusterInputModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>
@@ -251,6 +261,9 @@
     <Reference Include="UnityEngine.UIElementsNativeModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.UIElementsNativeModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UIWidgetsModule">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.UIWidgetsModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UNETModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.UNETModule.dll</HintPath>
     </Reference>
@@ -334,6 +347,12 @@
     </Reference>
     <Reference Include="UnityEditor.UnityConnectModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEditor.UnityConnectModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\NetStandard\ref\2.0.0\netstandard.dll</HintPath>

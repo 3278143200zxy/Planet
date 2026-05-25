@@ -22,6 +22,7 @@ public class Building : BaseUnit
 
     public bool isBlock = false;
 
+
     // Start is called before the first frame update
     public override void Awake()
     {
@@ -35,10 +36,12 @@ public class Building : BaseUnit
     }
 
     // Update is called once per frame
+    
     public override void Update()
     {
         base.Update();
     }
+    
     public virtual void SetBuilding(Cell c)
     {
         cell = c;

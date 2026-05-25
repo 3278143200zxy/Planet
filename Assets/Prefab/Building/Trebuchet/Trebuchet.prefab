@@ -486,6 +486,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b29f8c45693302947b61aebf640f49f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 1312058210101528032}
   center: {fileID: 8687607029793035677}
   attackRange: 4.5
   target: {fileID: 0}
@@ -493,3 +494,4 @@ MonoBehaviour:
   maxProjectSpeed: 10
   projectilePrefab: {fileID: 3446177922811310639, guid: 8489040ed9d98ae429dee5914820366d, type: 3}
   firePos: {fileID: 6317836956414687823}
+  targetingType: 0

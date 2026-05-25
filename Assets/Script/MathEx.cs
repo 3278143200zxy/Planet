@@ -103,4 +103,48 @@ public static class MathEx
 
         return Mathf.Abs(dx) <= halfW && Mathf.Abs(dy) <= halfL;
     }
+    public static float Perlin(float x, float y, float scale)
+    {
+        return Mathf.PerlinNoise(x * scale, y * scale);
+    }
+    public static float CircularNoise(float x, float circleCellNumber, float scale)
+    {
+        float angle = x / circleCellNumber * Mathf.PI * 2;
+
+        float nx = Mathf.Cos(angle);
+        float ny = Mathf.Sin(angle);
+
+        return Mathf.PerlinNoise(nx * scale + 100f, ny * scale + 100f);
+    }
+    public static float CircularNoise(float x, float circleCellNumber, float scale, float offset)
+    {
+        float angle = x / circleCellNumber * Mathf.PI * 2;
+
+        float nx = Mathf.Cos(angle);
+        float ny = Mathf.Sin(angle);
+
+        return Mathf.PerlinNoise(nx * scale + 100f + offset, ny * scale + 100f + offset);
+    }
+    public static float SimpleNoise(float x, float y)
+    {
+        return Mathf.PerlinNoise(x * 1.01f, y * 1.10f);
+    }
+    public static Vector3 CalculateInitialVelocity(Vector3 start, Vector3 end, float gravityMagnitude, Vector3 gravityOrigin)
+    {
+        Vector3 delta = end - start;
+        if (gravityMagnitude < 1e-6f) return delta;
+
+        // 指向重力原点的方向（引力方向）
+        Vector3 dirStart = (gravityOrigin - start).normalized;
+        Vector3 dirEnd = (gravityOrigin - end).normalized;
+        Vector3 avgDir = (dirStart + dirEnd).normalized;
+        Vector3 gravity = avgDir * gravityMagnitude;   // 现在指向原点
+
+        // 提高弧度的因子（使轨迹更高）
+        float heightFactor = 1.5f;
+        float t = heightFactor * Mathf.Sqrt(2f * delta.magnitude / gravityMagnitude);
+        t = Mathf.Clamp(t, 0.2f, 5f);
+
+        return delta / t - 0.5f * gravity * t;
+    }
 }

@@ -335,10 +335,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b26a37a291b46be4da78ec3984594eab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  OnOptionItemClickedEvent:
+    m_PersistentCalls:
+      m_Calls: []
   optionDataItemPool: []
   optionDataItems:
   - {fileID: 4223707123230406375}
-  options: 
+  options: []
   content: {fileID: 2471538279594169480}
 --- !u!114 &7730368899501228188
 MonoBehaviour:
@@ -834,7 +837,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dropdown: {fileID: 0}
-  itemType: 0
+  itemRecipe:
+    itemType: 0
+    itemTypeToNumberDictionary:
+      m_keys: 
+      m_values: 
   text: {fileID: 3266883547597385713}
   image: {fileID: 3685847270753785118}
 --- !u!114 &3234559253770060368

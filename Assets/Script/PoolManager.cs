@@ -25,6 +25,7 @@ public class PoolManager : MonoBehaviour
 
     public List<BaseUnitDataNode> baseUnitDataNodes = new List<BaseUnitDataNode>();
     public List<ItemDataNode> itemDataNodes = new List<ItemDataNode>();
+    public List<ItemType> weaponItemTypes = new List<ItemType>();
     public Item itemPrefab;
 
     public Dictionary<BaseUnitType, BaseUnit> baseUnitTypeToPrefab = new Dictionary<BaseUnitType, BaseUnit>();
@@ -69,6 +70,7 @@ public class PoolManager : MonoBehaviour
                 item.transform.SetParent(null);
                 itemPool[item.itemType].Add(item);
                 if (planet.items.Contains(item)) planet.items.Remove(item);
+                if (item.isWeapon && TaskManager.instance.tasks.Contains(item.armTask)) TaskManager.instance.RemoveTask(item.armTask);
                 break;
             default:
                 baseUnitPool[baseUnit.baseUnitType].Add(baseUnit);
@@ -95,6 +97,7 @@ public class PoolManager : MonoBehaviour
             item.itemType = itemType;
             item.spriteRenderer.sprite = itemTypeToSprite[itemType];
         }
+        item.isWeapon = weaponItemTypes.Contains(itemType);
         item.ResetItem();
         return item;
     }

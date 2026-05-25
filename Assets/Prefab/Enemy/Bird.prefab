@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &420847965426052066
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7863997871209232033}
+  m_Layer: 10
+  m_Name: SuccessorPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7863997871209232033
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 420847965426052066}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.164, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7480563424087421152}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2736118875428418275
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +39,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2770403789606196253}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: SelectionRectangle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +72,7 @@ GameObject:
   - component: {fileID: 4201556309364150275}
   - component: {fileID: 4225183254779100896}
   - component: {fileID: 3606452883031248400}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Bird
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,6 +92,7 @@ Transform:
   m_Children:
   - {fileID: 8584309105764780702}
   - {fileID: 2770403789606196253}
+  - {fileID: 7863997871209232033}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -78,6 +109,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseUnitType: 0
+  OnBaseUnitSelectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  OnBaseUnitDeselectedEvent:
+    m_PersistentCalls:
+      m_Calls: []
   canClick: 1
   clickCircles:
   - x: 0
@@ -94,6 +131,7 @@ MonoBehaviour:
   OnDestoryEvent:
     m_PersistentCalls:
       m_Calls: []
+  spriteRenderers: []
   bloodEffectPrefab: {fileID: 8609538043700512948, guid: 63a468cbd1989704694e0dd3ca9f569c, type: 3}
 --- !u!114 &4225183254779100896
 MonoBehaviour:
@@ -107,10 +145,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d343104145c37f241ad937a79b9e3e9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemy: {fileID: 4201556309364150275}
+  rb: {fileID: 3606452883031248400}
+  predecessor: {fileID: 0}
+  successor: {fileID: 0}
+  successorPos: {fileID: 7863997871209232033}
   target: {fileID: 0}
-  acceleration: 0.01
+  acceleration: 0.05
   maxSpeed: 1.5
   collisionRadius: 0.15
+  lastFramePos: {x: 0, y: 0, z: 0}
 --- !u!114 &3606452883031248400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,7 +179,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4828513666260222219}
   - component: {fileID: 7470273761070883529}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Square
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +260,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8584309105764780702}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: TextureManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}

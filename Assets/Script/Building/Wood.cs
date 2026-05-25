@@ -42,8 +42,8 @@ public class Wood : MonoBehaviour
     public void CutTree(float p)
     {
         treeCutProgress -= p;
-        if (!treeCutProcessSlider.gameObject.activeInHierarchy) treeCutProcessSlider.gameObject.SetActive(true);
-        treeCutProcessSlider.value = treeCutProgress / totalTreeCutProgress;
+        //if (!treeCutProcessSlider.gameObject.activeInHierarchy) treeCutProcessSlider.gameObject.SetActive(true);
+        //treeCutProcessSlider.value = treeCutProgress / totalTreeCutProgress;
         if (treeCutProgress <= 0f) OnCuttedDown();
     }
     public void SetBuilding()

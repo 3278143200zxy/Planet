@@ -22,7 +22,6 @@ public class BillModule : MonoBehaviour
     public UnityEvent<ItemType> OnOptionItemClickedEvent = new UnityEvent<ItemType>();
 
     public List<BillInfo> billInfos = new List<BillInfo>();
-    public ItemTypeToNumberDictionary itemTypeToNumberDictionary = new ItemTypeToNumberDictionary();
 
     public ItemTypeToNumberDictionary missingItems = new ItemTypeToNumberDictionary();
 
@@ -42,6 +41,7 @@ public class BillModule : MonoBehaviour
         {
             missingItems = new ItemTypeToNumberDictionary(ir.itemTypeToNumberDictionary);
             warehouseModule.SetNeededItemTypes(new List<ItemType>(missingItems.Keys));
+            warehouseModule.SetNeededItems(new Dictionary<ItemType, int>(missingItems));
         }
     }
     public void WarehouseModuleAddItem(ItemType itemType)
@@ -63,21 +63,24 @@ public class BillModule : MonoBehaviour
             item.transform.position = spawnItemPos.position;
             item.ChangeLayer(item.gameObject, gameObject.layer);
 
+            warehouseModule.RemoveItemsDirectly(new Dictionary<ItemType, int>(billInfos[0].itemRecipe.itemTypeToNumberDictionary));
             billInfos.RemoveAt(0);
             MouseManager.instance.billInfoPanel.RefreshShownValue();
+            warehouseModule.ClearNeededItems();
             CancelCraftTask();
 
             if (billInfos.Count > 0)
             {
                 missingItems = new ItemTypeToNumberDictionary(billInfos[0].itemRecipe.itemTypeToNumberDictionary);
                 warehouseModule.SetNeededItemTypes(new List<ItemType>(missingItems.Keys));
+                warehouseModule.SetNeededItems(new Dictionary<ItemType, int>(missingItems));
             }
         }
     }
     public void StartCraftTask()
     {
         craftTask = new Task(TaskType.Craft, new BaseUnit[] { baseUnit });
-        TaskManager.instance.AddTask(craftTask);
+        TaskManager.instance.AddTaskWithoutCreatureFindTask(craftTask);
     }
     public void CancelCraftTask()
     {

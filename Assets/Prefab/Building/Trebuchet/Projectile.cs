@@ -1,11 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+public enum MotionType
+{
+    Homing,
+    Linear,
+    Projectile
+}
 public class Projectile : MonoBehaviour
 {
-    public Planet planet;
-    public Cell currentCell;
+    [HideInInspector] public Planet planet;
+    [HideInInspector] public Cell currentCell;
 
     public PlanetRigidbody planetRigidbody;
 
@@ -14,26 +19,32 @@ public class Projectile : MonoBehaviour
     public GameObject destoryEffect;
 
     public List<BaseUnit> lastFrameCollidingBaseUnits = new List<BaseUnit>();
+
+    public MotionType motionType;
+
+    public bool isCollidingWithBlock = true;
+
     private void Awake()
     {
         planet = MouseManager.instance.planets[0];
-    }
-    // Start is called before the first frame update
-    void Start()
-    {
 
+        if (motionType == MotionType.Linear) planetRigidbody.gravity = 0f;
+        Debug.Log(2 + " " + Time.time);
     }
 
     // Update is called once per frame
     void Update()
     {
-        currentCell = planet.PosToCell(transform.position);
-        Cell belowCell = null;
-        if (currentCell != null) belowCell = currentCell.neighbourCellNodes[1].cell;
-        if (currentCell != null && belowCell.canStand && (currentCell.radiusIdx - 1f / 2f) * planet.cellHeight - Vector2.Distance(transform.position, planet.transform.position) >= -(collisionRadius + planetRigidbody.velocity.magnitude * Time.deltaTime))
+        if (isCollidingWithBlock)
         {
-            transform.position = (transform.position - planet.transform.position).normalized * ((currentCell.radiusIdx - 1f / 2f) * planet.cellHeight + collisionRadius);
-            OnDestory();
+            currentCell = planet.PosToCell(transform.position);
+            Cell belowCell = null;
+            if (currentCell != null) belowCell = currentCell.neighbourCellNodes[1].cell;
+            if (currentCell != null && belowCell.canStand && planet.CellRadiusDistance(currentCell.radiusIdx) - Vector2.Distance(transform.position, planet.transform.position) >= -(collisionRadius + planetRigidbody.velocity.magnitude * TimeManager.deltaTime))
+            {
+                transform.position = (transform.position - planet.transform.position).normalized * ((currentCell.radiusIdx - 1f / 2f) * planet.cellHeight + collisionRadius);
+                OnDestory();
+            }
         }
 
         List<BaseUnit> collidingBaseUnits = QtreeManager.instance.FindTargets(transform.position, collisionRadius);
@@ -49,6 +60,16 @@ public class Projectile : MonoBehaviour
     {
         planetRigidbody.velocity = v;
     }
+    public void ChangeLayer(GameObject go, int layer)
+    {
+        if (go == null) return;
+        go.layer = layer;
+
+        foreach (Transform child in go.transform)
+        {
+            ChangeLayer(child.gameObject, layer);
+        }
+    }
     void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, collisionRadius);
@@ -57,7 +78,7 @@ public class Projectile : MonoBehaviour
     {
         Vector2 dir = transform.position - planet.transform.position;
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg - 90;
-        Instantiate(destoryEffect, transform.position, Quaternion.Euler(0, 0, angle));
+        if (destoryEffect != null) Instantiate(destoryEffect, transform.position, Quaternion.Euler(0, 0, angle));
 
         Destroy(gameObject);
     }

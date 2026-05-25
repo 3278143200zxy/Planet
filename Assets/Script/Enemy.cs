@@ -20,6 +20,7 @@ public class Enemy : BaseUnit
     {
         base.Update();
     }
+    
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);

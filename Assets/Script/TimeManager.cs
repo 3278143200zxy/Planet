@@ -29,10 +29,6 @@ public class TimeManager : MonoBehaviour
     {
         instance = this;
     }
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
 
     // Update is called once per frame
     void Update()
@@ -40,6 +36,8 @@ public class TimeManager : MonoBehaviour
         //Debug.Log(timeScale);
         float fps = 1f / Time.deltaTime;
         fpsText.text = $"FPS: {fps:F1}";
+
+
     }
     public void ChangeTimeScale(float ts)
     {

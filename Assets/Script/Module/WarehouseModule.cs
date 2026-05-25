@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Linq;
 
 public class WarehouseModule : MonoBehaviour
 {
@@ -12,6 +14,7 @@ public class WarehouseModule : MonoBehaviour
     public bool isAllItemTypesNeeded = false;
     public List<ItemType> neededItemTypes = new List<ItemType>();
     public Dictionary<ItemType, int> itemTypeToNumber = new Dictionary<ItemType, int>();
+    public Dictionary<ItemType, int> neededItemTypeToNumber = new Dictionary<ItemType, int>();
 
     public int capacity;
     public int storage;
@@ -37,6 +40,8 @@ public class WarehouseModule : MonoBehaviour
         else CancelMoveItemTask();
 
         itemTypeToSprite = new Dictionary<ItemType, Sprite>(PoolManager.instance.itemTypeToSprite);
+
+        if (isAllItemTypesNeeded) neededItemTypes = Enum.GetValues(typeof(ItemType)).Cast<ItemType>().ToList();
     }
     private void LateUpdate()
     {
@@ -87,6 +92,14 @@ public class WarehouseModule : MonoBehaviour
         if (IsNeededItemAvailableOnPlanet(neededItemTypes)) StartMoveItemTask();
         else CancelMoveItemTask();
     }
+    public void SetNeededItems(Dictionary<ItemType, int> it2n)
+    {
+        neededItemTypeToNumber = new Dictionary<ItemType, int>(it2n);
+    }
+    public void ClearNeededItems()
+    {
+        neededItemTypeToNumber.Clear();
+    }
     public bool IsNeededItemAvailableOnPlanet(List<ItemType> itemTypes)
     {
         if (isAllItemTypesNeeded) return true;
@@ -118,7 +131,9 @@ public class WarehouseModule : MonoBehaviour
     }
     public List<ItemType> AvailableItemTypes(List<ItemType> itemTypes)
     {
-        return itemTypes.GetIntersection(itemTypeToNumber.Keys);
+        List<ItemType> tempItemTypes = itemTypes.GetIntersection(itemTypeToNumber.Keys);
+        tempItemTypes.RemoveAll(x => neededItemTypeToNumber[x] >= itemTypeToNumber[x]);
+        return tempItemTypes;
     }
     public void AddItem(ItemType itemType)
     {
@@ -153,6 +168,16 @@ public class WarehouseModule : MonoBehaviour
             itemTypeToShowItemNode.Remove(itemType);
         }
         */
+    }
+    public void RemoveItemsDirectly(Dictionary<ItemType, int> it2n)
+    {
+        foreach (var itt in it2n.Keys)
+            if (itemTypeToNumber.ContainsKey(itt))
+            {
+                itemTypeToNumber[itt] -= it2n[itt];
+                if (itemTypeToNumber[itt] <= 0) itemTypeToNumber.Remove(itt);
+            }
+
     }
     public void OnDestoryFunction()
     {

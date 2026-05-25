@@ -5,7 +5,6 @@ using UnityEngine;
 public class PlanetRigidbody : MonoBehaviour
 {
     private Planet planet;
-    private BaseUnit baseUnit;
 
     public float gravity = 9.8f;
     public Vector3 velocity;
@@ -13,7 +12,7 @@ public class PlanetRigidbody : MonoBehaviour
     // Start is called before the first frame update
     private void Awake()
     {
-        baseUnit = GetComponent<BaseUnit>();
+
     }
     void Start()
     {

@@ -6,6 +6,7 @@ using UnityEngine;
 public enum SimpleEventType
 {
     Destory,
+    Zoom,
 }
 [Serializable]
 public class SimpleEventNode
@@ -26,32 +27,45 @@ public class SimpleEvent : MonoBehaviour
     {
         for (int i = 0; i < simpleEventNodes.Count; i++)
         {
-            if (simpleEventNodes[i].parameters.Count == 0)
+            SimpleEventNode eventNode = simpleEventNodes[i];
+            switch (eventNode.simpleEventType)
             {
-                InvokeSimpleEvent(simpleEventNodes[i]);
-                simpleEventNodes.RemoveAt(i);
+                case SimpleEventType.Zoom:
+                    eventNode.parameters.Add(0);
+                    transform.localScale = Vector3.one * eventNode.parameters[2];
+                    break;
             }
         }
     }
     private void Update()
     {
-        for (int i = 0; i < simpleEventNodes.Count; i++)
+        for (int i = simpleEventNodes.Count - 1; i >= 0; i--)
         {
-            simpleEventNodes[i].parameters[0] -= Time.deltaTime;
-            if(simpleEventNodes[i].parameters[0] <= 0)
+            SimpleEventNode eventNode = simpleEventNodes[i];
+            List<float> parameters = eventNode.parameters;
+            switch (eventNode.simpleEventType)
             {
-                InvokeSimpleEvent(simpleEventNodes[i]);
-                simpleEventNodes.RemoveAt(i);
+                case SimpleEventType.Destory:
+                    if (parameters[0] <= 0)
+                    {
+                        Destroy(gameObject);
+                        simpleEventNodes.RemoveAt(i);
+                    }
+                    else parameters[0] -= TimeManager.deltaTime;
+                    break;
+                case SimpleEventType.Zoom:
+                    if (parameters[0] <= 0)
+                    {
+                        parameters[4] += TimeManager.deltaTime;
+                        if (parameters[4] <= eventNode.parameters[1])
+                        {
+                            transform.localScale = Vector3.one * ((parameters[4] / parameters[1]) * (parameters[3] - parameters[2]) + parameters[2]);
+                        }
+                        else simpleEventNodes.RemoveAt(i);
+                    }
+                    else parameters[0] -= TimeManager.deltaTime;
+                    break;
             }
-        }
-    }
-    public void InvokeSimpleEvent(SimpleEventNode simpleEventNode)
-    {
-        switch (simpleEventNode.simpleEventType)
-        {
-            case SimpleEventType.Destory:
-                Destroy(gameObject);
-                break;
         }
     }
 }

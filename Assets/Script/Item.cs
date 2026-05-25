@@ -19,8 +19,10 @@ public enum ItemType
 {
     Wood,
     Stone,
+    Iron,
     Axe,
     Pickaxe,
+    Shoe,
 }
 public class Item : BaseUnit
 {
@@ -43,12 +45,15 @@ public class Item : BaseUnit
     public bool isPickedUp;
     public Creature reserver;
 
+    public bool isWeapon = false;
+    public Task armTask;
 
     public override void Awake()
     {
         base.Awake();
 
         reserver = null;
+        armTask = new Task(TaskType.MoveItem, new BaseUnit[] { this });
     }
     // Start is called before the first frame update
     public override void Start()
@@ -65,6 +70,7 @@ public class Item : BaseUnit
     }
 
     // Update is called once per frame
+    
     public override void Update()
     {
         base.Update();
@@ -90,6 +96,7 @@ public class Item : BaseUnit
             if (!isInAir && isInAirLastFrame) HitGround();
         }
     }
+    
     public override void LateUpdate()
     {
         base.LateUpdate();
@@ -99,19 +106,20 @@ public class Item : BaseUnit
     }
     public void HitGround()
     {
-        if (reserver == null)
-            planet.ItemHitGround(this);
-
+        if (reserver == null) planet.ItemHitGround(this);
+        if (isWeapon && !TaskManager.instance.tasks.Contains(armTask)) TaskManager.instance.AddTask(armTask);
     }
     public void LeaveGround()
     {
-
+        if (isWeapon && TaskManager.instance.tasks.Contains(armTask)) TaskManager.instance.RemoveTask(armTask);
     }
     public void PickUp()
     {
         isPickedUp = true;
         transform.localScale = Vector3.one * pickUpSize;
         planet.items.Remove(this);
+
+        if (isWeapon) TaskManager.instance.RemoveTask(armTask);
     }
     public void ResetItem()
     {

@@ -266,7 +266,7 @@ MonoBehaviour:
     taskType: 0
     baseUnits: []
   itemRecipes:
-  - itemType: 2
+  - itemType: 5
     itemTypeToNumberDictionary:
       m_keys: 00000000
       m_values: 01000000
@@ -274,13 +274,14 @@ MonoBehaviour:
     itemTypeToNumberDictionary:
       m_keys: 01000000
       m_values: 01000000
+  - itemType: 4
+    itemTypeToNumberDictionary:
+      m_keys: 00000000
+      m_values: 01000000
   OnOptionItemClickedEvent:
     m_PersistentCalls:
       m_Calls: []
   billInfos: []
-  itemTypeToNumberDictionary:
-    m_keys: 
-    m_values: 
   missingItems:
     m_keys: 
     m_values: 
@@ -308,6 +309,7 @@ MonoBehaviour:
   showItemNodePrefab: {fileID: 0}
   showItemNodePool: {fileID: 0}
   isStartedMoveItemTask: 0
+  isChangeTaskFrame: 0
   AddItemEvent:
     m_PersistentCalls:
       m_Calls: []

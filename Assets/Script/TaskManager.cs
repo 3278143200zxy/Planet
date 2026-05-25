@@ -6,6 +6,7 @@ using UnityEngine;
 
 public enum TaskType
 {
+    None,
     CutTree,
     MineStone,
     Build,
@@ -28,6 +29,7 @@ public class Task
 {
     public TaskType taskType;
     public BaseUnit[] baseUnits;
+
     public Task(TaskType taskType, BaseUnit[] baseUnits)
     {
         this.taskType = taskType;
@@ -113,15 +115,15 @@ public class TaskManager : MonoBehaviour
     }
     private void LateUpdate()
     {
-        
-        if ( isCreatureFindTaskFrame)
+
+        if (isCreatureFindTaskFrame)
         {
             foreach (Creature creature in creatures)
             {
                 creature.FindTask();
             }
-             isCreatureFindTaskFrame = false;
+            isCreatureFindTaskFrame = false;
         }
-        
+
     }
 }

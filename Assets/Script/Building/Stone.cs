@@ -1,11 +1,31 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum MineralType
+{
+    Stone,
+    Iron,
+    Soil,
+}
+[Serializable]
+public class MineralNode
+{
+    public Sprite sprite;
+    public ItemType itemType;
+}
+[Serializable]
+public class MineralDictionary : SerializableDictionary<MineralType, MineralNode> { }
 public class Stone : MonoBehaviour
 {
     public Building building;
+
+    public SpriteRenderer spriteRenderer;
+    public MineralDictionary mineralDictionary = new MineralDictionary();
+    public MineralType mineralType;
+
 
     public GameObject mineStoneTip;
 
@@ -36,17 +56,17 @@ public class Stone : MonoBehaviour
     public void MineStone(float p)
     {
         stoneMineProgress -= p;
-        if (!stoneMiningProgressSlider.gameObject.activeInHierarchy) stoneMiningProgressSlider.gameObject.SetActive(true);
-        stoneMiningProgressSlider.value = stoneMineProgress / totalStoneMineProgress;
+        //if (!stoneMiningProgressSlider.gameObject.activeInHierarchy) stoneMiningProgressSlider.gameObject.SetActive(true);
+        //stoneMiningProgressSlider.value = stoneMineProgress / totalStoneMineProgress;
         if ((stoneMineProgress) <= 0f) OnMinedOut();
     }
     public void OnMinedOut()
     {
-        int stoneItemNumber = Random.Range(minStoneItemNumber, maxStoneItemNumber);
+        int stoneItemNumber = UnityEngine.Random.Range(minStoneItemNumber, maxStoneItemNumber);
         for (int i = 0; i < stoneItemNumber; i++)
         {
-            Item stoneItem = PoolManager.instance.InstantiateItem(ItemType.Stone);
-            stoneItem.transform.position = transform.position + new Vector3(Random.Range(-spawnItemRange / 2, spawnItemRange / 2), spawnItemHeight, 0);
+            Item stoneItem = PoolManager.instance.InstantiateItem(mineralDictionary[mineralType].itemType);
+            stoneItem.transform.position = transform.position + new Vector3(UnityEngine.Random.Range(-spawnItemRange / 2, spawnItemRange / 2), spawnItemHeight, 0);
 
             stoneItem.ChangeLayer(stoneItem.gameObject, building.spriteRenderers[0].gameObject.layer);
         }
@@ -70,6 +90,11 @@ public class Stone : MonoBehaviour
         building.AddActionType(building, ActionType.MineStone);
         building.RemoveActionType(building, ActionType.CancelMineStone);
         TaskManager.instance.RemoveTask(mineStoneTask);
+    }
+    public void SetMineralType(MineralType mt)
+    {
+        mineralType = mt;
+        spriteRenderer.sprite = mineralDictionary[mineralType].sprite;
     }
     private void OnDrawGizmos()
     {

@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TargetingType
+{
+    Aim,
+    Still,
+
+}
 public class Trebuchet : MonoBehaviour
 {
-    private Animator animator;
+    public Animator animator;
 
     public Transform center;
     public float attackRange;
@@ -16,16 +22,8 @@ public class Trebuchet : MonoBehaviour
     public float maxProjectSpeed;
     public Projectile projectilePrefab;
     public Transform firePos;
-    // Start is called before the first frame update
-    private void Awake()
-    {
-        animator = GetComponent<Animator>();
-    }
-    void Start()
-    {
 
-    }
-
+    public TargetingType targetingType;
     // Update is called once per frame
     void Update()
     {
@@ -34,7 +32,6 @@ public class Trebuchet : MonoBehaviour
 
         if (target != null)
         {
-
             fireIntervalTimer += Time.deltaTime;
             if (fireIntervalTimer >= fireInterval)
             {
@@ -45,14 +42,21 @@ public class Trebuchet : MonoBehaviour
     }
     public void Fire()
     {
-        float x = target.transform.position.x - firePos.position.x, y = target.transform.position.y - firePos.position.y, v = maxProjectSpeed, g = projectilePrefab.planetRigidbody.gravity;
-        float a = Mathf.Atan2(v * v + Mathf.Sqrt(v * v * v * v - g * (g * x * x + 2f * v * v * y)), g * x);
-        float offsetAngle = MathEx.SignedAngleRad(transform.position, Vector2.up);
-        //Debug.Log(x + " " + y + " " + v + " " + g + " " + a);
-        a -= offsetAngle;
+        Vector2 dir = Vector2.up * maxProjectSpeed;
+        if (targetingType == TargetingType.Aim)
+        {
+            float x = target.transform.position.x - firePos.position.x, y = target.transform.position.y - firePos.position.y, v = maxProjectSpeed, g = projectilePrefab.planetRigidbody.gravity;
+            float a = Mathf.Atan2(v * v + Mathf.Sqrt(v * v * v * v - g * (g * x * x + 2f * v * v * y)), g * x);
+            float offsetAngle = MathEx.SignedAngleRad(transform.position, Vector2.up);
+            //Debug.Log(x + " " + y + " " + v + " " + g + " " + a);
+            a -= offsetAngle;
+            dir = MathEx.RotateVector2(Vector2.right, a) * maxProjectSpeed;
+        }
         //Debug.Log(offsetAngle);
+        Debug.Log(1 + " " + Time.time);
         Projectile projectile = Instantiate(projectilePrefab, firePos.position, Quaternion.identity);
-        projectile.SetVelocity(MathEx.RotateVector2(Vector2.right, a) * maxProjectSpeed);
+        projectile.SetVelocity(dir);
+        projectile.ChangeLayer(projectile.gameObject, gameObject.layer);
 
         animator.Play("Restore", 0, 0);
 

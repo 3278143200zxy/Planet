@@ -27,6 +27,11 @@ public class BaseUnitInfoPanel : MonoBehaviour
 
     public Transform showWorkProgressTextsPool;
     public List<Text> showWorkProgressTexts = new List<Text>();
+
+    public GameObject creaturePool;
+    public Slider energySlider;
+    public Text energyText;
+    public Text taskTypeText;
     private void Awake()
     {
         foreach (BaseUnitButtonNode bubn in baseUnitButtonNodes)
@@ -39,7 +44,7 @@ public class BaseUnitInfoPanel : MonoBehaviour
         gameObject.SetActive(false);
 
         showWorkProgressTexts = new List<Text>(showWorkProgressTextsPool.GetComponentsInChildren<Text>());
-        DisableAllShowWorkProgressTexts();
+        showWorkProgressTextsPool.gameObject.SetActive(false);
     }
     /*
     public void SetBaseUnitInfoPanel(BaseUnitInfo bsi)
@@ -61,31 +66,22 @@ public class BaseUnitInfoPanel : MonoBehaviour
         gameObject.SetActive(true);
 
         DisableAllActionButtons();
-        DisableAllShowWorkProgressTexts();
 
         nameText.text = bsi.baseUnitName;
         descriptionText.text = bsi.baseUnitDescription;
 
         foreach (var type in bsi.actionTypes) ActivateActionButton(type);
 
-        DisableAllShowWorkProgressTexts();
-
+        showWorkProgressTextsPool.gameObject.SetActive(false);
+        creaturePool.SetActive(false);
 
         switch (bu)
         {
             case PlacedObject po:
-                ActivateShowWorkProgressTexts(po.requiredItemTypeToNumber.Count + 1);
-                showWorkProgressTexts[0].text = "Work left:" + po.buildingProgress.ToString() + "/" + po.totalBuildingProgress.ToString();
-                int i = 0;
-                foreach (var itemType in po.requiredItemTypeToNumber.Keys)
-                {
-                    i++;
-                    if (po.itemTypeToNumber.ContainsKey(itemType)) showWorkProgressTexts[i].text = itemType.ToString() + ": " + po.itemTypeToNumber[itemType].ToString() + "/" + po.requiredItemTypeToNumber[itemType].ToString();
-                    else showWorkProgressTexts[i].text = itemType.ToString() + ": " + 0 + "/" + po.requiredItemTypeToNumber[itemType].ToString();
-
-                }
+                SetPlacedObject(po);
                 break;
-            default:
+            case Creature c:
+                SetCreature(c);
                 break;
         }
 
@@ -110,13 +106,30 @@ public class BaseUnitInfoPanel : MonoBehaviour
     {
         foreach (ActionType type in System.Enum.GetValues(typeof(ActionType))) DisableActionButton(type);
     }
-    public void DisableAllShowWorkProgressTexts()
+    public void SetPlacedObject(PlacedObject placedObject)
     {
-        foreach (var text in showWorkProgressTexts) text.gameObject.SetActive(false);
+        showWorkProgressTextsPool.gameObject.SetActive(true);
 
+        showWorkProgressTexts[0].text = "Work left:" + placedObject.buildingProgress.ToString() + "/" + placedObject.totalBuildingProgress.ToString();
+        showWorkProgressTexts[0].gameObject.SetActive(true);
+
+        int i = 0;
+        foreach (var itemType in placedObject.requiredItemTypeToNumber.Keys)
+        {
+            i++;
+            if (placedObject.itemTypeToNumber.ContainsKey(itemType)) showWorkProgressTexts[i].text = itemType.ToString() + ": " + placedObject.itemTypeToNumber[itemType].ToString() + "/" + placedObject.requiredItemTypeToNumber[itemType].ToString();
+            else showWorkProgressTexts[i].text = itemType.ToString() + ": " + 0 + "/" + placedObject.requiredItemTypeToNumber[itemType].ToString();
+            showWorkProgressTexts[i].gameObject.SetActive(true);
+        }
+        for (int j = i + 1; j < showWorkProgressTexts.Count; j++) showWorkProgressTexts[j].gameObject.SetActive(false);
     }
-    public void ActivateShowWorkProgressTexts(int number)
+    public void SetCreature(Creature creature)
     {
-        for (int i = 0; i < number; i++) showWorkProgressTexts[i].gameObject.SetActive(true);
+        creaturePool.SetActive(true);
+        energySlider.value = creature.energy / 1f;
+        float tempEnergy = creature.energy * 100f;
+        energyText.text = tempEnergy.ToString("F0");
+
+        taskTypeText.text = creature.task.taskType.ToString();
     }
 }

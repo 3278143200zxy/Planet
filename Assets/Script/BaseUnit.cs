@@ -94,9 +94,9 @@ public class BaseUnit : MonoBehaviour
         //QtreeManager.instance.baseUnits.Add(this);
     }
 
+
     public virtual void Update()
     {
-
         if (canClick && Input.GetMouseButtonDown(0) && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
         {
             Vector3 mousePos = MouseManager.instance.mousePos;
@@ -129,7 +129,6 @@ public class BaseUnit : MonoBehaviour
                 }
             }
         }
-
     }
 
     public virtual void LateUpdate()
@@ -186,7 +185,6 @@ public class BaseUnit : MonoBehaviour
     }
     public virtual void DestoryBaseUnit()
     {
-
         //Destroy(gameObject);
         PoolManager.instance.DestoryBaseUnit(this);
     }

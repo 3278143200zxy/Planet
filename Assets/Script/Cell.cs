@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 
 [Serializable]
 public class NeighbourCellNode
@@ -33,6 +34,7 @@ public class Cell : MonoBehaviour
 {
     public Planet planet;
     public int radiusIdx, angleIdx, layerIdx;
+    public int cellIdx;
 
     public Building building;
     public PlacedObject placedObject;
@@ -49,20 +51,29 @@ public class Cell : MonoBehaviour
     private int[] ad = new int[4] { 0, 0, 1, -1 };
     private int[] ld = new int[2] { -1, 1 };
 
-    private int[] ad2 = new int[4] { 1, 1, -1, -1 };
-    private int[] rd2 = new int[4] { 1, -1, -1, 1 };
+    private int[] ad2 = new int[8] { 1, 1, -1, -1, 0, 0, 0, 0 };
+    private int[] rd2 = new int[8] { 1, -1, -1, 1, 1, 1, -1, -1 };
+    private int[] ld2 = new int[8] { 0, 0, 0, 0, 1, -1, 1, -1 };
     public NeighbourCellNode[] neighbourCellNodes = new NeighbourCellNode[6];
-    public NeighbourCellNode[] diagonalNeighbourCellNodes = new NeighbourCellNode[4];
+    public NeighbourCellNode[] diagonalNeighbourCellNodes = new NeighbourCellNode[8];
 
 
     public GameObject noPlacingSign;
+
+    public Water water;
+    public ObjectSlider waterSlider;
     public void SetCell(Planet p, int _ri, int _ai, int _li)
     {
         planet = p;
         radiusIdx = _ri;
         angleIdx = _ai;
         layerIdx = _li;
+
         neighbourCellNodes = new NeighbourCellNode[6];
+        diagonalNeighbourCellNodes = new NeighbourCellNode[8];
+
+        cellIdx = radiusIdx * (planet.circleCellNumber + 1) * 2 + angleIdx * 2 + layerIdx;
+        water = new Water(this);
     }
     //Find cell's neighbours
     public void SetCellNeighbours()
@@ -91,17 +102,18 @@ public class Cell : MonoBehaviour
             neighbourCellNodes[i + 4] = new NeighbourCellNode(planet.grid[radiusIdx, angleIdx, li]);
         }
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
-            int ri = radiusIdx + rd2[i], ai = angleIdx + ad2[i];
-            if (ri >= planet.outerRadius || ri < planet.innerRadius)
+            int ri = radiusIdx + rd2[i], ai = angleIdx + ad2[i], li = layerIdx + ld2[i];
+            if (ri >= planet.outerRadius || ri < planet.innerRadius || li < 0 || li >= 2)
             {
                 diagonalNeighbourCellNodes[i] = new NeighbourCellNode(null);
                 continue;
             }
             if (ai >= planet.circleCellNumber) ai -= planet.circleCellNumber;
             if (ai < 0) ai += planet.circleCellNumber;
-            diagonalNeighbourCellNodes[i] = new NeighbourCellNode(planet.grid[ri, ai, layerIdx]);
+            diagonalNeighbourCellNodes[i] =
+                new NeighbourCellNode(planet.grid[ri, ai, li]);
         }
 
     }
@@ -116,7 +128,7 @@ public class Cell : MonoBehaviour
             if (node.cell != null && node.number > 0 && node.cell.neighbourCellNodes[1].cell.canStand && (node.cell.building == null || !node.cell.building.isBlock)) temp.Add(node.cell);
         }
         //Debug.Log(angleIdx + " " + radiusIdx + " " + layerIdx + " " + "general");
-        for (int i = 2; i < 4; i++)
+        for (int i = 2; i < 6; i++)
         {
             NeighbourCellNode node = neighbourCellNodes[i];
             if (node.cell != null && node.cell.canStand)
@@ -127,15 +139,18 @@ public class Cell : MonoBehaviour
                     && node3.cell != null && (node3.cell.building == null || !node3.cell.building.isBlock)) temp.Add(node3.cell);
             }
         }
-        for (int i = 2; i < 4; i++)
+        for (int i = 2; i < 6; i++)
         {
             NeighbourCellNode node = neighbourCellNodes[i];
-            NeighbourCellNode node2 = node.cell.neighbourCellNodes[1];
-            NeighbourCellNode node3 = node2.cell.neighbourCellNodes[1];
-            if (node3.cell != null && node3.cell.canStand)
+            if (node.cell != null)
             {
-                if (node2.cell != null && (node2.cell.building == null || !node2.cell.building.isBlock)
-                    && node.cell != null && (node.cell.building == null || !node.cell.building.isBlock)) temp.Add(node2.cell);
+                NeighbourCellNode node2 = node.cell.neighbourCellNodes[1];
+                NeighbourCellNode node3 = node2.cell.neighbourCellNodes[1];
+                if (node3.cell != null && node3.cell.canStand)
+                {
+                    if (node2.cell != null && (node2.cell.building == null || !node2.cell.building.isBlock) && !node2.cell.canStand
+                        && node.cell != null && (node.cell.building == null || !node.cell.building.isBlock)) temp.Add(node2.cell);
+                }
             }
         }
         //Debug.Log(temp.Count);
@@ -143,6 +158,8 @@ public class Cell : MonoBehaviour
     }
     public float GetMoveCostTo(Cell neighbour)
     {
+        if (neighbour == this) return 0;
+
         for (int i = 0; i < 6; i++)
         {
             if (neighbourCellNodes[i].cell == neighbour)
@@ -152,11 +169,11 @@ public class Cell : MonoBehaviour
                 // 返回邻居的移动代价
             }
         }
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 8; i++)
         {
             if (diagonalNeighbourCellNodes[i].cell == neighbour)
             {
-                return 1;
+                return 1.3f;
             }
         }
         return float.MaxValue; // 如果没有找到邻居，返回一个非常大的值，表示无法到达
@@ -260,5 +277,9 @@ public class Cell : MonoBehaviour
     {
         if (neighbourCellNodes[5].cell == null) return;
         neighbourCellNodes[5].SubtractCellNumber();
+    }
+    public void DebugCoord()
+    {
+        Debug.Log(radiusIdx + " " + angleIdx + " " + layerIdx);
     }
 }

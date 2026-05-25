@@ -85,8 +85,14 @@
     <Reference Include="UnityEngine.AudioModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.AudioModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.AutoStreamingModule">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.AutoStreamingModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.ClothModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClothModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CloudFoundationModule">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.CloudFoundationModule.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.ClusterInputModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.ClusterInputModule.dll</HintPath>
@@ -202,6 +208,9 @@
     <Reference Include="UnityEngine.UIElementsNativeModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.UIElementsNativeModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.UIWidgetsModule">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\Variations\mono\Managed\UnityEngine.UIWidgetsModule.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEngine.UNETModule">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\Managed\UnityEngine\UnityEngine.UNETModule.dll</HintPath>
     </Reference>
@@ -292,6 +301,9 @@
     <Reference Include="UnityEditor.WebGL.Extensions">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WebGLSupport\UnityEditor.WebGL.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="UnityEditor.WindowsStandalone.Extensions">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\WindowsStandaloneSupport\UnityEditor.WindowsStandalone.Extensions.dll</HintPath>
     </Reference>
@@ -312,6 +324,12 @@
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.6\net35\unity-custom\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\PlaybackEngines\iOSSupport\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Users\32781\Desktop\2020.3.47f1\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\mscorlib.dll</HintPath>

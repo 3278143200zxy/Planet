@@ -48,6 +48,8 @@ public class PlacedObject : BaseUnit
     public SpriteRenderer spriteRenderer;
     public MaterialPropertyBlock mpb;
 
+    public GameObject buildTip;
+
     public override void Awake()
     {
         //Debug.Log(baseUnitInfo.actionTypes.Count + " " + Time.time);
@@ -120,6 +122,8 @@ public class PlacedObject : BaseUnit
 
         //building.SetBuilding(cell, dots, standDots);
         //Destroy(gameObject);
+        buildTip.SetActive(true);
+
         if (IsItemAvailable()) StartMoveItemTask();
         else CancelMoveItemTask();
 
@@ -166,6 +170,8 @@ public class PlacedObject : BaseUnit
         {
             StartBuildTask();
         }
+
+        buildTip.SetActive(true);
     }
     public void CancelTaskButton()
     {
@@ -186,6 +192,8 @@ public class PlacedObject : BaseUnit
                     CancelBuildTask();
                     break;
             }
+
+        buildTip.SetActive(false);
     }
     public bool IsItemAvailable()
     {
