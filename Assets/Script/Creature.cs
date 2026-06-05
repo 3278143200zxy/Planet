@@ -405,7 +405,7 @@ public class Creature : BaseUnit
                                         }
                                         else
                                         {
-                                            if (reservedWarehouseModule != null) reservedItem = reservedWarehouseModule.ReserveItem(reservedWarehouseModule.AvailableItemTypes(moveItemPlacedObject.requiredItemTypes)[0]);
+                                            //if (reservedWarehouseModule != null) reservedItem = reservedWarehouseModule.ReserveItem(reservedWarehouseModule.AvailableItemTypes(moveItemPlacedObject.requiredItemTypes)[0]);
 
                                             path = moveItemTempPath;
                                             ChangeCreatureState(CreatureState.Walk);
@@ -457,10 +457,17 @@ public class Creature : BaseUnit
                                             TaskManager.instance.RemoveTask(warehouseModule.moveItemTask);
                                             break;
                                         }
-                                        List<WarehouseModule> tempWarehouseModules = new List<WarehouseModule>(planet.warehouseModules);
-                                        tempWarehouseModules.Remove(warehouseModule);
-                                        List<Cell> moveItemTempPath = PathToClosetItem(warehouseModule.neededItemTypes, tempWarehouseModules, out reservedItem, out reservedWarehouseModule);
-                                        if (reservedWarehouseModule != null) reservedItem = reservedWarehouseModule.ReserveItem(reservedWarehouseModule.AvailableItemTypes(warehouseModule.neededItemTypes)[0]);
+                                        
+                                        List<Cell> moveItemTempPath = null;
+                                        if (warehouseModule.GetComponent<BillModule>() == null) moveItemTempPath = PathToClosetItem(warehouseModule.neededItemTypes, out reservedItem);
+                                        else
+                                        {
+                                            List<WarehouseModule> tempWarehouseModules = new List<WarehouseModule>(planet.warehouseModules);
+                                            tempWarehouseModules.Remove(warehouseModule);
+
+                                            moveItemTempPath = PathToClosetItem(warehouseModule.neededItemTypes, tempWarehouseModules, out reservedItem, out reservedWarehouseModule);
+                                        }
+                                        //if (reservedWarehouseModule != null) reservedItem = reservedWarehouseModule.ReserveItem(reservedWarehouseModule.AvailableItemTypes(warehouseModule.neededItemTypes)[0]);
                                         if (reservedItem == null) warehouseModule.CancelMoveItemTask();
                                         else
                                         {
@@ -676,8 +683,6 @@ public class Creature : BaseUnit
                 wood = task.baseUnits[0].GetComponent<Wood>();
                 break;
             case TaskType.MineStone:
-                Debug.Log(t.baseUnits[0].currentCell.angleIdx);
-                Debug.Log(punchStoneDirection);
                 if (punchStoneDirection == Vector2.right)
                 {
                     walkAngleOffset = -0.3f;
@@ -688,7 +693,7 @@ public class Creature : BaseUnit
                     walkAngleOffset = 0.3f;
                     SetTargetCell(task.baseUnits[0].currentCell.neighbourCellNodes[3].cell);
                 }
-                else
+                else 
                 {
                     walkAngleOffset = 0;
                     SetTargetCell(task.baseUnits[0].currentCell.neighbourCellNodes[0].cell);
@@ -818,8 +823,6 @@ public class Creature : BaseUnit
                         tempPath = new List<Cell>(tempPath1);
                         tempPunchStoneDirection = Vector2.left;
                     }
-                    Debug.Log(t.baseUnits[0].currentCell.angleIdx + " " + t.baseUnits[0].currentCell.radiusIdx);
-                    Debug.Log(tempPunchStoneDirection);
                     break;
                 default:
                     tempPath = planet.FindPath(currentCell, t.baseUnits[0].currentCell);
@@ -946,6 +949,35 @@ public class Creature : BaseUnit
             }
         }
         if (wh != null) itm = wh.ReserveItem(itemTypes.GetIntersection(wh.itemTypeToNumber.Keys)[0]);
+        return result;
+    }
+    public List<Cell> PathToClosetItem(List<ItemType> itemTypes, out Item itm)
+    {
+        List<Cell> result = null;
+        float minCost = float.MaxValue;
+        itm = null;
+        foreach (Item item in planet.items)
+        {
+            if (itemTypes.Contains(item.itemType) && item.reserver == null && !item.isInAir)
+            {
+                List<Cell> tempPath = planet.FindPath(currentCell, item.currentCell);
+                //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, item.currentCell, minCost);
+                //Debug.Log(Time.time + " " + planet.GetPathLength(tempPath) + " " + minCost + " " + planet.items.Count);
+                //Debug.Log(item.itemType);
+                //List<Cell> tempPath = planet.FindPathWithMaxDistance(currentCell, it.currentCell, minCost);
+                if (tempPath != null)
+                {
+                    float cost = planet.GetPathLength(tempPath);
+                    if (cost < minCost)
+                    {
+                        result = tempPath;
+                        itm = item;
+                        minCost = cost;
+                    }
+                }
+            }
+        }
+
         return result;
     }
     public List<Cell> PathToClosetItem(out Item itm)

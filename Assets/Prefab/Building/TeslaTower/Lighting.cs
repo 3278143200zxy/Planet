@@ -5,17 +5,7 @@ using UnityEngine;
 public class Lighting : MonoBehaviour
 {
     public GameObject mask;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
     public void SetPoint(Vector3 point1, Vector3 point2)
     {
         transform.position = point1;

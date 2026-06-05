@@ -6,6 +6,8 @@ public class Enemy : BaseUnit
 {
     [Header("Enemy")]
     public GameObject bloodEffectPrefab;
+
+    public float health;
     public override void Awake()
     {
         base.Awake();
@@ -20,10 +22,13 @@ public class Enemy : BaseUnit
     {
         base.Update();
     }
-    
+
     public override void TakeDamage(float damage)
     {
         base.TakeDamage(damage);
+
+        health -= damage;
+        if (health <= 0) DestoryBaseUnit();
     }
     public override void TakeDamage(float damage, Vector3 pos)
     {
@@ -34,7 +39,8 @@ public class Enemy : BaseUnit
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         bloodEffect.transform.rotation = Quaternion.Euler(0, 0, angle);
 
-
+        health -= damage;
+        if (health <= 0)DestoryBaseUnit();
     }
     public override void DestoryBaseUnit()
     {

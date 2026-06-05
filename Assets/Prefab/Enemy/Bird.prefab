@@ -133,6 +133,7 @@ MonoBehaviour:
       m_Calls: []
   spriteRenderers: []
   bloodEffectPrefab: {fileID: 8609538043700512948, guid: 63a468cbd1989704694e0dd3ca9f569c, type: 3}
+  health: 5
 --- !u!114 &4225183254779100896
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -151,10 +152,15 @@ MonoBehaviour:
   successor: {fileID: 0}
   successorPos: {fileID: 7863997871209232033}
   target: {fileID: 0}
-  acceleration: 0.05
-  maxSpeed: 1.5
+  acceleration: 0.1
+  maxSpeed: 5
   collisionRadius: 0.15
   lastFramePos: {x: 0, y: 0, z: 0}
+  minCruiseHeight: 95
+  maxCruiseHeight: 110
+  minWaypointTolerance: 2
+  toleranceIncreasePerSecond: 0.5
+  maxHorizontalDistance: 20
 --- !u!114 &3606452883031248400
 MonoBehaviour:
   m_ObjectHideFlags: 0

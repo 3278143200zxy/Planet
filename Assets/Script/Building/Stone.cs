@@ -44,11 +44,12 @@ public class Stone : MonoBehaviour
 
     private void Awake()
     {
-        stoneMineProgress = totalStoneMineProgress;
     }
 
     void Start()
     {
+        stoneMineProgress = totalStoneMineProgress;
+
         building.actionTypeToEvent[ActionType.MineStone].AddListener(StartMineStoneTask);
         building.actionTypeToEvent[ActionType.CancelMineStone].AddListener(CancelMineStoneTask);
     }

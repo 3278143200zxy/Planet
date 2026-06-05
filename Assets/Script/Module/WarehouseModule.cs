@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System.Linq;
+using System.Diagnostics.Contracts;
 
 public class WarehouseModule : MonoBehaviour
 {
@@ -127,12 +128,16 @@ public class WarehouseModule : MonoBehaviour
         item.gameObject.SetActive(false);
         item.transform.position = transform.position;
 
+        Debug.Log("Remove " + Time.time);
+        foreach (var itt in itemTypeToNumber.Keys) Debug.Log(itt + " " + itemTypeToNumber[itt]);
+
         return item;
     }
     public List<ItemType> AvailableItemTypes(List<ItemType> itemTypes)
     {
+        //Debug.Log(itemTypes.Count + " " + itemTypeToNumber.Keys.Count + " " + Time.time);
         List<ItemType> tempItemTypes = itemTypes.GetIntersection(itemTypeToNumber.Keys);
-        tempItemTypes.RemoveAll(x => neededItemTypeToNumber[x] >= itemTypeToNumber[x]);
+        //tempItemTypes.RemoveAll(x =>   neededItemTypeToNumber[x] >= itemTypeToNumber[x]);
         return tempItemTypes;
     }
     public void AddItem(ItemType itemType)
@@ -151,6 +156,8 @@ public class WarehouseModule : MonoBehaviour
             */
         }
         //itemTypeToShowItemNode[itemType].AddNumber(1);
+        Debug.Log("Add " + Time.time);
+        foreach (var itt in itemTypeToNumber.Keys) Debug.Log(itt + " " + itemTypeToNumber[itt]);
 
         AddItemEvent.Invoke(itemType);
         baseUnit.planet.ItemHitGround(itemType);

@@ -6,15 +6,20 @@ ScriptsOnlyBuild:
     - BillInfoItem
     - BillInfoPanel
     - BillModule
+    - Bird
     - Building
     - CameraController
     - Cell
     - Creature
     - CustomDropdown
+    - CustomLightNoCulling
+    - Enemy
+    - EnemyManager
     - GridLineManager
     - Item
     - Ladder
     - Lighting
+    - MiningDrill
     - MouseManager
     - ObjectSlider
     - OptionDataItem
@@ -39,8 +44,6 @@ ScriptsOnlyBuild:
     - WaterModule
     - WeatherManager
     - Wood
-    NaughtyAttributes.Editor.dll:
-    - NaughtyAttributes.Editor.NaughtyInspector
     Unity.2D.Animation.Editor.dll:
     - UnityEditor.U2D.Animation.BoneGizmo
     Unity.2D.IK.Editor.dll:
@@ -81,6 +84,7 @@ ScriptsOnlyBuild:
     - UnityEngine.Rendering.UI.DebugUIHandlerVector4
     - UnityEngine.Rendering.UI.UIFoldout
     Unity.RenderPipelines.Universal.Editor.dll:
+    - UnityEditor.Experimental.Rendering.Universal.Path2D.ScriptablePathInspector
     - UnityEditor.Rendering.Universal.UniversalProjectSettings
     Unity.RenderPipelines.Universal.Runtime.dll:
     - UnityEngine.Experimental.Rendering.Universal.Light2D
@@ -94,8 +98,10 @@ ScriptsOnlyBuild:
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
     - UnityEditor.Graphs.AnimationStateMachine.Graph
     - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
+    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     - UnityEditor.Graphs.AnimatorControllerTool
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -232,6 +238,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 4318}
     - Class: 114
+      Script: {instanceID: 4460}
+    - Class: 114
       Script: {instanceID: 4500}
     - Class: 114
       Script: {instanceID: 4814}
@@ -255,6 +263,8 @@ ScriptsOnlyBuild:
       Script: {instanceID: 5156}
     - Class: 114
       Script: {instanceID: 5212}
+    - Class: 114
+      Script: {instanceID: 5298}
     - Class: 114
       Script: {instanceID: 5402}
     - Class: 114
@@ -313,6 +323,12 @@ ScriptsOnlyBuild:
       Script: {instanceID: 7744}
     - Class: 114
       Script: {instanceID: 7834}
+    - Class: 114
+      Script: {instanceID: 7880}
+    - Class: 114
+      Script: {instanceID: 72024}
+    - Class: 114
+      Script: {instanceID: 241522}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -1014,7 +1030,7 @@ ScriptsOnlyBuild:
     className: TMP_SpriteAsset
   - hash:
       serializedVersion: 2
-      Hash: 8849acbb3192b6fff9fc58c6a64cd3df
+      Hash: bc8712f9b0487db07bff3b3c1d24e7b8
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Bird
@@ -1110,7 +1126,7 @@ ScriptsOnlyBuild:
     className: VolumeProfile
   - hash:
       serializedVersion: 2
-      Hash: 00b4e88fb21ba99c42f796e5483eb296
+      Hash: a5af9178dc92ab6bd75acfde48851e01
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Planet
@@ -1200,7 +1216,7 @@ ScriptsOnlyBuild:
     className: MinMaxSliderTest
   - hash:
       serializedVersion: 2
-      Hash: 66b20e88aeaf01ad85494c73c4744efd
+      Hash: 29a9364a40ff20c3bc1b3bb46d77cb93
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Enemy
@@ -1530,7 +1546,7 @@ ScriptsOnlyBuild:
     className: _TestScriptableObjectB
   - hash:
       serializedVersion: 2
-      Hash: 3fb770885e2d4bb5a4d7801b4ffa944e
+      Hash: 2bb28cc84e43fb2c718d4e3fe6fcee5f
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: TeslaTower
@@ -1716,6 +1732,12 @@ ScriptsOnlyBuild:
     className: DebugUIHandlerFoldout
   - hash:
       serializedVersion: 2
+      Hash: d05b3b587d2503f9f83843e45ba7c1de
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: MiningDrill
+  - hash:
+      serializedVersion: 2
       Hash: 8220b46879dc5e37db1b940c938f5744
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -1738,6 +1760,18 @@ ScriptsOnlyBuild:
     assemblyName: NaughtyAttributes.Test.dll
     namespaceName: NaughtyAttributes.Test
     className: FoldoutTest
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: CustomLightNoCulling
+  - hash:
+      serializedVersion: 2
+      Hash: 76cf703735098df5ef1ec64e5b42b0c8
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: EnemyManager
   platform: 19
   scenePathNames:
   - Assets/Scenes/SampleScene.unity

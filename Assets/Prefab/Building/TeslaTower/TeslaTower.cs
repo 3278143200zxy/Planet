@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class TeslaTower : MonoBehaviour
 {
+    public Building building;
+
     public Transform center;
     public float attackRange;
 
@@ -14,13 +16,9 @@ public class TeslaTower : MonoBehaviour
     public int chainAttackNumber;
 
     public Lighting lightingPrefab;
-    // Start is called before the first frame update
-    void Start()
-    {
 
-    }
+    public float damage;
 
-    // Update is called once per frame
     void Update()
     {
         target = QtreeManager.instance.FindClosestTarget(center.position, attackRange, typeof(Enemy));
@@ -38,12 +36,16 @@ public class TeslaTower : MonoBehaviour
     {
         Lighting lighting = Instantiate(lightingPrefab);
         lighting.SetPoint(center.position, target.transform.position);
+        building.ChangeLayer(lighting.gameObject, gameObject.layer);
+        target.TakeDamage(damage);
 
         List<BaseUnit> chainTargets = QtreeManager.instance.FindTargets(target.transform.position, chainAttackRange, typeof(Enemy), new List<BaseUnit>() { target });
         if (chainTargets.Count > 0)
         {
             lighting = Instantiate(lightingPrefab);
             lighting.SetPoint(target.transform.position, chainTargets[0].transform.position);
+            building.ChangeLayer(lighting.gameObject, gameObject.layer);
+            target.TakeDamage(damage);
         }
     }
     private void OnDrawGizmos()

@@ -110,6 +110,9 @@
     <Compile Include="Assets\Script\Building\Ladder.cs" />
     <Compile Include="Assets\Script\PlacedObjectButton.cs" />
     <Compile Include="Assets\Script\UI\CustomDropdown.cs" />
+    <Compile Include="Assets\Script\Building\MiningDrill.cs" />
+    <Compile Include="Assets\Script\Light\CustomLightNoCulling.cs" />
+    <Compile Include="Assets\Script\Enemy\EnemyManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\2D_BuildingEmission.shader" />

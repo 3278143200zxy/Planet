@@ -259,6 +259,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7091102197787786081, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
   m_PrefabInstance: {fileID: 3448718020844661292}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3202007070044624254 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+  m_PrefabInstance: {fileID: 3448718020844661292}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4522348063867605985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b594a10c8aea5e640a6018c4e60515ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &9211255552787566715 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5767064775390427735, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
@@ -276,6 +287,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f1ba75946338574ebe187617dbbca0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  building: {fileID: 3202007070044624254}
   center: {fileID: 3198375689003340722}
   attackRange: 4
   target: {fileID: 0}
@@ -283,3 +295,4 @@ MonoBehaviour:
   chainAttackRange: 3
   chainAttackNumber: 0
   lightingPrefab: {fileID: 8541771105594020965, guid: bbebda993fc8e8e45b4c746970bfcd30, type: 3}
+  damage: 5

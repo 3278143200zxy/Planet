@@ -63,6 +63,7 @@ public class Planet : MonoBehaviour
     //public float riseParameterCorrection;
 
     public int currentLayer = 0;
+    public List<GameObject> frontGameObjects = new List<GameObject>();
     public List<Transform> layers = new List<Transform>();
     public Camera frontCamera;
     public Camera backCamera;
@@ -142,84 +143,6 @@ public class Planet : MonoBehaviour
         for (int l = 0; l < 2; l++)
         {
             int layer = LayerMask.NameToLayer(l.ToString());
-            //instantiate stone
-            /*
-            for (int i = innerRadius; i < surfaceRadius; i++)
-            {
-                for (int j = 0; j < Mathf.RoundToInt(360f / cellIntervalAngle); j++)
-                {
-                    Vector3 dir = Vector2.right;
-                    dir = Quaternion.Euler(0, 0, cellIntervalAngle * j) * dir;
-
-                    Building stoneBuilding = Instantiate(stoneBuildingPrefab, transform.position + dir.normalized * CellRadiusDistance(i) + new Vector3(0, 0, l), Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
-                    stoneBuilding.SetBuilding(grid[i, j, l]);
-                    stoneBuilding.transform.SetParent(layers[l]);
-                    stoneBuilding.ChangeLayer(stoneBuilding.gameObject, layer);
-                }
-            }
-            */
-            //instantiate mountain
-            /*
-            for (int m = 0; m < mountainNumber; m++)
-            {
-                int currentAngleIdx = UnityEngine.Random.Range(0, Mathf.RoundToInt(360f / cellIntervalAngle));
-                bool isRising = true;
-                int h = 0;
-                int maxHeight = UnityEngine.Random.Range(minMountainHeight, maxMountainHeight);
-                while (isRising || h != 0)
-                {
-                    for (int k = 0; k < h; k++)
-                    {
-                        Vector3 dir = Vector2.right;
-                        dir = Quaternion.Euler(0, 0, cellIntervalAngle * currentAngleIdx) * dir;
-                        for (int i = surfaceRadius; i < surfaceRadius + h; i++)
-                        {
-                            if (grid[i, currentAngleIdx, l].building != null) continue;
-
-                            Building stoneBuilding = Instantiate(stoneBuildingPrefab, transform.position + dir.normalized * CellRadiusDistance(i) + new Vector3(0, 0, l), Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
-                            stoneBuilding.SetBuilding(grid[i, currentAngleIdx, l]);
-                            stoneBuilding.transform.SetParent(layers[l]);
-                            stoneBuilding.spriteRenderers[0].gameObject.layer = layer;
-                        }
-                    }
-                    int heightOffset = UnityEngine.Random.Range(0, maxRiseHeight);
-                    if (isRising)
-                    {
-                        h += heightOffset;
-                        h = Mathf.Min(h, maxHeight);
-                        if (h == maxHeight) isRising = false;
-                    }
-                    else
-                    {
-                        h -= heightOffset;
-                        h = Math.Max(h, 0);
-                        if (h == 0) break;
-                    }
-                    currentAngleIdx += 1;
-                    int parameter = Mathf.RoundToInt(360f / cellIntervalAngle);
-                    currentAngleIdx = (currentAngleIdx + parameter) % parameter;
-                }
-
-            }
-            */
-            //instantiate soil
-            /*
-            for (int j = 0; j < Mathf.RoundToInt(360f / cellIntervalAngle); j++)
-            {
-                Vector3 dir = Vector2.right;
-                if (grid[surfaceRadius, j, l].building != null) continue;
-                dir = Quaternion.Euler(0, 0, cellIntervalAngle * j) * dir;
-
-                Building soilBuilding = Instantiate(soilBuildingPrefab, transform.position + dir.normalized * CellRadiusDistance(surfaceRadius) + new Vector3(0, 0, l), Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
-                soilBuilding.SetBuilding(grid[surfaceRadius, j, l]);
-                soilBuilding.transform.SetParent(layers[l]);
-                soilBuilding.ChangeLayer(soilBuilding.gameObject, layer);
-                //soilBuilding.spriteRenderers[0].gameObject.layer = layer;
-            }
-            */
-            //instantiate tree
-
-
             float offset = UnityEngine.Random.Range(0, 10000f);
             Dictionary<int, int> angleIdxToMaxRadiusIdx = new Dictionary<int, int>();
             for (int a = 0; a < circleCellNumber; a++)
@@ -286,7 +209,7 @@ public class Planet : MonoBehaviour
                     if (possibility > mineralThreshold) stone.SetMineralType(MineralType.Iron);
                     else stone.SetMineralType(MineralType.Stone);
 
-                    stone.totalStoneMineProgress += (r - innerRadius) / 2;
+                    stone.totalStoneMineProgress += Mathf.Max(0, surfaceRadius - r) * 5;
                 }
                 if (angleIdxToMaxRadiusIdx[a] < surfaceRadius)
                 {
@@ -496,6 +419,7 @@ public class Planet : MonoBehaviour
         currentLayer = Mathf.Abs(currentLayer - 1);
         frontCamera.cullingMask = LayerMask.GetMask(currentLayer.ToString(), "UI");
 
+        foreach (var go in frontGameObjects) go.layer = LayerMask.NameToLayer(currentLayer.ToString());
 
     }
     public int CellRadiusFromDistance(float S)

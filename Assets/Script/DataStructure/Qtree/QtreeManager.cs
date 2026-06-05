@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.SymbolStore;
+using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using UnityEngine;
 
@@ -34,19 +35,19 @@ public class QtreeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
         qtree = new Qtree(0, Vector2.zero, maxWidth, maxHeight, maxDepth, maxChild);
-        
+
         for (int i = 0; i < baseUnits.Count; i++)
         {
             //qtree.Remove(qtree, baseUnits[i]);
             qtree.Insert(qtree, baseUnits[i]);
 
         }
-        
+
         //Debug.Log(baseUnits.Count);
         DrawLine(qtree);
-        
+
     }
     public void DrawLine(Qtree q)
     {
@@ -115,6 +116,23 @@ public class QtreeManager : MonoBehaviour
         }
         return target;
     }
+    public BaseUnit FindClosestTarget(Vector3 pos, float atttackRange, List<Type> types, List<BaseUnit> excludedBaseUnits)
+    {
+        List<BaseUnit> targets = FindTargets(pos, atttackRange, types);
+        float minDis = float.MaxValue;
+        BaseUnit target = null;
+        foreach (var b in targets)
+        {
+            if (excludedBaseUnits.Contains(b)) continue;
+            float dis = Vector2.Distance(pos, b.transform.position);
+            if (dis < minDis)
+            {
+                target = b;
+                minDis = dis;
+            }
+        }
+        return target;
+    }
     public BaseUnit FindClosestTarget(Vector3 pos, float atttackRange, List<BaseUnit> excludedBaseUnits)
     {
         List<BaseUnit> targets = FindTargets(pos, atttackRange);
@@ -143,6 +161,13 @@ public class QtreeManager : MonoBehaviour
         List<BaseUnit> targets = new List<BaseUnit>();
         QtreeFindTargets(qtree, pos, attackRange, targets);
         targets.RemoveAll(n => !type.IsInstanceOfType(n));
+        return targets;
+    }
+    public List<BaseUnit> FindTargets(Vector3 pos, float attackRange, List<Type> types)
+    {
+        List<BaseUnit> targets = new List<BaseUnit>();
+        QtreeFindTargets(qtree, pos, attackRange, targets);
+        targets.RemoveAll(n => !types.Any(t => t.IsInstanceOfType(n)));
         return targets;
     }
     public List<BaseUnit> FindTargets(Vector3 pos, float attackRange, Type type, List<BaseUnit> excludedBaseUnits)
