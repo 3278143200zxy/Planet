@@ -22,7 +22,7 @@ public class Building : BaseUnit
 
     public bool isBlock = false;
 
-
+    public bool isStackable = false;
     // Start is called before the first frame update
     public override void Awake()
     {
@@ -36,12 +36,12 @@ public class Building : BaseUnit
     }
 
     // Update is called once per frame
-    
+
     public override void Update()
     {
         base.Update();
     }
-    
+
     public virtual void SetBuilding(Cell c)
     {
         cell = c;
@@ -53,8 +53,10 @@ public class Building : BaseUnit
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
+
                 Cell processingCell = cell.planet.grid[radiusIdx, angleIdx, layerIdx];
-                processingCell.building = this;
+                if (!isStackable) processingCell.building = this;
+                else processingCell.stackBuildings.Add(this);
             }
         }
         foreach (Dot d in standDots)
@@ -86,8 +88,10 @@ public class Building : BaseUnit
                 int temp = Mathf.RoundToInt(360f / cell.planet.cellIntervalAngle);
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
+
                 Cell processingCell = cell.planet.grid[radiusIdx, angleIdx, layerIdx];
-                processingCell.building = null;
+                if (!isStackable) processingCell.building = null;
+                else processingCell.stackBuildings.Remove(this);
             }
         }
         foreach (Dot d in standDots)

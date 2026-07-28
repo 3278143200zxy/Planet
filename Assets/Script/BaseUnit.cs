@@ -42,6 +42,7 @@ public enum BaseUnitType
     Stone,
     ArbalestTower,
     Item,
+    Enemy,
 }
 public class BaseUnit : MonoBehaviour
 {

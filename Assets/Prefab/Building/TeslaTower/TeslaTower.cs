@@ -21,11 +21,11 @@ public class TeslaTower : MonoBehaviour
 
     void Update()
     {
-        target = QtreeManager.instance.FindClosestTarget(center.position, attackRange, typeof(Enemy));
-        if (target != null)
+        attackIntervalTimer += Time.deltaTime;
+        if (attackIntervalTimer > attackInterval)
         {
-            attackIntervalTimer += Time.deltaTime;
-            if (attackIntervalTimer > attackInterval)
+            target = QtreeManager.instance.FindClosestTarget(center.position, attackRange, typeof(Enemy));
+            if (target != null)
             {
                 Fire();
                 attackIntervalTimer = 0;

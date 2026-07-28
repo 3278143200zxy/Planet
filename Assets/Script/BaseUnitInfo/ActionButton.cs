@@ -12,6 +12,8 @@ public enum ActionType
     CancelMineStone,
     Build,
     CancelBuild,
+    Research,
+    CancelResearch,
 }
 public class ActionButton : MonoBehaviour
 {

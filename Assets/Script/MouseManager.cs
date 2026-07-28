@@ -41,8 +41,14 @@ public class MouseManager : MonoBehaviour
         }
     }
     public GameObject mouseTip;
+
+    public Text mouseCellRadiusIdxText;
+    public Text mouseCellAngleIdxText;
+    public Text mouseCellLayerIdxText;
+    public Text mouseCellWaterText;
+
     public PlacedObject placedObject;
-    public List<GameObject> lastFrameNoPlacingSigns = new List<GameObject>();
+    //public List<GameObject> lastFrameNoPlacingSigns = new List<GameObject>();
 
     public BaseUnit baseUnit;
     public BaseUnit lastBaseUnit;
@@ -72,9 +78,10 @@ public class MouseManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        /*
         foreach (var sign in lastFrameNoPlacingSigns) sign.SetActive(false);
         lastFrameNoPlacingSigns.Clear();
-
+        */
 
         foreach (Planet planet in planets)
         {
@@ -90,10 +97,23 @@ public class MouseManager : MonoBehaviour
                 mouseTip.SetActive(true);
                 if (mouseCell != null)
                 {
-                    mouseTip.transform.position = mouseCell.transform.position;
-                    mouseTip.transform.rotation = mouseCell.transform.rotation;
+                    mouseTip.transform.position = mouseCell.position;
+                    mouseTip.transform.rotation = mouseCell.rotation;
+
+                    mouseCellRadiusIdxText.text = mouseCell.radiusIdx.ToString();
+                    mouseCellAngleIdxText.text = mouseCell.angleIdx.ToString();
+                    mouseCellLayerIdxText.text = mouseCell.layerIdx.ToString();
+                    mouseCellWaterText.text = mouseCell.water.waterAmount.ToString();
                 }
-                else mouseTip.SetActive(false);
+                else
+                {
+                    mouseTip.SetActive(false);
+
+                    mouseCellRadiusIdxText.text = "null";
+                    mouseCellAngleIdxText.text = "null";
+                    mouseCellLayerIdxText.text = "null";
+                    mouseCellWaterText.text = "null";
+                }
                 //mouseTip.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
                 if (placedObject != null)
@@ -108,7 +128,7 @@ public class MouseManager : MonoBehaviour
                         placedObject.transform.position = mousePos;
                         continue;
                     }
-                    placedObject.transform.position = mouseCell.transform.position;
+                    placedObject.transform.position = mouseCell.position;
                     Vector2 direction = mousePos - planet.transform.position;
                     placedObject.transform.rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(direction.x, direction.y) * Mathf.Rad2Deg);
 
@@ -123,10 +143,11 @@ public class MouseManager : MonoBehaviour
                             if (angleIdx < 0) angleIdx += temp;
                             if (angleIdx >= temp) angleIdx -= temp;
                             Cell processingCell = planet.grid[radiusIdx, angleIdx, planet.currentLayer];
+                            Debug.Log(radiusIdx + " " + angleIdx);
                             if (!processingCell.canPlace)
                             {
-                                lastFrameNoPlacingSigns.Add(processingCell.noPlacingSign);
-                                processingCell.noPlacingSign.SetActive(true);
+                                //lastFrameNoPlacingSigns.Add(processingCell.noPlacingSign);
+                                //processingCell.noPlacingSign.SetActive(true);
                                 canMousePlace = false;
                             }
                         }

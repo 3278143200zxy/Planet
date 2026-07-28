@@ -71,6 +71,8 @@ public class Planet : MonoBehaviour
 
     public WaterModule waterModule;
 
+    public Sun sun;
+
     public int seed;
 
     public int circleCellNumber
@@ -111,24 +113,27 @@ public class Planet : MonoBehaviour
         List<Cell> tempCells = new List<Cell>();
         for (int l = 0; l < 2; l++)
         {
-
             for (int i = innerRadius; i < outerRadius; i++)
             {
                 for (int j = 0; j < Mathf.RoundToInt(360f / cellIntervalAngle); j++)
                 {
                     Vector3 dir = Vector2.right;
                     dir = Quaternion.Euler(0, 0, cellIntervalAngle * j) * dir;
+
+                    //cells are entity
                     /*
-                    Cell cell = Instantiate(cellPrefab, transform.position + dir.normalized * i * cellHeight, Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
-                    cell.transform.localScale = new Vector3(1 + (i - surfaceRadius) * cellSizeCorrection, 1, 1);
-                    */
                     Cell cell = Instantiate(cellPrefab, transform.position + dir.normalized * CellRadiusDistance(i) + new Vector3(0, 0, l), Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg));
                     cell.transform.localScale = Vector3.one * (1 + (i - surfaceRadius) * cellSizeCorrection);
                     grid[i, j, l] = cell;// new Cell(i, j);
                     cell.SetCell(this, i, j, l);
                     tempCells.Add(cell);
-                    //if (i == surfaceRadius + 1) cell.AddCircleNeighbours();
-                    //cell.SetCanReach(true);
+                    */
+
+                    //cells are data
+                    Cell cell = new Cell();
+                    grid[i, j, l] = cell;// new Cell(i, j);
+                    cell.SetCell(this, i, j, l);
+                    tempCells.Add(cell);
                 }
             }
 
@@ -137,7 +142,7 @@ public class Planet : MonoBehaviour
             foreach (var cell in tempCells)
             {
                 cell.SetCellNeighbours();
-                cell.transform.SetParent(layers[l]);
+                //cell.SetParent(layers[l]);
             }
 
         for (int l = 0; l < 2; l++)
@@ -211,10 +216,12 @@ public class Planet : MonoBehaviour
 
                     stone.totalStoneMineProgress += Mathf.Max(0, surfaceRadius - r) * 5;
                 }
+
                 if (angleIdxToMaxRadiusIdx[a] < surfaceRadius)
                 {
                     for (int r = angleIdxToMaxRadiusIdx[a] + 1; r <= surfaceRadius; r++) grid[r, a, l].water.SetWaterAmount(1f);
                 }
+
             }
 
             for (int a = 0; a < circleCellNumber; a++)
@@ -246,8 +253,8 @@ public class Planet : MonoBehaviour
         var closedSet = new HashSet<Cell>();
 
         int Heuristic(Cell a, Cell b) =>
-            (int)(Mathf.Abs(a.transform.position.x - b.transform.position.x) +
-                  Mathf.Abs(a.transform.position.y - b.transform.position.y));
+            (int)(Mathf.Abs(a.position.x - b.position.x) +
+                  Mathf.Abs(a.position.y - b.position.y));
 
         openSet.Enqueue(start, 0);
         gScore[start] = 0;
@@ -277,6 +284,8 @@ public class Planet : MonoBehaviour
             {
                 if (/*!neighbor.canStand || */closedSet.Contains(neighbor))
                     continue;
+
+                //if (neighbor.water.waterAmount > 0.7f) continue;
 
                 float currentG = gScore.TryGetValue(current, out var g) ? g : float.MaxValue;
                 float neighborG = gScore.TryGetValue(neighbor, out var ng) ? ng : float.MaxValue;
@@ -308,8 +317,8 @@ public class Planet : MonoBehaviour
         var fScore = new Dictionary<Cell, float>();
 
         float Heuristic(Cell a, Cell b) =>
-            Mathf.Abs(a.transform.position.x - b.transform.position.x) +
-            Mathf.Abs(a.transform.position.y - b.transform.position.y);
+            Mathf.Abs(a.position.x - b.position.x) +
+            Mathf.Abs(a.position.y - b.position.y);
 
         openSet.Enqueue(start, 0);
         gScore[start] = 0;
@@ -344,7 +353,9 @@ public class Planet : MonoBehaviour
             // 3. 扩展邻居（原逻辑不变）
             foreach (var neighbor in current.GetNeighbours())
             {
-                if (!neighbor.canStand) continue;
+                //if (!neighbor.canStand||neighbor.water.waterAmount>0.7f) continue;
+
+                if (neighbor.water.waterAmount > 0.7f) continue;
 
                 float tentativeG = gScore.TryGetValue(current, out var g) ? g : float.MaxValue;
                 tentativeG += current.GetMoveCostTo(neighbor);
@@ -394,12 +405,14 @@ public class Planet : MonoBehaviour
     public Cell PosToCell(Vector3 pos)
     {
         Vector3 dir = pos - transform.position;
-        if (dir.magnitude < (innerRadius - 1f / 2f) * cellHeight && dir.magnitude > (outerRadius - 1f / 2f) * cellHeight) return null;
+        // if (dir.magnitude < (innerRadius - 1f / 2f) * cellHeight && dir.magnitude > (outerRadius - 1f / 2f) * cellHeight) return null;
         float angle = Vector2.SignedAngle(Vector2.right, dir) + cellIntervalAngle / 2;
         if (angle < 0) angle += 360f;
         //angle += 360f;
         int ri = CellRadiusFromDistance(Vector2.Distance(transform.position, pos));
         int li = Mathf.RoundToInt(pos.z);
+        if (ri >= outerRadius || ri < innerRadius) return null;
+        if (li < 0 || li >= 2) return null;
         //Debug.Log((int)(distance / cellHeight) + " " + (int)(angle / cellIntervalAngle));
         return grid[ri, (int)(angle / cellIntervalAngle), li];
     }

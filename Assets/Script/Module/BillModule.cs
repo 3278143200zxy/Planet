@@ -41,7 +41,7 @@ public class BillModule : MonoBehaviour
         {
             missingItems = new ItemTypeToNumberDictionary(ir.itemTypeToNumberDictionary);
             warehouseModule.SetNeededItemTypes(new List<ItemType>(missingItems.Keys));
-            warehouseModule.SetNeededItems(new Dictionary<ItemType, int>(missingItems));
+            //warehouseModule.SetNeededItems(new Dictionary<ItemType, int>(missingItems));
         }
     }
     public void WarehouseModuleAddItem(ItemType itemType)
@@ -66,14 +66,14 @@ public class BillModule : MonoBehaviour
             warehouseModule.RemoveItemsDirectly(new Dictionary<ItemType, int>(billInfos[0].itemRecipe.itemTypeToNumberDictionary));
             billInfos.RemoveAt(0);
             MouseManager.instance.billInfoPanel.RefreshShownValue();
-            warehouseModule.ClearNeededItems();
+            //warehouseModule.ClearNeededItems();
             CancelCraftTask();
 
             if (billInfos.Count > 0)
             {
                 missingItems = new ItemTypeToNumberDictionary(billInfos[0].itemRecipe.itemTypeToNumberDictionary);
                 warehouseModule.SetNeededItemTypes(new List<ItemType>(missingItems.Keys));
-                warehouseModule.SetNeededItems(new Dictionary<ItemType, int>(missingItems));
+                //warehouseModule.SetNeededItems(new Dictionary<ItemType, int>(missingItems));
             }
         }
     }

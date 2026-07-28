@@ -449,19 +449,15 @@ MonoBehaviour:
   creatureState: 0
   animator: {fileID: 4038889567112293124}
   lastNormalizedTime: 0
-  lastCurrentCell: {fileID: 0}
   velocity: {x: 0, y: 0, z: 0}
   creatureHeight: 0.52
   task:
     taskType: 0
     baseUnits: []
   isSettingTask: 0
-  idleWalkSpeed: 1
   minIdleWalkInterval: 3
   maxIdleWalkInterval: 6
   idleWalkAngleOffset: 0
-  isIdleWalking: 0
-  path: []
   walkSpeed: 1.3
   moverSpeed: 1.8
   climbSpeed: 0.7
@@ -476,6 +472,8 @@ MonoBehaviour:
   processPerCraft: 1
   billModule: {fileID: 0}
   processPerBuildPlacedObject: 1
+  researchBench: {fileID: 0}
+  processPerResearch: 1
   reservedItem: {fileID: 0}
   reservedWarehouseModule: {fileID: 0}
   itemPos: {fileID: 3349176140989779743}

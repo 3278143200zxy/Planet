@@ -44,16 +44,49 @@ Shader "Custom/SpriteInnerWhiteOutline_DualFill"
 
             struct v2f
             {
-                float4 vertex   : SV_POSITION;
-                float2 texcoord : TEXCOORD0;
-                fixed4 color    : COLOR;
+                float4 vertex    : SV_POSITION;
+                float2 texcoord  : TEXCOORD0;
+                fixed4 color     : COLOR;
+                float2 contentY  : TEXCOORD1; // x=minY, y=maxY
             };
 
             sampler2D _MainTex;
+            float4 _MainTex_TexelSize;
             fixed4 _Color;
             float _OutlineThickness;
             float _FillAmount_Original;
             float _FillAmount_White;
+
+            // 粗采样找不透明区域的上下边界（无脚本）
+            float2 ComputeContentBoundsY()
+            {
+                const int SCAN = 64; // 越大越准，越慢；一般 64 够用
+                float minY = 1.0;
+                float maxY = 0.0;
+
+                [loop]
+                for (int iy = 0; iy < SCAN; iy++)
+                {
+                    float y = (iy + 0.5) / SCAN;
+                    [loop]
+                    for (int ix = 0; ix < SCAN; ix++)
+                    {
+                        float x = (ix + 0.5) / SCAN;
+                        float a = tex2Dlod(_MainTex, float4(x, y, 0, 0)).a;
+                        if (a > 0.1)
+                        {
+                            minY = min(minY, y);
+                            maxY = max(maxY, y);
+                        }
+                    }
+                }
+
+                if (maxY < minY)
+                    return float2(0.0, 1.0);
+
+                float halfStep = 0.5 / SCAN;
+                return float2(max(minY - halfStep, 0.0), min(maxY + halfStep, 1.0));
+            }
 
             v2f vert(appdata_t IN)
             {
@@ -61,6 +94,7 @@ Shader "Custom/SpriteInnerWhiteOutline_DualFill"
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color;
+                OUT.contentY = ComputeContentBoundsY();
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
                 #endif
@@ -106,31 +140,24 @@ Shader "Custom/SpriteInnerWhiteOutline_DualFill"
 
                 float needOutline = max(hasTransparentNeighbor, hasMissingNeighbor);
 
-                // 描边优先显示
                 if (isOpaque > 0.5 && needOutline > 0.5)
-                {
                     return fixed4(1.0, 1.0, 1.0, _Color.a);
-                }
 
-                // 非描边区域，分层显示原图和白色区间
+                float contentMinY = IN.contentY.x;
+                float contentMaxY = IN.contentY.y;
+                float contentH = max(contentMaxY - contentMinY, 1e-5);
+                float fillY = saturate((uv.y - contentMinY) / contentH);
+
                 if (centerCol.a > 0.01)
                 {
-                    if (uv.y <= _FillAmount_Original)
-                    {
-                        // 显示原图
+                    if (fillY <= _FillAmount_Original)
                         return centerCol * _Color;
-                    }
-                    else if (uv.y >= _FillAmount_Original && uv.y <= _FillAmount_White)
-                    {
-                        // 超出原图显示范围但在白色区间内，显示白色，透明度同材质
+                    else if (fillY <= _FillAmount_White)
                         return fixed4(1, 1, 1, _Color.a);
-                    }
                 }
 
-                // 其余透明
                 return fixed4(0, 0, 0, 0);
             }
-
             ENDCG
         }
     }

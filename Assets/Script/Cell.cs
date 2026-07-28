@@ -30,17 +30,20 @@ public class NeighbourCellNode
         distance = 1;
     }
 }
-public class Cell : MonoBehaviour
+public class Cell
 {
     public Planet planet;
     public int radiusIdx, angleIdx, layerIdx;
     public int cellIdx;
+    public Vector3 position;
+    public Quaternion rotation;
 
     public Building building;
+    public List<Building> stackBuildings = new List<Building>();
     public PlacedObject placedObject;
     public bool canPlace
     {
-        get { return building == null && placedObject == null; }
+        get { return building == null && placedObject == null && stackBuildings.Count == 0; }
     }
     public bool canStand
     {
@@ -61,7 +64,11 @@ public class Cell : MonoBehaviour
     public GameObject noPlacingSign;
 
     public Water water;
-    public ObjectSlider waterSlider;
+
+    public Cell()
+    {
+
+    }
     public void SetCell(Planet p, int _ri, int _ai, int _li)
     {
         planet = p;
@@ -73,6 +80,12 @@ public class Cell : MonoBehaviour
         diagonalNeighbourCellNodes = new NeighbourCellNode[8];
 
         cellIdx = radiusIdx * (planet.circleCellNumber + 1) * 2 + angleIdx * 2 + layerIdx;
+
+        Vector3 dir = Vector2.right;
+        dir = Quaternion.Euler(0, 0, planet.cellIntervalAngle * angleIdx) * dir;
+        position = dir.normalized * planet.CellRadiusDistance(radiusIdx) + new Vector3(0, 0, layerIdx);
+        rotation = Quaternion.Euler(0, 0, -Mathf.Atan2(dir.x, dir.y) * Mathf.Rad2Deg);
+
         water = new Water(this);
     }
     //Find cell's neighbours
@@ -125,7 +138,7 @@ public class Cell : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             NeighbourCellNode node = neighbourCellNodes[i];
-            if (node.cell != null && node.number > 0 && node.cell.neighbourCellNodes[1].cell.canStand && (node.cell.building == null || !node.cell.building.isBlock)) temp.Add(node.cell);
+            if (node.cell != null && node.number > 0 && node.cell.neighbourCellNodes[1].cell.canStand && (node.cell.building == null || !node.cell.building.isBlock) ) temp.Add(node.cell);
         }
         //Debug.Log(angleIdx + " " + radiusIdx + " " + layerIdx + " " + "general");
         for (int i = 2; i < 6; i++)

@@ -5153,6 +5153,42 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[1].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[2].x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[3].x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[3].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[4].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[4].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[5].x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
+      propertyPath: dots.Array.data[5].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 266731296873758546, guid: 8f1a8e6d5d118ff4ca49f9191c6aaf0e, type: 3}
       propertyPath: clickRectangles.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -5297,5 +5333,4 @@ MonoBehaviour:
   rope: {fileID: 8071728699929580102}
   mineInterval: 0.5
   progressPreMineStone: 1
-  lastCurrentCell: {fileID: 0}
   stone: {fileID: 0}

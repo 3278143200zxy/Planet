@@ -72,6 +72,10 @@ public class PoolManager : MonoBehaviour
                 if (planet.items.Contains(item)) planet.items.Remove(item);
                 if (item.isWeapon && TaskManager.instance.tasks.Contains(item.armTask)) TaskManager.instance.RemoveTask(item.armTask);
                 break;
+            case BaseUnitType.Enemy:
+                baseUnitPool[baseUnit.baseUnitType].Add(baseUnit);
+                QtreeManager.instance.baseUnits.Remove(baseUnit);
+                break;
             default:
                 baseUnitPool[baseUnit.baseUnitType].Add(baseUnit);
                 break;

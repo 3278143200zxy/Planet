@@ -3,24 +3,84 @@
   "WorkspaceRootPath": "C:\\Users\\32781\\Planet\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|c:\\users\\32781\\planet\\assets\\placedobjectmaterial\\placedobject.shader||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\placedobjectmaterial\\placedobject.shader||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\placedobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\placedobject.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\building.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\planet\\planet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\planet\\planet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|c:\\users\\32781\\planet\\assets\\script\\enemy\\enemymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\enemy\\enemymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\cell.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\cell.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\sun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\sun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\stone\\stone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\stone\\stone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\researchbench\\researchbench.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\researchbench\\researchbench.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\datastructure\\qtree\\qtreemanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\datastructure\\qtree\\qtreemanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|c:\\users\\32781\\planet\\assets\\prefab\\building\\trebuchet\\trebuchet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\trebuchet\\trebuchet.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|c:\\users\\32781\\planet\\assets\\prefab\\building\\machinegunturret\\gunturret.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\machinegunturret\\gunturret.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\trebuchet\\projectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\trebuchet\\projectile.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\shader\\edgefade.shader||{3B902123-F8A7-4915-9F01-361F908088D0}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\shader\\edgefade.shader||{3B902123-F8A7-4915-9F01-361F908088D0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\poolmanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\poolmanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\technologytree\\technologymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\technologytree\\technologymanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\planet\\watermodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\planet\\watermodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\teslatower\\teslatower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\teslatower\\teslatower.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\enemy\\bird.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\enemy\\bird.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\technologytree\\technologynode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\technologytree\\technologynode.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\module\\warehousemodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\module\\warehousemodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\technologytree\\technologypanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\technologytree\\technologypanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\enemy.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -31,24 +91,56 @@
       "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\baseunit.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\teslatower\\lighting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\teslatower\\lighting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\damage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\damage.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\creature.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\wood\\wood.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\wood\\wood.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\datastructure\\qtree\\qtreemanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\datastructure\\qtree\\qtreemanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\ui\\uiline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\ui\\uiline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\light\\customlightnoculling.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\light\\customlightnoculling.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\taskmanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\taskmanager.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\building\\miningdrill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\building\\miningdrill.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\baseunitinfo\\baseunitinfopanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\baseunitinfo\\baseunitinfopanel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\mousemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\mousemanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\navigationbar\\navigationbarmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\navigationbar\\navigationbarmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\garden\\garden.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\garden\\garden.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\armory\\armory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\armory\\armory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\sun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\sun.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\prefab\\building\\wood\\sapling.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\prefab\\building\\wood\\sapling.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\module\\billmodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\module\\billmodule.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|C:\\Users\\32781\\Planet\\assets\\script\\baseunitinfo\\actionbutton.cs||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{A395EA3E-FDD5-56D1-545C-8271DD864878}|Assembly-CSharp.csproj|solutionrelative:assets\\script\\baseunitinfo\\actionbutton.cs||{8B382828-6202-11D1-8870-0000F87579D2}"
     }
   ],
   "DocumentGroupContainers": [
@@ -58,156 +150,442 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 12,
+          "SelectedChildIndex": 1,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PlacedObject.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\PlacedObject.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\PlacedObject.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\PlacedObject.cs",
+              "RelativeToolTip": "Assets\\Script\\PlacedObject.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAD4AAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-07T07:24:50.646Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PlacedObject.shader",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\PlacedObjectMaterial\\PlacedObject.shader",
+              "RelativeDocumentMoniker": "Assets\\PlacedObjectMaterial\\PlacedObject.shader",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\PlacedObjectMaterial\\PlacedObject.shader",
+              "RelativeToolTip": "Assets\\PlacedObjectMaterial\\PlacedObject.shader",
+              "ViewState": "AgIAAHgAAAAAAAAAAAAQwKMAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
+              "WhenOpened": "2026-07-28T17:48:08.142Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Cell.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Cell.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Cell.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Cell.cs",
+              "RelativeToolTip": "Assets\\Script\\Cell.cs",
+              "ViewState": "AgIAAFkAAAAAAAAAAAAkwIUAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T09:14:46.565Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Creature.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Creature.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Creature.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Creature.cs",
+              "RelativeToolTip": "Assets\\Script\\Creature.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAOcAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-07T18:05:10.54Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "WaterModule.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Planet\\WaterModule.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Planet\\WaterModule.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Planet\\WaterModule.cs",
+              "RelativeToolTip": "Assets\\Script\\Planet\\WaterModule.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAIwFsAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T09:14:33.829Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Stone.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Stone\\Stone.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Stone\\Stone.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Stone\\Stone.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Stone\\Stone.cs",
+              "ViewState": "AgIAACQAAAAAAAAAAAAIwDMAAAAKAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-15T14:10:19.199Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "ResearchBench.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\ResearchBench\\ResearchBench.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\ResearchBench\\ResearchBench.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\ResearchBench\\ResearchBench.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\ResearchBench\\ResearchBench.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAIwDkAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-12T17:05:01.554Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "QtreeManager.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
+              "RelativeToolTip": "Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-20T12:57:56.126Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "Projectile.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Trebuchet\\Projectile.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Trebuchet\\Projectile.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Trebuchet\\Projectile.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Trebuchet\\Projectile.cs",
+              "ViewState": "AgIAACgAAAAAAAAAAAAqwDIAAAALAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-15T18:49:13.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "EdgeFade.shader",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Shader\\EdgeFade.shader",
+              "RelativeDocumentMoniker": "Assets\\Shader\\EdgeFade.shader",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Shader\\EdgeFade.shader",
+              "RelativeToolTip": "Assets\\Shader\\EdgeFade.shader",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAFkAAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002777|",
+              "WhenOpened": "2026-07-15T16:28:43.323Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "Damage.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Damage.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Damage.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Damage.cs",
+              "RelativeToolTip": "Assets\\Script\\Damage.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwsAAAAEAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-15T18:20:38.52Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "Trebuchet.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Trebuchet\\Trebuchet.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Trebuchet\\Trebuchet.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Trebuchet\\Trebuchet.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Trebuchet\\Trebuchet.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABoAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-27T13:58:19.108Z",
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "EnemyManager.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Enemy\\EnemyManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Enemy\\EnemyManager.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Enemy\\EnemyManager.cs",
-              "RelativeToolTip": "Assets\\Script\\Enemy\\EnemyManager.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvx0AAABCAAAAAAAAAA==",
+              "DocumentIndex": 10,
+              "Title": "GunTurret.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\MachineGunTurret\\GunTurret.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\MachineGunTurret\\GunTurret.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\MachineGunTurret\\GunTurret.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\MachineGunTurret\\GunTurret.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABYAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-05T16:22:13.925Z",
+              "WhenOpened": "2026-07-27T11:41:18.748Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "BaseUnit.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnit.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\BaseUnit.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnit.cs",
-              "RelativeToolTip": "Assets\\Script\\BaseUnit.cs",
-              "ViewState": "AgIAAK4AAAAAAAAAAAAswL4AAAAEAAAAAAAAAA==",
+              "DocumentIndex": 14,
+              "Title": "TechnologyManager.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\TechnologyTree\\TechnologyManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\TechnologyTree\\TechnologyManager.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\TechnologyTree\\TechnologyManager.cs",
+              "RelativeToolTip": "Assets\\Script\\TechnologyTree\\TechnologyManager.cs",
+              "ViewState": "AgIAAA4AAAAAAAAAAADwvyUAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-05T09:23:16.465Z"
+              "WhenOpened": "2026-07-08T08:10:40.776Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "Lighting.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\TeslaTower\\Lighting.cs",
-              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\TeslaTower\\Lighting.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\TeslaTower\\Lighting.cs",
-              "RelativeToolTip": "Assets\\Prefab\\Building\\TeslaTower\\Lighting.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwcAAAAAAAAAAAAAAA==",
+              "DocumentIndex": 17,
+              "Title": "TechnologyNode.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\TechnologyTree\\TechnologyNode.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\TechnologyTree\\TechnologyNode.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\TechnologyTree\\TechnologyNode.cs",
+              "RelativeToolTip": "Assets\\Script\\TechnologyTree\\TechnologyNode.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAxwDYAAABAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-05T09:18:49.099Z"
+              "WhenOpened": "2026-07-08T17:06:24.399Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 19,
+              "Title": "TechnologyPanel.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\TechnologyTree\\TechnologyPanel.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\TechnologyTree\\TechnologyPanel.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\TechnologyTree\\TechnologyPanel.cs",
+              "RelativeToolTip": "Assets\\Script\\TechnologyTree\\TechnologyPanel.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwCIAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-09T08:22:08.548Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
               "Title": "TeslaTower.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\TeslaTower\\TeslaTower.cs",
               "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\TeslaTower\\TeslaTower.cs",
               "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\TeslaTower\\TeslaTower.cs",
               "RelativeToolTip": "Assets\\Prefab\\Building\\TeslaTower\\TeslaTower.cs",
-              "ViewState": "AgIAABgAAAAAAAAAAAAAACYAAABEAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAUwBoAAAA0AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-05T08:45:05.435Z"
+              "WhenOpened": "2026-07-20T12:21:44.746Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "QtreeManager.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
-              "RelativeToolTip": "Assets\\Script\\DataStructure\\Qtree\\QtreeManager.cs",
-              "ViewState": "AgIAAGYAAAAAAAAAAAAgwHgAAABFAAAAAAAAAA==",
+              "DocumentIndex": 18,
+              "Title": "WarehouseModule.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Module\\WarehouseModule.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Module\\WarehouseModule.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Module\\WarehouseModule.cs",
+              "RelativeToolTip": "Assets\\Script\\Module\\WarehouseModule.cs",
+              "ViewState": "AgIAAD4AAAAAAAAAAAA1wE8AAAATAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-04T08:55:55.976Z"
+              "WhenOpened": "2026-06-07T18:11:59.539Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Bird.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Enemy\\Bird.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Enemy\\Bird.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Enemy\\Bird.cs",
-              "RelativeToolTip": "Assets\\Script\\Enemy\\Bird.cs",
-              "ViewState": "AgIAAHUAAAAAAAAAAAAQwJkAAAABAAAAAAAAAA==",
+              "DocumentIndex": 23,
+              "Title": "Wood.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Wood\\Wood.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Wood\\Wood.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Wood\\Wood.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Wood\\Wood.cs",
+              "ViewState": "AgIAABgAAAAAAAAAAAAAwFEAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-03T11:25:05.91Z"
+              "WhenOpened": "2026-06-08T05:53:57.684Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 13,
+              "Title": "PoolManager.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\PoolManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\PoolManager.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\PoolManager.cs",
+              "RelativeToolTip": "Assets\\Script\\PoolManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-20T12:24:48.283Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
               "Title": "Enemy.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Enemy.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Enemy.cs",
               "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Enemy.cs",
               "RelativeToolTip": "Assets\\Script\\Enemy.cs",
-              "ViewState": "AgIAAA4AAAAAAAAAAAAAwBwAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABcAAAAAAAAAAAAQwC4AAAAXAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-03T09:31:28.395Z"
+              "WhenOpened": "2026-07-20T12:23:46.82Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 21,
+              "Title": "BaseUnit.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnit.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\BaseUnit.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnit.cs",
+              "RelativeToolTip": "Assets\\Script\\BaseUnit.cs",
+              "ViewState": "AgIAAGAAAAAAAAAAAAAgwHEAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T13:37:52.347Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "BaseUnitInfoPanel.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnitInfo\\BaseUnitInfoPanel.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\BaseUnitInfo\\BaseUnitInfoPanel.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnitInfo\\BaseUnitInfoPanel.cs",
+              "RelativeToolTip": "Assets\\Script\\BaseUnitInfo\\BaseUnitInfoPanel.cs",
+              "ViewState": "AgIAAFsAAAAAAAAAAAAswGAAAAArAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T13:37:39.864Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "ActionButton.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnitInfo\\ActionButton.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\BaseUnitInfo\\ActionButton.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\BaseUnitInfo\\ActionButton.cs",
+              "RelativeToolTip": "Assets\\Script\\BaseUnitInfo\\ActionButton.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-13T11:41:47.601Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "TaskManager.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\TaskManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\TaskManager.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\TaskManager.cs",
+              "RelativeToolTip": "Assets\\Script\\TaskManager.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvw4AAAANAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-10T14:15:16.115Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "UILine.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\UI\\UILine.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\UI\\UILine.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\UI\\UILine.cs",
+              "RelativeToolTip": "Assets\\Script\\UI\\UILine.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAA3wA4AAAAGAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-30T17:46:34.569Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "NavigationBarManager.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\NavigationBar\\NavigationBarManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\NavigationBar\\NavigationBarManager.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\NavigationBar\\NavigationBarManager.cs",
+              "RelativeToolTip": "Assets\\Script\\NavigationBar\\NavigationBarManager.cs",
+              "ViewState": "AgIAAAoAAAAAAAAAAAAxwCIAAAAMAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-07-02T09:51:23.078Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "BillModule.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Module\\BillModule.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Module\\BillModule.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Module\\BillModule.cs",
+              "RelativeToolTip": "Assets\\Script\\Module\\BillModule.cs",
+              "ViewState": "AgIAABwAAAAAAAAAAAAywCsAAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T03:55:52.357Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Building.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Building.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\Building.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Building.cs",
+              "RelativeToolTip": "Assets\\Script\\Building.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAAQwCkAAAAWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-07T07:25:53.7Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "Garden.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Garden\\Garden.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Garden\\Garden.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Garden\\Garden.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Garden\\Garden.cs",
+              "ViewState": "AgIAADUAAAAAAAAAAAAQwCEAAAAzAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-07T15:41:11.772Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "Armory.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Armory\\Armory.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Armory\\Armory.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Armory\\Armory.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Armory\\Armory.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-08T03:55:07.898Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "MouseManager.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\MouseManager.cs",
+              "RelativeDocumentMoniker": "Assets\\Script\\MouseManager.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\MouseManager.cs",
+              "RelativeToolTip": "Assets\\Script\\MouseManager.cs",
+              "ViewState": "AgIAALoAAAAAAAAAAAAiwNAAAAA5AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-06-06T19:10:51.426Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
               "Title": "Sun.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Sun.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Sun.cs",
               "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Sun.cs",
               "RelativeToolTip": "Assets\\Script\\Sun.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA8AAABlAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-03T09:20:21.331Z"
+              "WhenOpened": "2026-06-06T18:59:36.031Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "CustomLightNoCulling.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Light\\CustomLightNoCulling.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Light\\CustomLightNoCulling.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Light\\CustomLightNoCulling.cs",
-              "RelativeToolTip": "Assets\\Script\\Light\\CustomLightNoCulling.cs",
-              "ViewState": "AgIAABYAAAAAAAAAAAAAwCsAAABGAAAAAAAAAA==",
+              "DocumentIndex": 32,
+              "Title": "Sapling.cs",
+              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Wood\\Sapling.cs",
+              "RelativeDocumentMoniker": "Assets\\Prefab\\Building\\Wood\\Sapling.cs",
+              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Prefab\\Building\\Wood\\Sapling.cs",
+              "RelativeToolTip": "Assets\\Prefab\\Building\\Wood\\Sapling.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAMAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-02T09:29:10.078Z"
+              "WhenOpened": "2026-06-06T14:19:04.803Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "Creature.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Creature.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Creature.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Creature.cs",
-              "RelativeToolTip": "Assets\\Script\\Creature.cs",
-              "ViewState": "AgIAAJcAAAAAAAAAAAAAwLQAAACgAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-01T14:57:17.424Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "MiningDrill.cs",
-              "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Building\\MiningDrill.cs",
-              "RelativeDocumentMoniker": "Assets\\Script\\Building\\MiningDrill.cs",
-              "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Building\\MiningDrill.cs",
-              "RelativeToolTip": "Assets\\Script\\Building\\MiningDrill.cs",
-              "ViewState": "AgIAACsAAAAAAAAAAAAIwE4AAABLAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-01T11:24:39.64Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "Planet.cs",
               "DocumentMoniker": "C:\\Users\\32781\\Planet\\Assets\\Script\\Planet\\Planet.cs",
               "RelativeDocumentMoniker": "Assets\\Script\\Planet\\Planet.cs",
               "ToolTip": "C:\\Users\\32781\\Planet\\Assets\\Script\\Planet\\Planet.cs",
               "RelativeToolTip": "Assets\\Script\\Planet\\Planet.cs",
-              "ViewState": "AgIAAIUBAAAAAAAAAAAkwKUBAABnAAAAAAAAAA==",
+              "ViewState": "AgIAAAoBAAAAAAAAAAAqwB8BAAASAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-06-01T11:14:05.747Z",
+              "WhenOpened": "2026-06-06T09:16:59.472Z",
               "EditorCaption": ""
             }
           ]

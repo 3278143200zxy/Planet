@@ -220,9 +220,10 @@ public class PlacedObject : BaseUnit
                 if (angleIdx < 0) angleIdx += temp;
                 if (angleIdx >= temp) angleIdx -= temp;
                 Cell processingCell = currentCell.planet.grid[radiusIdx, angleIdx, layerIdx];
-                processingCell.placedObject = this;
+                processingCell.placedObject = null;
             }
         }
+
         base.DestoryBaseUnit();
     }
     public override void OnDrawGizmos()
@@ -275,6 +276,7 @@ public class PlacedObject : BaseUnit
     }
     public void SetBuilding()
     {
+
 
         Building building = Instantiate(buildingPrefab, transform.position, transform.rotation);
         building.ChangeLayer(building.gameObject, gameObject.layer);

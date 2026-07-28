@@ -12,6 +12,7 @@ public enum TaskType
     Build,
     MoveItem,
     Craft,
+    Research,
 }
 public class CreatureTaskNode
 {

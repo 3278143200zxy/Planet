@@ -14,8 +14,6 @@ public class Water
     {
         waterModule = _cell.planet.waterModule;
         cell = _cell;
-        waterSlider = cell.waterSlider;
-        waterSlider.fillRect.layer = LayerMask.NameToLayer(cell.layerIdx.ToString());
         SetWaterAmount(0);
     }
     public void SetWaterAmount(float wa)
@@ -68,7 +66,29 @@ public class Water
     }
     public void RefreshDisplay()
     {
-        waterSlider.SetValue(waterAmount);
+        if (waterSlider != null)
+        {
+            if (waterAmount == 0f)
+            {
+                cell.planet.waterModule.DestoryWaterSlider(waterSlider);
+                waterSlider = null;
+            }
+            else waterSlider.SetValue(waterAmount);
+        }
+        else
+        {
+            if (waterAmount > 0f)
+            {
+                waterSlider = cell.planet.waterModule.GetWaterSlider();
+                waterSlider.transform.SetParent(cell.planet.waterModule.transform);
+                waterSlider.transform.position = cell.position;
+                waterSlider.transform.rotation = cell.rotation;
+                waterSlider.transform.localScale = Vector3.one * (1 + (cell.radiusIdx - cell.planet.surfaceRadius) * cell.planet.cellSizeCorrection);
+                waterSlider.fillRect.layer = LayerMask.NameToLayer(cell.layerIdx.ToString());
+
+                waterSlider.SetValue(waterAmount);
+            }
+        }
     }
 }
 public class WaterModule : MonoBehaviour
@@ -82,6 +102,8 @@ public class WaterModule : MonoBehaviour
 
     public float overflowThreshold = 0.1f;
 
+    public ObjectSlider waterSliderPrefab;
+    public List<ObjectSlider> waterSliderPool = new List<ObjectSlider>();
     private void Awake()
     {
         for (int i = planet.innerRadius; i < planet.outerRadius; i++) waterCells.Add(i, new List<Cell>());
@@ -171,7 +193,7 @@ public class WaterModule : MonoBehaviour
             {
                 float totalWaterAmount = 0;
                 foreach (var cell in unionFindGroups[root]) totalWaterAmount += cell.water.waterAmount;
-                //Debug.Log(totalWaterAmount + " " + Time.time);
+                //Debug.Log(totalWaterAmount + " " + Time.timea);
                 float averagedWaterAmount = totalWaterAmount / unionFindGroups[root].Count;
                 bool isOverFlow = averagedWaterAmount > overflowThreshold;
                 if (isOverFlow) averagedWaterAmount = totalWaterAmount / (unionFindGroups[root].Count + unionFindNeighbourEmptyCells[root].Count);
@@ -180,5 +202,24 @@ public class WaterModule : MonoBehaviour
             }
         }
         //Debug.Log("End");
+    }
+    public ObjectSlider GetWaterSlider()
+    {
+        if (waterSliderPool.Count == 0)
+        {
+            return Instantiate(waterSliderPrefab);
+        }
+        else
+        {
+            ObjectSlider waterSlider = waterSliderPool[0];
+            waterSliderPool.RemoveAt(0);
+            waterSlider.gameObject.SetActive(true);
+            return waterSlider;
+        }
+    }
+    public void DestoryWaterSlider(ObjectSlider ws)
+    {
+        ws.gameObject.SetActive(false);
+        waterSliderPool.Add(ws);
     }
 }

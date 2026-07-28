@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 
@@ -15,6 +16,7 @@ public enum CreatureState
     Build,
     Craft,
     Sleep,
+    Research,
 }
 public enum ProfessionType
 {
@@ -77,6 +79,8 @@ public class Creature : BaseUnit
     public float processPerCraft;
     [HideInInspector] public BillModule billModule;
     public float processPerBuildPlacedObject;
+    [HideInInspector] public ResearchBench researchBench;
+    public float processPerResearch;
 
     public Item reservedItem;
     public WarehouseModule reservedWarehouseModule;
@@ -222,6 +226,12 @@ public class Creature : BaseUnit
                 break;
             case CreatureState.Walk:
                 //if creature is not at the last cell pr work horizontally, do not consider the angle offset
+                foreach (var cell in path) if (!cell.neighbourCellNodes[1].cell.canStand)
+                    {
+                        ChangeCreatureState(CreatureState.Idle);
+                        CancelTask();
+                        break;
+                    }
                 if (path.Count > 0 || path[0].radiusIdx != lastCurrentCell.radiusIdx)
                 {
                     //Debug.Log(currentCell.radiusIdx * planet.cellHeight + " " + Vector2.Distance(transform.position, planet.transform.position));
@@ -253,7 +263,7 @@ public class Creature : BaseUnit
                     {
                         //Debug.Log("y");
                         float step = climbSpeed * TimeManager.deltaTime;
-                        float distanceDiff = Vector2.Distance(path[0].transform.position, planet.transform.position) - Vector2.Distance(transform.position, planet.transform.position);
+                        float distanceDiff = Vector2.Distance(path[0].position, planet.transform.position) - Vector2.Distance(transform.position, planet.transform.position);
                         //Debug.Log(distanceDiff + " " + step);
                         if (Mathf.Abs(distanceDiff) <= step)
                         {
@@ -270,7 +280,7 @@ public class Creature : BaseUnit
                     {
                         //Debug.Log("z");
                         float step = walkSpeed * TimeManager.deltaTime;
-                        float distanceDiff = path[0].transform.position.z - transform.position.z;
+                        float distanceDiff = path[0].position.z - transform.position.z;
                         //Debug.Log(distanceDiff + " " + step);
                         if (Mathf.Abs(distanceDiff) <= step)
                         {
@@ -289,14 +299,14 @@ public class Creature : BaseUnit
                         //Debug.Log("d");
                         Vector3 force = Vector3.zero;
                         //force = MathEx.CalculateInitialVelocity(lastCurrentCell.transform.position, path[0].transform.position, planet.gravity, planet.transform.position);
-                        force = MathEx.CalculateInitialVelocity(transform.position, path[0].transform.position + (Vector3)MathEx.RotateVector2(new Vector3(0, -planet.cellHeight / 2 + creatureHeight), Mathf.Deg2Rad * angle), planet.gravity * TimeManager.timeScale, planet.transform.position);
+                        force = MathEx.CalculateInitialVelocity(transform.position, path[0].position + (Vector3)MathEx.RotateVector2(new Vector3(0, -planet.cellHeight / 2 + creatureHeight), Mathf.Deg2Rad * angle), planet.gravity * TimeManager.timeScale, planet.transform.position);
                         AddForce(force * 0.95f);
 
                     }
                     else if (Mathf.Abs(path[0].layerIdx - lastCurrentCell.layerIdx) == 1 && Mathf.Abs(path[0].radiusIdx - lastCurrentCell.radiusIdx) == 1 && path[0].angleIdx == lastCurrentCell.angleIdx)
                     {
                         Vector3 force = Vector3.zero;
-                        force = MathEx.CalculateInitialVelocity(transform.position, path[0].transform.position + (Vector3)MathEx.RotateVector2(new Vector3(0, -planet.cellHeight / 2 + creatureHeight), Mathf.Deg2Rad * angle), planet.gravity * TimeManager.timeScale, planet.transform.position);
+                        force = MathEx.CalculateInitialVelocity(transform.position, path[0].position + (Vector3)MathEx.RotateVector2(new Vector3(0, -planet.cellHeight / 2 + creatureHeight), Mathf.Deg2Rad * angle), planet.gravity * TimeManager.timeScale, planet.transform.position);
                         force.z = 0f;
                         AddForce(force * 0.95f);
                         isChangeLayerAtVertex = true;
@@ -357,35 +367,12 @@ public class Creature : BaseUnit
                             break;
                         case TaskType.Build:
                             ChangeCreatureState(CreatureState.Build);
-                            /*
-                            PlacedObject placedObject = task.baseUnits[0].GetComponent<PlacedObject>();
-                            if (reservedItem.isPickedUp)
-                            {
-                                placedObject.AddItem(reservedItem);
-                                reservedItem.DestoryBaseUnit();
-                                List<Cell> buildTempPath = PathToClosetItem(placedObject.requiredItemTypes, out reservedItem, out reservedWarehouseModule);
-                                if (reservedItem == null) placedObject.CancelBuildTask();
-                                else
-                                {
-                                    path = buildTempPath;
-                                    ChangeCreatureState(CreatureState.Walk);
-                                    reservedItem.reserver = this;
-                                }
-                            }
-                            else
-                            {
-                                PickUpItem(reservedItem);
-                                SetTargetCell(placedObject.currentCell);
-                                if (reservedWarehouseModule != null)
-                                {
-                                    reservedWarehouseModule.RemoveItem(reservedItem.itemType);
-                                    reservedWarehouseModule = null;
-                                }
-                            }
-                            */
                             break;
                         case TaskType.Craft:
                             ChangeCreatureState(CreatureState.Craft);
+                            break;
+                        case TaskType.Research:
+                            ChangeCreatureState(CreatureState.Research);
                             break;
                         case TaskType.MoveItem:
                             if (task.baseUnits[0] is PlacedObject)
@@ -457,7 +444,7 @@ public class Creature : BaseUnit
                                             TaskManager.instance.RemoveTask(warehouseModule.moveItemTask);
                                             break;
                                         }
-                                        
+
                                         List<Cell> moveItemTempPath = null;
                                         if (warehouseModule.GetComponent<BillModule>() == null) moveItemTempPath = PathToClosetItem(warehouseModule.neededItemTypes, out reservedItem);
                                         else
@@ -518,6 +505,7 @@ public class Creature : BaseUnit
             case CreatureState.MineStone:
             case CreatureState.Craft:
             case CreatureState.Build:
+            case CreatureState.Research:
                 ed = workEnergyDecrease;
                 break;
             case CreatureState.Sleep:
@@ -619,6 +607,9 @@ public class Creature : BaseUnit
             case CreatureState.Craft:
                 animator.Play("Craft", 0, 0f);
                 break;
+            case CreatureState.Research:
+                animator.Play("Research", 0, 0f);
+                break;
             case CreatureState.Sleep:
                 animator.Play("Sleep", 0, 0f);
                 break;
@@ -635,6 +626,10 @@ public class Creature : BaseUnit
     public void Craft()
     {
         billModule.Craft(processPerCraft);
+    }
+    public void Research()
+    {
+        researchBench.Research(processPerResearch);
     }
     public void BuildPlacedObject()
     {
@@ -693,7 +688,7 @@ public class Creature : BaseUnit
                     walkAngleOffset = 0.3f;
                     SetTargetCell(task.baseUnits[0].currentCell.neighbourCellNodes[3].cell);
                 }
-                else 
+                else
                 {
                     walkAngleOffset = 0;
                     SetTargetCell(task.baseUnits[0].currentCell.neighbourCellNodes[0].cell);
@@ -704,6 +699,10 @@ public class Creature : BaseUnit
             case TaskType.Craft:
                 SetTargetCell(task.baseUnits[0].currentCell);
                 billModule = task.baseUnits[0].GetComponent<BillModule>();
+                break;
+            case TaskType.Research:
+                SetTargetCell(task.baseUnits[0].currentCell);
+                researchBench = task.baseUnits[0].GetComponent<ResearchBench>();
                 break;
             case TaskType.MoveItem:
                 if (task.baseUnits[0] is PlacedObject)

@@ -15,7 +15,7 @@ public class WarehouseModule : MonoBehaviour
     public bool isAllItemTypesNeeded = false;
     public List<ItemType> neededItemTypes = new List<ItemType>();
     public Dictionary<ItemType, int> itemTypeToNumber = new Dictionary<ItemType, int>();
-    public Dictionary<ItemType, int> neededItemTypeToNumber = new Dictionary<ItemType, int>();
+    //public Dictionary<ItemType, int> neededItemTypeToNumber = new Dictionary<ItemType, int>();
 
     public int capacity;
     public int storage;
@@ -93,14 +93,18 @@ public class WarehouseModule : MonoBehaviour
         if (IsNeededItemAvailableOnPlanet(neededItemTypes)) StartMoveItemTask();
         else CancelMoveItemTask();
     }
+    /*
     public void SetNeededItems(Dictionary<ItemType, int> it2n)
     {
         neededItemTypeToNumber = new Dictionary<ItemType, int>(it2n);
     }
+    */
+    /*
     public void ClearNeededItems()
     {
         neededItemTypeToNumber.Clear();
     }
+    */
     public bool IsNeededItemAvailableOnPlanet(List<ItemType> itemTypes)
     {
         if (isAllItemTypesNeeded) return true;
@@ -183,6 +187,8 @@ public class WarehouseModule : MonoBehaviour
             {
                 itemTypeToNumber[itt] -= it2n[itt];
                 if (itemTypeToNumber[itt] <= 0) itemTypeToNumber.Remove(itt);
+                storage--;
+                return;
             }
 
     }
